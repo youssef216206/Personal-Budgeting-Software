@@ -24,6 +24,41 @@ class Category(models.Model):
         return self.name
 
 
+class Notification(models.Model):
+    """System alert persisted for a user (SDS US #5, #10)."""
+
+    TYPE_WARNING = "warning"
+    TYPE_ALERT = "alert"
+    TYPE_INFO = "info"
+    TYPE_SUCCESS = "success"
+    TYPE_CHOICES = [
+        (TYPE_WARNING, "Warning"),
+        (TYPE_ALERT, "Alert"),
+        (TYPE_INFO, "Info"),
+        (TYPE_SUCCESS, "Success"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="notifications",
+    )
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default=TYPE_INFO)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.type}: {self.message[:60]}"
+
+    def mark_as_read(self):
+        self.is_read = True
+        self.save(update_fields=["is_read"])
+
+
 class Budget(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="budgets"
@@ -37,9 +72,7 @@ class Budget(models.Model):
     alert_threshold_percent = models.PositiveSmallIntegerField(
         default=80, help_text="Notify when spent % reaches this value"
     )
-    spent_amount = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0
-    )
+    spent_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -60,17 +93,30 @@ class Budget(models.Model):
         pct = self.spent_percentage()
         return pct >= self.alert_threshold_percent or self.is_over_limit()
 
-    @classmethod
-    def apply_expense_to_matching(cls, user, category, amount, on_date):
-        qs = cls.objects.filter(
-            user=user,
-            category=category,
-            start_date__lte=on_date,
-            end_date__gte=on_date,
+    def get_alert_message(self):
+        if self.is_over_limit():
+            return (
+                f"Budget exceeded for {self.category.name}! "
+                f"Spent {self.spent_amount} of {self.limit_amount}."
+            )
+        pct = self.spent_percentage()
+        return (
+            f"Budget warning for {self.category.name}: {pct:.0f}% used "
+            f"({self.spent_amount} of {self.limit_amount})."
         )
-        for budget in qs:
-            budget.spent_amount += amount
-            budget.save(update_fields=["spent_amount"])
+
+    def trigger_alert(self):
+        if self.should_alert():
+            ntype = (
+                Notification.TYPE_ALERT
+                if self.is_over_limit()
+                else Notification.TYPE_WARNING
+            )
+            Notification.objects.create(
+                user_id=self.user_id,
+                type=ntype,
+                message=self.get_alert_message(),
+            )
 
 
 class Transaction(models.Model):
@@ -103,6 +149,63 @@ class Transaction(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new and self.kind == self.KIND_EXPENSE and self.category_id:
-            Budget.apply_expense_to_matching(
-                self.user, self.category, self.amount, self.occurred_at.date()
+            on_date = self.occurred_at.date()
+            matching = Budget.objects.filter(
+                user=self.user,
+                category=self.category,
+                start_date__lte=on_date,
+                end_date__gte=on_date,
             )
+            for budget in matching:
+                budget.spent_amount += self.amount
+                budget.save(update_fields=["spent_amount"])
+                budget.trigger_alert()
+
+
+class SavingsGoal(models.Model):
+    """User savings goal with progress tracking (SDS US #6)."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="savings_goals",
+    )
+    name = models.CharField(max_length=200)
+    target_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    current_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    deadline = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.name
+
+    def get_progress_percentage(self):
+        if not self.target_amount or self.target_amount == 0:
+            return 0
+        pct = float((self.current_amount / self.target_amount) * 100)
+        return min(pct, 100)
+
+    def get_monthly_savings_needed(self):
+        today = timezone.now().date()
+        remaining = float(self.target_amount - self.current_amount)
+        if remaining <= 0:
+            return 0
+        if self.deadline <= today:
+            return remaining
+        months = (
+            (self.deadline.year - today.year) * 12
+            + (self.deadline.month - today.month)
+        )
+        if months <= 0:
+            return remaining
+        return round(remaining / months, 2)
+
+    def add_contribution(self, amount):
+        self.current_amount += amount
+        self.save(update_fields=["current_amount"])
+
+    def check_goal_completion(self):
+        return self.current_amount >= self.target_amount

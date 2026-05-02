@@ -1,0 +1,38 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Add contribution — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Add contribution</h1>
+  <p class="lead">{{ goal.name }} — currently at {{ goal.current_amount|floatformat:2 }} of {{ goal.target_amount|floatformat:2 }}.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="progress-bar-wrap progress-bar-wrap--form" title="{{ goal.get_progress_percentage|floatformat:0 }}% complete">
+    <div class="progress-bar" style="width: {{ goal.get_progress_percentage|floatformat:0 }}%"></div>
+  </div>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <div class="form-actions">
+      <button type="submit">Add contribution</button>
+      <a href="{% url 'goals_list' %}" class="btn secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #6 — Financial goals</strong>
+    Adding a contribution updates the goal balance and progress, as in the SDS sequence (<code>addContribution</code>, refreshed progress). Completing a target can trigger success feedback in the app.
+  </li>
+</ul>
+{% endblock %}

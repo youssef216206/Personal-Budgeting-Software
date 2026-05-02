@@ -3,7 +3,7 @@
 {% block page_hero %}
 <div class="page-hero">
   <h1>{{ heading }}</h1>
-  <p class="lead">Category, limit, date range, and alert threshold.</p>
+  <p class="lead">Name your goal, set a target amount, and pick a deadline.</p>
 </div>
 {% endblock %}
 {% block content %}
@@ -19,8 +19,8 @@
       <ul class="errorlist">{{ form.non_field_errors }}</ul>
     {% endif %}
     <div class="form-actions">
-      <button type="submit">Save</button>
-      <a href="{% url 'budget_list' %}" class="btn secondary">Back</a>
+      <button type="submit">Save goal</button>
+      <a href="{% url 'goals_list' %}" class="btn secondary">Cancel</a>
     </div>
   </form>
 </div>
@@ -28,8 +28,8 @@
 {% block sds_help %}
 <ul class="sds-us-list">
   <li>
-    <strong>US #4 — Create/edit budget</strong>
-    The user enters category, limit, date range, and alert threshold. The system validates input and overlapping budgets for the same category before saving. See SDS “Sequence Diagram 3: Create/Edit Budget” and US #4 in the class–sequence table.
+    <strong>US #6 — Financial goals</strong>
+    Creating a goal matches <code>GoalsUI.submitGoal</code> / <code>Goal.createGoal</code> in the SDS: name, target, and deadline are stored so the app can show progress and monthly savings needed later.
   </li>
 </ul>
 {% endblock %}

@@ -1,0 +1,225 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Reports — MyBudget Desk{% endblock %}
+{% block meta_description %}View income vs expense charts, category breakdowns, and spending insights.{% endblock %}
+
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Reports &amp; analytics</h1>
+  <p class="lead">Filter by date range to explore income, expenses, and category breakdowns.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="card form-card">
+  <h2 class="section-title">Date range</h2>
+  <form method="get" class="date-range-form">
+    <div class="date-range-row">
+      <div>
+        <label for="id_from_date">From</label>
+        <input type="date" id="id_from_date" name="from_date" value="{{ from_date|date:'Y-m-d' }}">
+      </div>
+      <div>
+        <label for="id_to_date">To</label>
+        <input type="date" id="id_to_date" name="to_date" value="{{ to_date|date:'Y-m-d' }}">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit">Apply</button>
+    </div>
+  </form>
+</div>
+
+{% if not has_data %}
+<div class="card empty-state">
+  <p class="muted">No transaction data available for this period.</p>
+</div>
+{% else %}
+
+<div class="card">
+  <h2 class="section-title">Summary</h2>
+  <div class="row">
+    <div class="stat-pill">
+      <strong>Total income</strong>
+      <span class="amount amount--income">{{ total_income|floatformat:2 }}</span>
+    </div>
+    <div class="stat-pill">
+      <strong>Total expenses</strong>
+      <span class="amount amount--expense">{{ total_expenses|floatformat:2 }}</span>
+    </div>
+    <div class="stat-pill">
+      <strong>Balance</strong>
+      <span class="amount {% if balance >= 0 %}amount--income{% else %}amount--expense{% endif %}">{{ balance|floatformat:2 }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="card chart-card">
+  <h2 class="section-title">Charts</h2>
+  <div class="charts-row">
+    <div class="chart-wrap">
+      <h3 class="chart-caption">Expenses by category</h3>
+      {% if breakdown %}
+      <div class="chart-canvas-host">
+        <canvas id="pieChart" aria-label="Expenses by category pie chart"></canvas>
+      </div>
+      {% else %}
+      <div class="chart-canvas-host chart-canvas-host--empty">
+        <p class="chart-empty muted">No categorized expenses in this range. Add expense transactions with categories to see the pie chart.</p>
+      </div>
+      {% endif %}
+    </div>
+    <div class="chart-wrap">
+      <h3 class="chart-caption">Income vs expenses</h3>
+      <div class="chart-canvas-host">
+        <canvas id="barChart" aria-label="Income vs expenses bar chart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if insights %}
+<div class="card">
+  <h2 class="section-title">Insights</h2>
+  <ul class="insight-list">
+    {% for insight in insights %}
+      <li class="insight-item">{{ insight }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if breakdown %}
+<div class="card">
+  <h2 class="section-title">Category breakdown</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Category</th><th>Amount</th></tr></thead>
+      <tbody>
+        {% for row in breakdown %}
+          <tr>
+            <td>{{ row.category__name|default:"Uncategorized" }}</td>
+            <td>{{ row.total|floatformat:2 }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #7 — Reports &amp; analytics</strong>
+    The user selects a date range; the system aggregates transactions, computes totals and category breakdowns, shows insights, and displays charts (pie by category, bar for income vs expenses). Empty periods show an appropriate message. See “Sequence Diagram 6: View Reports and Analytics” and the US #7 table row (<code>ReportsUI</code>, <code>Report</code>, <code>Transaction</code>).
+  </li>
+</ul>
+{% endblock %}
+
+{% block extra_js %}
+{% if has_data %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const totalIncome   = Number("{{ total_income|floatformat:2 }}");
+  const totalExpenses = Number("{{ total_expenses|floatformat:2 }}");
+
+  const palette = [
+    '#3b82f6','#6366f1','#8b5cf6','#a78bfa',
+    '#60a5fa','#818cf8','#c4b5fd','#7c3aed',
+    '#2563eb','#4f46e5',
+  ];
+
+  {% if breakdown %}
+  const labels = {{ chart_labels|safe }};
+  const pieValues = {{ chart_data|safe }};
+  const pieCanvas = document.getElementById('pieChart');
+  if (pieCanvas && pieValues.length > 0) {
+    new Chart(pieCanvas, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: pieValues,
+          backgroundColor: palette.slice(0, pieValues.length),
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 8,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { top: 4, right: 4, bottom: 4, left: 4 } },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { family: 'Inter', size: 11 },
+              padding: 10,
+              boxWidth: 12,
+              usePointStyle: true,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.raw;
+                const n = typeof v === 'number' ? v : parseFloat(v);
+                return ` ${ctx.label}: ${Number.isFinite(n) ? n.toFixed(2) : v}`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+  {% endif %}
+
+  const barCanvas = document.getElementById('barChart');
+  if (barCanvas) {
+    new Chart(barCanvas, {
+      type: 'bar',
+      data: {
+        labels: ['Income', 'Expenses'],
+        datasets: [{
+          data: [totalIncome, totalExpenses],
+          backgroundColor: ['rgba(5,150,105,0.75)', 'rgba(220,38,38,0.75)'],
+          borderColor: ['#059669', '#dc2626'],
+          borderWidth: 1.5,
+          borderRadius: 8,
+          categoryPercentage: 0.55,
+          barPercentage: 0.75,
+          maxBarThickness: 72,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { top: 8, right: 8, bottom: 4, left: 4 } },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y.toFixed(2)}` } },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(15, 23, 42, 0.06)' },
+            ticks: { font: { family: 'Inter', size: 11 } },
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'Inter', size: 12, weight: '600' } },
+          },
+        },
+      },
+    });
+  }
+})();
+</script>
+{% endif %}
+{% endblock %}

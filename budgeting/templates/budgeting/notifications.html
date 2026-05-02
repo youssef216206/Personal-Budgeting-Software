@@ -1,0 +1,33 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Notifications — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Notifications</h1>
+  <p class="lead">Budget alerts and system messages. All unread items are marked as read when you visit this page.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card">
+  {% if notifications %}
+    <ul class="notif-list notif-list--full">
+      {% for n in notifications %}
+        <li class="notif-item notif-item--{{ n.type }} {% if n.is_read %}notif-item--read{% endif %}">
+          <span class="notif-type-badge notif-type-badge--{{ n.type }}">{{ n.get_type_display }}</span>
+          <span class="notif-msg">{{ n.message }}</span>
+          <span class="muted notif-time">{{ n.created_at|date:"Y-m-d H:i" }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">No notifications yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #5 — Budget over-limit alert</strong>
+    Notifications persist alert content and type when spending nears or exceeds a budget. The SDS shows <code>Notification.send</code> after <code>Budget.triggerAlert</code>. This screen lists stored alerts; the dashboard and nav badge reflect unread items (see also US #10).
+  </li>
+</ul>
+{% endblock %}

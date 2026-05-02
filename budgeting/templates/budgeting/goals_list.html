@@ -1,0 +1,52 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Goals — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Savings goals</h1>
+  <p class="lead">Set a target, track your progress, and add contributions whenever you save.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-toolbar">
+    <p class="muted card-toolbar__text">Track targets, deadlines, and monthly savings needed.</p>
+    <a href="{% url 'goal_create' %}" class="btn">Create goal</a>
+  </div>
+  {% if goals %}
+    {% for goal in goals %}
+      <div class="goal-card">
+        <div class="goal-header">
+          <span class="goal-name">{{ goal.name }}</span>
+          <span class="goal-amounts">{{ goal.current_amount|floatformat:2 }} / {{ goal.target_amount|floatformat:2 }}</span>
+        </div>
+        <div class="progress-bar-wrap" title="{{ goal.get_progress_percentage|floatformat:0 }}% complete">
+          <div class="progress-bar {% if goal.check_goal_completion %}progress-bar--complete{% endif %}"
+               style="width: {{ goal.get_progress_percentage|floatformat:0 }}%"></div>
+        </div>
+        <div class="goal-meta">
+          <span class="muted">{{ goal.get_progress_percentage|floatformat:0 }}% · Deadline: {{ goal.deadline }}</span>
+          {% if not goal.check_goal_completion %}
+            <span class="muted"> · ~{{ goal.get_monthly_savings_needed|floatformat:2 }}/month needed</span>
+          {% else %}
+            <span class="badge-income"> Goal reached!</span>
+          {% endif %}
+        </div>
+        {% if not goal.check_goal_completion %}
+          <a href="{% url 'goal_contribute' goal.pk %}" class="btn" style="margin-top:0.75rem;">Add contribution</a>
+        {% endif %}
+      </div>
+      {% if not forloop.last %}<hr class="goal-divider">{% endif %}
+    {% endfor %}
+  {% else %}
+    <p class="muted">No goals yet. Create one to start saving toward a target.</p>
+  {% endif %}
+</div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #6 — Financial goals</strong>
+    Users create savings goals and track progress, monthly savings needed, and contributions. See SDS “Sequence Diagram 5: Set and Track Financial Goals” and the US #6 row (GoalsUI, Goal, Database).
+  </li>
+</ul>
+{% endblock %}

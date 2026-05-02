@@ -1,5 +1,5 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Add transaction — Ledger{% endblock %}
+{% block title %}Add transaction — MyBudget Desk{% endblock %}
 {% block page_hero %}
 <div class="page-hero">
   <h1>Add transaction</h1>
@@ -7,7 +7,7 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="card">
+<div class="card form-card">
   <form method="post" novalidate>
     {% csrf_token %}
     {% for field in form %}
@@ -18,8 +18,22 @@
     {% if form.non_field_errors %}
       <ul class="errorlist">{{ form.non_field_errors }}</ul>
     {% endif %}
-    <button type="submit">Save transaction</button>
-    <a href="{% url 'dashboard' %}" class="btn secondary">Cancel</a>
+    <div class="form-actions">
+      <button type="submit">Save transaction</button>
+      <a href="{% url 'dashboard' %}" class="btn secondary">Cancel</a>
+    </div>
   </form>
 </div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #3 — Add transaction</strong>
+    The user submits transaction details; the system saves the record and, for expenses, updates the related budget. Invalid input returns errors instead of saving. See SDS “Sequence Diagram 2: Add Transaction.”
+  </li>
+  <li>
+    <strong>US #5 — Budget over-limit alert</strong>
+    After an expense is applied, matching budgets refresh spent totals and may create notifications when the threshold or limit is reached. See “Sequence Diagram 4: Budget Over-Limit Alert.”
+  </li>
+</ul>
 {% endblock %}

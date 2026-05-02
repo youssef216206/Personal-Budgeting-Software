@@ -1,23 +1,42 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Sign up — Ledger{% endblock %}
+{% block title %}Sign up — MyBudget Desk{% endblock %}
+{% block body_class %}auth-body{% endblock %}
 {% block main_class %}app-main--auth{% endblock %}
-{% block meta_description %}Create your Ledger account — secure sign up with email verification flow.{% endblock %}
+{% block meta_description %}Create your MyBudget Desk account — secure sign up with email verification flow.{% endblock %}
 {% block content %}
-<div class="card">
-  <h1>Create account</h1>
-  <p class="muted">Enter your details. We validate input and keep emails unique, then take you to the dashboard.</p>
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% for field in form %}
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field }}
-      {{ field.errors }}
-    {% endfor %}
-    {% if form.non_field_errors %}
-      <ul class="errorlist">{{ form.non_field_errors }}</ul>
-    {% endif %}
-    <button type="submit">Sign up</button>
-  </form>
-  <p class="muted" style="margin-top:1.25rem;"><a href="{% url 'login' %}">Already have an account?</a></p>
+<div class="auth-shell">
+  <div class="auth-card card form-card">
+    <header class="auth-card__header">
+      <div class="auth-brand-mark" aria-hidden="true"></div>
+      <h1 class="auth-card__title">Create account</h1>
+      <p class="auth-card__lead">Choose a strong password. We keep emails unique and sign you in when you’re done.</p>
+    </header>
+    <form method="post" class="auth-form" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
+      {% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="auth-label">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      {% endfor %}
+      <div class="form-actions form-actions--auth">
+        <button type="submit">Create account</button>
+      </div>
+    </form>
+    <footer class="auth-card__footer">
+      <span class="auth-card__footer-hint">Already registered?</span>
+      <a href="{% url 'login' %}">Log in instead</a>
+    </footer>
+  </div>
 </div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #1 — User sign-up</strong>
+    A new user enters registration data; the system validates input, ensures the email is unique, saves the user, and redirects to the dashboard on success. See SDS “Sequence Diagram 1: User Sign up” and the US #1 row in the class–sequence usage table.
+  </li>
+</ul>
 {% endblock %}

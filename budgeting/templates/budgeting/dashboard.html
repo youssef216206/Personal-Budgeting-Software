@@ -1,25 +1,70 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Dashboard — Ledger{% endblock %}
+{% block title %}Dashboard — MyBudget Desk{% endblock %}
 {% block page_hero %}
 <div class="page-hero">
   <h1>Dashboard</h1>
-  <p class="lead">Your balances, recent activity, and budgets at a glance.</p>
+  <p class="lead">{{ month }} — your balance, recent activity, budgets, and savings goals.</p>
 </div>
 {% endblock %}
 {% block content %}
+
+{% if not has_data %}
+<div class="card empty-state">
+  <p class="muted">No financial data available yet. <a href="{% url 'transaction_add' %}">Add your first transaction</a> to get started.</p>
+</div>
+{% endif %}
+
 <div class="card">
   <h2 class="section-title">Summary</h2>
   <div class="row">
     <div class="stat-pill">
-      <strong>Income total</strong>
-      <span class="amount amount--income">{{ income_total }}</span>
+      <strong>Total balance</strong>
+      <span class="amount {% if total_balance >= 0 %}amount--income{% else %}amount--expense{% endif %}">{{ total_balance|floatformat:2 }}</span>
     </div>
     <div class="stat-pill">
-      <strong>Expenses total</strong>
-      <span class="amount amount--expense">{{ expense_total }}</span>
+      <strong>{{ month }} income</strong>
+      <span class="amount amount--income">{{ income_total|floatformat:2 }}</span>
+    </div>
+    <div class="stat-pill">
+      <strong>{{ month }} expenses</strong>
+      <span class="amount amount--expense">{{ expense_total|floatformat:2 }}</span>
     </div>
   </div>
 </div>
+
+{% if budget_warnings %}
+<div class="card card--warning">
+  <h2 class="section-title section-title--alerts">Budget alerts</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Category</th><th>Spent</th><th>Limit</th><th>%</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for b in budget_warnings %}
+          <tr class="{% if b.is_over_limit %}row--danger{% else %}row--warning{% endif %}">
+            <td>{{ b.category.name }}</td>
+            <td>{{ b.spent_amount }}</td>
+            <td>{{ b.limit_amount }}</td>
+            <td>{{ b.spent_percentage|floatformat:0 }}%</td>
+            <td>{% if b.is_over_limit %}<span class="badge-expense">Over limit</span>{% else %}<span class="badge-warning">Near limit</span>{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if unread_notifications %}
+<div class="card">
+  <h2 class="section-title">Unread notifications</h2>
+  <ul class="notif-list">
+    {% for n in unread_notifications %}
+      <li class="notif-item notif-item--{{ n.type }}">{{ n.message }} <span class="muted">· {{ n.created_at|date:"Y-m-d H:i" }}</span></li>
+    {% endfor %}
+  </ul>
+  <p style="margin-top:0.75rem;margin-bottom:0;"><a href="{% url 'notifications' %}">View all alerts →</a></p>
+</div>
+{% endif %}
 
 <div class="card">
   <h2 class="section-title">Recent transactions</h2>
@@ -56,7 +101,7 @@
               <td>{{ b.category.name }}</td>
               <td>{{ b.limit_amount }}</td>
               <td>{{ b.spent_amount }} <span class="muted">({{ b.spent_percentage|floatformat:0 }}%)</span></td>
-              <td>{{ b.start_date }} — {{ b.end_date }}</td>
+              <td class="muted">{{ b.start_date }} — {{ b.end_date }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -67,4 +112,39 @@
     <p class="muted">No budgets yet. <a href="{% url 'budget_create' %}">Create a budget</a>.</p>
   {% endif %}
 </div>
+
+<div class="card">
+  <h2 class="section-title">Savings goals</h2>
+  {% if savings_goals %}
+    {% for g in savings_goals %}
+      <div class="goal-card goal-card--compact">
+        <div class="goal-header">
+          <span class="goal-name">{{ g.name }}</span>
+          <span class="goal-amounts">{{ g.current_amount|floatformat:2 }} / {{ g.target_amount|floatformat:2 }}</span>
+        </div>
+        <div class="progress-bar-wrap" title="{{ g.get_progress_percentage|floatformat:0 }}% complete">
+          <div class="progress-bar {% if g.check_goal_completion %}progress-bar--complete{% endif %}"
+               style="width: {{ g.get_progress_percentage|floatformat:0 }}%"></div>
+        </div>
+        <p class="goal-meta muted" style="margin-bottom:0;">
+          {{ g.get_progress_percentage|floatformat:0 }}% · due {{ g.deadline }}
+          {% if not g.check_goal_completion %} · ~{{ g.get_monthly_savings_needed|floatformat:2 }}/mo{% endif %}
+        </p>
+      </div>
+      {% if not forloop.last %}<hr class="goal-divider">{% endif %}
+    {% endfor %}
+    <p style="margin-top:1rem;margin-bottom:0;"><a href="{% url 'goals_list' %}">All goals &amp; contributions →</a></p>
+  {% else %}
+    <p class="muted">No savings goals yet. <a href="{% url 'goal_create' %}">Create a goal</a>.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #10 — Dashboard overview</strong>
+    Opening the app loads a summary: totals, recent transactions, budget warnings, and unread notifications. The SDS sequence shows DashboardUI gathering data from transactions, budgets, and notifications when the user opens the application.
+  </li>
+</ul>
 {% endblock %}

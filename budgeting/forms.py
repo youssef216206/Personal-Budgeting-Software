@@ -1,8 +1,9 @@
 from django import forms
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.utils import timezone
 
-from .models import Budget, Category, Transaction
+from .models import Budget, Category, SavingsGoal, Transaction
 
 
 class SignUpForm(forms.Form):
@@ -42,6 +43,8 @@ class TransactionForm(forms.ModelForm):
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
+        self.fields["amount"].widget.attrs.setdefault("placeholder", "0.00")
+        self.fields["amount"].widget.attrs.setdefault("step", "0.01")
         if user:
             self.fields["category"].queryset = Category.objects.filter(
                 Q(user__isnull=True) | Q(user=user)
@@ -59,17 +62,12 @@ class TransactionForm(forms.ModelForm):
         data = super().clean()
         kind = data.get("kind")
         amount = data.get("amount")
-        category = data.get("category")
 
         if amount is not None and amount <= 0:
             self.add_error("amount", "Amount must be greater than zero.")
 
-        if kind == Transaction.KIND_EXPENSE and not category:
+        if kind == Transaction.KIND_EXPENSE and not data.get("category"):
             self.add_error("category", "Expense transactions require a category.")
-
-        if kind == Transaction.KIND_INCOME and category is None:
-            # income can use optional category; allow blank
-            pass
 
         return data
 
@@ -96,12 +94,15 @@ class BudgetForm(forms.ModelForm):
             self.fields["category"].queryset = Category.objects.filter(
                 Q(user__isnull=True) | Q(user=user)
             ).order_by("name")
+        self.fields["limit_amount"].widget.attrs.setdefault("placeholder", "0.00")
+        self.fields["limit_amount"].widget.attrs.setdefault("step", "0.01")
 
     def clean(self):
         data = super().clean()
         start = data.get("start_date")
         end = data.get("end_date")
         category = data.get("category")
+
         if start and end and end < start:
             self.add_error("end_date", "End date must be on or after start date.")
 
@@ -116,13 +117,7 @@ class BudgetForm(forms.ModelForm):
                 "Alert threshold must be between 1 and 100.",
             )
 
-        if (
-            self.user
-            and category
-            and start
-            and end
-            and not self.errors
-        ):
+        if self.user and category and start and end and not self.errors:
             qs = Budget.objects.filter(
                 user=self.user,
                 category=category,
@@ -146,3 +141,43 @@ class BudgetForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
+
+
+class SavingsGoalForm(forms.ModelForm):
+    """Form for creating a savings goal (SDS US #6 GoalsUI.submitGoal)."""
+
+    class Meta:
+        model = SavingsGoal
+        fields = ["name", "target_amount", "deadline"]
+        widgets = {
+            "deadline": forms.DateInput(attrs={"type": "date"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["target_amount"].widget.attrs.setdefault("placeholder", "0.0")
+        self.fields["target_amount"].widget.attrs.setdefault("step", "0.01")
+
+    def clean_target_amount(self):
+        amount = self.cleaned_data.get("target_amount")
+        if amount is not None and amount <= 0:
+            raise forms.ValidationError("Target amount must be greater than zero.")
+        return amount
+
+    def clean_deadline(self):
+        deadline = self.cleaned_data.get("deadline")
+        if deadline and deadline <= timezone.now().date():
+            raise forms.ValidationError("Deadline must be a future date.")
+        return deadline
+
+
+class ContributionForm(forms.Form):
+    """Form for adding a contribution to an existing goal (SDS US #6 GoalsUI.addContribution)."""
+
+    amount = forms.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        min_value=0.01,
+        label="Contribution amount",
+        widget=forms.NumberInput(attrs={"placeholder": "0.00", "step": "0.01"}),
+    )

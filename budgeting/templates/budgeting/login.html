@@ -1,23 +1,42 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Log in — Ledger{% endblock %}
+{% block title %}Log in — MyBudget Desk{% endblock %}
+{% block body_class %}auth-body{% endblock %}
 {% block main_class %}app-main--auth{% endblock %}
-{% block meta_description %}Sign in to Ledger with your email.{% endblock %}
+{% block meta_description %}Sign in to MyBudget Desk with your email.{% endblock %}
 {% block content %}
-<div class="card">
-  <h1>Welcome back</h1>
-  <p class="muted">Use the email you registered with.</p>
-  <form method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-      <ul class="errorlist">{{ form.non_field_errors }}</ul>
-    {% endif %}
-    {% for field in form %}
-      <label for="{{ field.id_for_label }}">{% if field.name == 'username' %}Email{% else %}{{ field.label }}{% endif %}</label>
-      {{ field }}
-      {{ field.errors }}
-    {% endfor %}
-    <button type="submit">Log in</button>
-  </form>
-  <p class="muted" style="margin-top:1.25rem;"><a href="{% url 'signup' %}">Create an account</a></p>
+<div class="auth-shell">
+  <div class="auth-card card form-card">
+    <header class="auth-card__header">
+      <div class="auth-brand-mark" aria-hidden="true"></div>
+      <h1 class="auth-card__title">Welcome back</h1>
+      <p class="auth-card__lead">Sign in with the email and password for your MyBudget Desk account.</p>
+    </header>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
+      {% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="auth-label">{% if field.name == 'username' %}Email{% else %}{{ field.label }}{% endif %}</label>
+        {{ field }}
+        {{ field.errors }}
+      {% endfor %}
+      <div class="form-actions form-actions--auth">
+        <button type="submit">Log in</button>
+      </div>
+    </form>
+    <footer class="auth-card__footer">
+      <span class="auth-card__footer-hint">New here?</span>
+      <a href="{% url 'signup' %}">Create an account</a>
+    </footer>
+  </div>
 </div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>Authentication (related to US #1)</strong>
+    Registered users sign in with email and password. The SDS sign-up table lists <code>User.authenticate</code> and <code>login</code> alongside registration; this screen completes that access path before the dashboard (US #10).
+  </li>
+</ul>
 {% endblock %}

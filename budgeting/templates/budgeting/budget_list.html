@@ -1,5 +1,5 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Budgets — Ledger{% endblock %}
+{% block title %}Budgets — MyBudget Desk{% endblock %}
 {% block page_hero %}
 <div class="page-hero">
   <h1>Your budgets</h1>
@@ -8,7 +8,10 @@
 {% endblock %}
 {% block content %}
 <div class="card">
-  <p class="actions"><a href="{% url 'budget_create' %}" class="btn">Create budget</a></p>
+  <div class="card-toolbar">
+    <p class="muted card-toolbar__text">Create a budget per category and date range. Edit anytime.</p>
+    <a href="{% url 'budget_create' %}" class="btn">Create budget</a>
+  </div>
   {% if budgets %}
     <div class="table-wrap">
       <table>
@@ -31,4 +34,12 @@
     <p class="muted">No budgets yet.</p>
   {% endif %}
 </div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #4 — Create/edit budget</strong>
+    This list is part of the budget workflow: users manage category limits, date ranges, and alert thresholds. The SDS describes validating data and avoiding conflicts before saving. See “Sequence Diagram 3: Create/Edit Budget.”
+  </li>
+</ul>
 {% endblock %}
