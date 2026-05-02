@@ -1,0 +1,25 @@
+{% extends "budgeting/base.html" %}
+{% block title %}{{ heading }} — Ledger{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>{{ heading }}</h1>
+  <p class="lead">Category, limit, date range, and alert threshold.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <button type="submit">Save</button>
+    <a href="{% url 'budget_list' %}" class="btn secondary">Back</a>
+  </form>
+</div>
+{% endblock %}

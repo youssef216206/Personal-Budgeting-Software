@@ -1,0 +1,23 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Log in — Ledger{% endblock %}
+{% block main_class %}app-main--auth{% endblock %}
+{% block meta_description %}Sign in to Ledger with your email.{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Welcome back</h1>
+  <p class="muted">Use the email you registered with.</p>
+  <form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{% if field.name == 'username' %}Email{% else %}{{ field.label }}{% endif %}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    <button type="submit">Log in</button>
+  </form>
+  <p class="muted" style="margin-top:1.25rem;"><a href="{% url 'signup' %}">Create an account</a></p>
+</div>
+{% endblock %}

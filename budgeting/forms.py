@@ -1,0 +1,148 @@
+from django import forms
+from django.db.models import Q
+from django.contrib.auth.models import User
+
+from .models import Budget, Category, Transaction
+
+
+class SignUpForm(forms.Form):
+    full_name = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(username__iexact=email).exists():
+            raise forms.ValidationError("Email already exists.")
+        return email
+
+    def clean(self):
+        data = super().clean()
+        p1 = data.get("password")
+        p2 = data.get("confirm_password")
+        if p1 and p2 and p1 != p2:
+            raise forms.ValidationError("Passwords do not match.")
+        if p1 and len(p1) < 8:
+            raise forms.ValidationError("Please use a password with at least 8 characters.")
+        return data
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ["kind", "amount", "category", "description", "occurred_at"]
+        widgets = {
+            "occurred_at": forms.DateTimeInput(
+                attrs={"type": "datetime-local"},
+                format="%Y-%m-%dT%H:%M:%S",
+            ),
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields["category"].queryset = Category.objects.filter(
+                Q(user__isnull=True) | Q(user=user)
+            ).order_by("name")
+        f = self.fields["occurred_at"]
+        f.widget.format = "%Y-%m-%dT%H:%M"
+        f.input_formats = [
+            "%Y-%m-%dT%H:%M",
+            "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d %H:%M",
+        ]
+
+    def clean(self):
+        data = super().clean()
+        kind = data.get("kind")
+        amount = data.get("amount")
+        category = data.get("category")
+
+        if amount is not None and amount <= 0:
+            self.add_error("amount", "Amount must be greater than zero.")
+
+        if kind == Transaction.KIND_EXPENSE and not category:
+            self.add_error("category", "Expense transactions require a category.")
+
+        if kind == Transaction.KIND_INCOME and category is None:
+            # income can use optional category; allow blank
+            pass
+
+        return data
+
+
+class BudgetForm(forms.ModelForm):
+    class Meta:
+        model = Budget
+        fields = [
+            "category",
+            "limit_amount",
+            "start_date",
+            "end_date",
+            "alert_threshold_percent",
+        ]
+        widgets = {
+            "start_date": forms.DateInput(attrs={"type": "date"}),
+            "end_date": forms.DateInput(attrs={"type": "date"}),
+        }
+
+    def __init__(self, *args, user=None, instance=None, **kwargs):
+        self.user = user
+        super().__init__(*args, instance=instance, **kwargs)
+        if user:
+            self.fields["category"].queryset = Category.objects.filter(
+                Q(user__isnull=True) | Q(user=user)
+            ).order_by("name")
+
+    def clean(self):
+        data = super().clean()
+        start = data.get("start_date")
+        end = data.get("end_date")
+        category = data.get("category")
+        if start and end and end < start:
+            self.add_error("end_date", "End date must be on or after start date.")
+
+        limit = data.get("limit_amount")
+        if limit is not None and limit <= 0:
+            self.add_error("limit_amount", "Budget limit must be greater than zero.")
+
+        ath = data.get("alert_threshold_percent")
+        if ath is not None and (ath < 1 or ath > 100):
+            self.add_error(
+                "alert_threshold_percent",
+                "Alert threshold must be between 1 and 100.",
+            )
+
+        if (
+            self.user
+            and category
+            and start
+            and end
+            and not self.errors
+        ):
+            qs = Budget.objects.filter(
+                user=self.user,
+                category=category,
+                start_date__lte=end,
+                end_date__gte=start,
+            )
+            if self.instance and self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise forms.ValidationError(
+                    "A budget for this category already exists for this period "
+                    "(overlapping dates)."
+                )
+
+        return data
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        if self.user:
+            obj.user = self.user
+        if commit:
+            obj.save()
+        return obj

@@ -1,0 +1,25 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Add transaction — Ledger{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Add transaction</h1>
+  <p class="lead">Record income or spending. Expenses update matching budget periods automatically.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <button type="submit">Save transaction</button>
+    <a href="{% url 'dashboard' %}" class="btn secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

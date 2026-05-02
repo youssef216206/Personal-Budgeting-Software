@@ -1,0 +1,23 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Sign up — Ledger{% endblock %}
+{% block main_class %}app-main--auth{% endblock %}
+{% block meta_description %}Create your Ledger account — secure sign up with email verification flow.{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Create account</h1>
+  <p class="muted">Enter your details. We validate input and keep emails unique, then take you to the dashboard.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <button type="submit">Sign up</button>
+  </form>
+  <p class="muted" style="margin-top:1.25rem;"><a href="{% url 'login' %}">Already have an account?</a></p>
+</div>
+{% endblock %}
