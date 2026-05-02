@@ -303,6 +303,7 @@ a:hover {
   border-left: 1px solid var(--stroke);
 }
 
+.app-nav a.nav-link,
 .app-nav a:not(.btn-nav):not(.notif-link) {
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
@@ -312,10 +313,29 @@ a:hover {
   transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+.app-nav a.nav-link:hover,
 .app-nav a:not(.btn-nav):not(.notif-link):hover {
   color: var(--blue-700);
   background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(237, 233, 254, 0.45));
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.12);
+}
+
+/* Current page — must win over default muted link color */
+.app-nav a.nav-link.is-active,
+.app-nav a.nav-link[aria-current="page"],
+.app-nav a:not(.btn-nav):not(.notif-link).is-active,
+.app-nav a:not(.btn-nav):not(.notif-link)[aria-current="page"] {
+  color: var(--blue-700);
+  font-weight: 700;
+  background: linear-gradient(180deg, #dbeafe, rgba(224, 231, 255, 0.75));
+  box-shadow:
+    0 0 0 2px rgba(37, 99, 235, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.app-nav a.nav-link.is-active:hover,
+.app-nav a.nav-link[aria-current="page"]:hover {
+  color: var(--blue-700);
 }
 
 .btn-nav {
@@ -365,6 +385,21 @@ a:hover {
 
 .btn-nav:hover::after {
   transform: translateX(120%);
+}
+
+.btn-nav.is-active,
+.btn-nav[aria-current="page"] {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 0 0 4px rgba(37, 99, 235, 0.55),
+    0 4px 16px rgba(37, 99, 235, 0.35),
+    0 2px 6px rgba(124, 58, 237, 0.2);
+  filter: brightness(1.06);
+}
+
+.btn-nav.is-active:hover,
+.btn-nav[aria-current="page"]:hover {
+  filter: brightness(1.08);
 }
 
 .nav-user {
@@ -1310,6 +1345,20 @@ body.auth-body .app-main--auth {
 .notif-link:hover {
   color: var(--danger);
   background: rgba(254, 242, 242, 0.9);
+}
+
+.notif-link.is-active,
+.notif-link[aria-current="page"] {
+  color: #b91c1c;
+  font-weight: 700;
+  background: rgba(254, 226, 226, 0.95);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.35);
+}
+
+.notif-link.is-active:hover,
+.notif-link[aria-current="page"]:hover {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 1);
 }
 
 .notif-badge {

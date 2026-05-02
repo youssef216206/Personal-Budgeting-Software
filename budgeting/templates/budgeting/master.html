@@ -24,15 +24,16 @@
         <span>{% block brand_text %}MyBudget Desk{% endblock %}</span>
       </a>
       <nav class="app-nav" aria-label="Main">
+        {% with n=nav_url_name|default:"" %}
         {% if user.is_authenticated %}
           <div class="nav-group nav-group--primary">
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'budget_list' %}">Budgets</a>
-            <a href="{% url 'goals_list' %}">Goals</a>
-            <a href="{% url 'reports' %}">Reports</a>
+            <a href="{% url 'dashboard' %}" class="nav-link{% if n == 'dashboard' %} is-active{% endif %}"{% if n == 'dashboard' %} aria-current="page"{% endif %}>Dashboard</a>
+            <a href="{% url 'budget_list' %}" class="nav-link{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} is-active{% endif %}"{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} aria-current="page"{% endif %}>Budgets</a>
+            <a href="{% url 'goals_list' %}" class="nav-link{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} is-active{% endif %}"{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} aria-current="page"{% endif %}>Goals</a>
+            <a href="{% url 'reports' %}" class="nav-link{% if n == 'reports' %} is-active{% endif %}"{% if n == 'reports' %} aria-current="page"{% endif %}>Reports</a>
           </div>
-          <a href="{% url 'transaction_add' %}" class="btn-nav">+ Transaction</a>
-          <a href="{% url 'notifications' %}" class="notif-link">
+          <a href="{% url 'transaction_add' %}" class="btn-nav{% if n == 'transaction_add' %} is-active{% endif %}"{% if n == 'transaction_add' %} aria-current="page"{% endif %}>+ Transaction</a>
+          <a href="{% url 'notifications' %}" class="notif-link{% if n == 'notifications' %} is-active{% endif %}"{% if n == 'notifications' %} aria-current="page"{% endif %}>
             Alerts{% if unread_notification_count %}<span class="notif-badge">{{ unread_notification_count }}</span>{% endif %}
           </a>
           <div class="nav-group nav-group--user">
@@ -43,9 +44,10 @@
             </form>
           </div>
         {% else %}
-          <a href="{% url 'login' %}">Log in</a>
-          <a href="{% url 'signup' %}" class="btn-nav">Sign up</a>
+          <a href="{% url 'login' %}" class="nav-link{% if n == 'login' %} is-active{% endif %}"{% if n == 'login' %} aria-current="page"{% endif %}>Log in</a>
+          <a href="{% url 'signup' %}" class="btn-nav{% if n == 'signup' %} is-active{% endif %}"{% if n == 'signup' %} aria-current="page"{% endif %}>Sign up</a>
         {% endif %}
+        {% endwith %}
       </nav>
     </header>
 
