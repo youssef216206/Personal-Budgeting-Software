@@ -1,13 +1,18 @@
 {% extends "budgeting/base.html" %}
-{% block title %}Add transaction — MyBudget Desk{% endblock %}
+{% load static %}
+{% block title %}{{ heading|default:"Add transaction" }} — MyBudget Desk{% endblock %}
 {% block page_hero %}
 <div class="page-hero">
-  <h1>Add transaction</h1>
+  <h1>{{ heading|default:"Add transaction" }}</h1>
   <p class="lead">Record income or spending. Expenses update matching budget periods automatically.</p>
 </div>
 {% endblock %}
 {% block content %}
 <div class="card form-card">
+  <div class="voice-row">
+    <button type="button" class="secondary" id="voice-mic-btn">Talk to fill form</button>
+    <span id="voice-mic-status" class="muted">Chrome / Edge: click, allow the mic, speak (e.g. “Spent 25 on food yesterday”). Review fields, then save.</span>
+  </div>
   <form method="post" novalidate>
     {% csrf_token %}
     {% for field in form %}
@@ -19,8 +24,11 @@
       <ul class="errorlist">{{ form.non_field_errors }}</ul>
     {% endif %}
     <div class="form-actions">
-      <button type="submit">Save transaction</button>
-      <a href="{% url 'dashboard' %}" class="btn secondary">Cancel</a>
+      <button type="submit">{{ submit_label|default:"Save transaction" }}</button>
+      <a href="{% url back_url_name|default:'dashboard' %}" class="btn secondary">Cancel</a>
+      {% if transaction %}
+        <a href="{% url 'transaction_delete' transaction.pk %}" class="btn-text-danger">Delete this transaction</a>
+      {% endif %}
     </div>
   </form>
 </div>
@@ -28,12 +36,20 @@
 {% block sds_help %}
 <ul class="sds-us-list">
   <li>
-    <strong>US #3 — Add transaction</strong>
-    The user submits transaction details; the system saves the record and, for expenses, updates the related budget. Invalid input returns errors instead of saving. See SDS “Sequence Diagram 2: Add Transaction.”
+    <strong>US #3 — Add / edit transaction</strong>
+    The user submits transaction details; the system saves the record and, for expenses, updates the related budget. When editing, the matching budget is reconciled (old amount removed, new amount applied) so spent totals stay accurate. Invalid input returns errors instead of saving. See SDS "Sequence Diagram 2: Add Transaction."
+  </li>
+  <li>
+    <strong>Voice fill (browser)</strong>
+    Optional speech-to-text on supported browsers fills amount, category, type, description, and date from a short phrase — you still confirm before saving.
   </li>
   <li>
     <strong>US #5 — Budget over-limit alert</strong>
-    After an expense is applied, matching budgets refresh spent totals and may create notifications when the threshold or limit is reached. See “Sequence Diagram 4: Budget Over-Limit Alert.”
+    After an expense is applied, matching budgets refresh spent totals and may create notifications when the threshold or limit is reached. See "Sequence Diagram 4: Budget Over-Limit Alert."
   </li>
 </ul>
+{% endblock %}
+{% block extra_js %}
+<script type="application/json" id="voice-categories-data">{{ voice_categories_json|default:"[]"|safe }}</script>
+<script src="{% static 'budgeting/js/voice.js' %}"></script>
 {% endblock %}

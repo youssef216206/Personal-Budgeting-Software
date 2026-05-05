@@ -1,0 +1,68 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Subscriptions — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Subscriptions</h1>
+  <p class="lead">Due charges post as expenses when you use the app (they update your balance and budgets). Pause or resume anytime.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card subscriptions-card surface-premium">
+  <div class="subscriptions-card__head">
+    <div class="subscriptions-card__glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </div>
+    <div class="subscriptions-card__head-text">
+      <h2 class="subscriptions-card__title">Recurring subscriptions</h2>
+      <p class="muted subscriptions-card__lede">Next due advances after each charge posts to your ledger.</p>
+    </div>
+    <a href="{% url 'subscription_add' %}" class="btn btn--toolbar subscriptions-card__cta">Add subscription</a>
+  </div>
+  {% if subscriptions %}
+  <div class="table-wrap table-wrap--premium table-wrap--subscriptions">
+    <table class="table-actions">
+      <thead>
+        <tr>
+          <th>Name</th><th>Amount</th><th>Category</th><th>Cycle</th><th>Next due</th><th>Status</th><th class="row-actions__cell" aria-label="Actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in subscriptions %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td>{{ s.amount }}</td>
+          <td>{{ s.category.name }}</td>
+          <td>{{ s.get_cycle_display }}</td>
+          <td>{{ s.next_due }}</td>
+          <td>
+            {% if s.is_active %}<span class="tag-pill tag-pill--success">Active</span>
+            {% else %}<span class="tag-pill tag-pill--muted">Paused</span>{% endif %}
+          </td>
+          <td class="row-actions__cell">
+            <div class="row-actions row-actions--subscription">
+              <form method="post" action="{% url 'subscription_toggle' s.pk %}" class="row-actions__form">
+                {% csrf_token %}
+                <button type="submit" class="secondary row-action-mini">{% if s.is_active %}Pause{% else %}Resume{% endif %}</button>
+              </form>
+              <a href="{% url 'subscription_edit' s.pk %}" class="row-action row-action--edit">Edit</a>
+              <a href="{% url 'subscription_delete' s.pk %}" class="row-action row-action--delete">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="muted">No subscriptions yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>Recurring subscriptions</strong>
+    The system generates expense transactions for each due date while you use the app, updates your balance, spending charts, and matching budgets, and advances the subscription’s next-due date.
+  </li>
+</ul>
+{% endblock %}

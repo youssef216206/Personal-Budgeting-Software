@@ -17,66 +17,138 @@
   {% block extra_css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
-  <div class="app-shell">
-    <header class="app-header">
-      <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="brand">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>{% block brand_text %}MyBudget Desk{% endblock %}</span>
-      </a>
-      <nav class="app-nav" aria-label="Main">
-        {% with n=nav_url_name|default:"" %}
-        {% if user.is_authenticated %}
-          <div class="nav-group nav-group--primary">
-            <a href="{% url 'dashboard' %}" class="nav-link{% if n == 'dashboard' %} is-active{% endif %}"{% if n == 'dashboard' %} aria-current="page"{% endif %}>Dashboard</a>
-            <a href="{% url 'budget_list' %}" class="nav-link{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} is-active{% endif %}"{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} aria-current="page"{% endif %}>Budgets</a>
-            <a href="{% url 'goals_list' %}" class="nav-link{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} is-active{% endif %}"{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} aria-current="page"{% endif %}>Goals</a>
-            <a href="{% url 'reports' %}" class="nav-link{% if n == 'reports' %} is-active{% endif %}"{% if n == 'reports' %} aria-current="page"{% endif %}>Reports</a>
-          </div>
-          <a href="{% url 'transaction_add' %}" class="btn-nav{% if n == 'transaction_add' %} is-active{% endif %}"{% if n == 'transaction_add' %} aria-current="page"{% endif %}>+ Transaction</a>
-          <a href="{% url 'notifications' %}" class="notif-link{% if n == 'notifications' %} is-active{% endif %}"{% if n == 'notifications' %} aria-current="page"{% endif %}>
-            Alerts{% if unread_notification_count %}<span class="notif-badge">{{ unread_notification_count }}</span>{% endif %}
+  {% with n=nav_url_name|default:"" %}
+  <div class="app-shell{% if user.is_authenticated %} app-shell--auth{% endif %}">
+    {% if user.is_authenticated %}
+      <aside class="app-sidebar" id="app-sidebar" aria-label="Primary">
+        <div class="sidebar-top">
+          <a href="{% url 'dashboard' %}" class="brand">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-text">{% block brand_text %}MyBudget Desk{% endblock %}</span>
           </a>
-          <div class="nav-group nav-group--user">
-            <span class="nav-user" title="{{ user.email }}">{{ user.email }}</span>
-            <form class="inline-logout" method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit" class="secondary">Log out</button>
-            </form>
-          </div>
-        {% else %}
-          <a href="{% url 'login' %}" class="nav-link{% if n == 'login' %} is-active{% endif %}"{% if n == 'login' %} aria-current="page"{% endif %}>Log in</a>
-          <a href="{% url 'signup' %}" class="btn-nav{% if n == 'signup' %} is-active{% endif %}"{% if n == 'signup' %} aria-current="page"{% endif %}>Sign up</a>
-        {% endif %}
-        {% endwith %}
-      </nav>
-    </header>
+          <button type="button" class="sidebar-close" id="sidebar-close" aria-label="Close navigation">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
 
-    <main class="app-main {% block main_class %}{% endblock %}">
-      <div class="page-hero-sds-wrap">
-        {% block page_hero %}{% endblock %}
-        <button type="button" class="sds-help-trigger sds-help-trigger--in-hero" id="sds-help-open" aria-haspopup="dialog" aria-controls="sds-help-dialog" title="SDS: user stories for this page">
-          <span class="sds-help-trigger__icon" aria-hidden="true">i</span>
-          <span class="visually-hidden">Open SDS user-story info for this page</span>
+        <nav class="sidebar-nav" aria-label="Main">
+          <a href="{% url 'dashboard' %}" class="sidebar-link{% if n == 'dashboard' %} is-active{% endif %}"{% if n == 'dashboard' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">⌂</span>
+            <span class="sidebar-link__label">Dashboard</span>
+          </a>
+          <a href="{% url 'transaction_list' %}" class="sidebar-link{% if n == 'transaction_list' or n == 'transaction_add' or n == 'transaction_edit' or n == 'transaction_delete' %} is-active{% endif %}"{% if n == 'transaction_list' or n == 'transaction_add' or n == 'transaction_edit' or n == 'transaction_delete' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">↔</span>
+            <span class="sidebar-link__label">Transactions</span>
+          </a>
+          <a href="{% url 'category_list' %}" class="sidebar-link{% if n == 'category_list' %} is-active{% endif %}"{% if n == 'category_list' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">▦</span>
+            <span class="sidebar-link__label">Categories</span>
+          </a>
+          <a href="{% url 'subscription_list' %}" class="sidebar-link{% if n == 'subscription_list' or n == 'subscription_add' or n == 'subscription_edit' or n == 'subscription_delete' or n == 'subscription_toggle' %} is-active{% endif %}"{% if n == 'subscription_list' or n == 'subscription_add' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">↻</span>
+            <span class="sidebar-link__label">Subscriptions</span>
+          </a>
+          <a href="{% url 'budget_list' %}" class="sidebar-link{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} is-active{% endif %}"{% if n == 'budget_list' or n == 'budget_create' or n == 'budget_edit' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">∎</span>
+            <span class="sidebar-link__label">Budgets</span>
+          </a>
+          <a href="{% url 'goals_list' %}" class="sidebar-link{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} is-active{% endif %}"{% if n == 'goals_list' or n == 'goal_create' or n == 'goal_contribute' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">★</span>
+            <span class="sidebar-link__label">Goals</span>
+          </a>
+          <a href="{% url 'reports' %}" class="sidebar-link{% if n == 'reports' %} is-active{% endif %}"{% if n == 'reports' %} aria-current="page"{% endif %}>
+            <span class="sidebar-link__icon" aria-hidden="true">▲</span>
+            <span class="sidebar-link__label">Reports</span>
+          </a>
+        </nav>
+
+        <a href="{% url 'transaction_add' %}" class="sidebar-cta{% if n == 'transaction_add' %} is-active{% endif %}"{% if n == 'transaction_add' %} aria-current="page"{% endif %}>+ Add transaction</a>
+
+        <a href="{% url 'notifications' %}" class="sidebar-link sidebar-link--alerts{% if n == 'notifications' %} is-active{% endif %}"{% if n == 'notifications' %} aria-current="page"{% endif %}>
+          <span class="sidebar-link__icon" aria-hidden="true">!</span>
+          <span class="sidebar-link__label">Alerts</span>
+          {% if unread_notification_count %}<span class="notif-badge">{{ unread_notification_count }}</span>{% endif %}
+        </a>
+
+        <div class="sidebar-user">
+          <span class="sidebar-user__email" title="{{ user.email }}">{{ user.email }}</span>
+          <form class="inline-logout" method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="secondary sidebar-user__logout">Log out</button>
+          </form>
+        </div>
+      </aside>
+
+      <div class="app-sidebar-backdrop" id="app-sidebar-backdrop" hidden></div>
+    {% else %}
+      {% block guest_header %}
+      <header class="app-topnav">
+        <a href="{% url 'login' %}" class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>{% block brand_text_guest %}MyBudget Desk{% endblock %}</span>
+        </a>
+        <nav class="app-topnav__nav" aria-label="Main">
+          <a href="{% url 'login' %}" class="topnav-link{% if n == 'login' %} is-active{% endif %}"{% if n == 'login' %} aria-current="page"{% endif %}>Log in</a>
+          <a href="{% url 'signup' %}" class="topnav-cta{% if n == 'signup' %} is-active{% endif %}"{% if n == 'signup' %} aria-current="page"{% endif %}>Sign up</a>
+        </nav>
+      </header>
+      {% endblock %}
+    {% endif %}
+
+    <div class="app-body">
+      {% if user.is_authenticated %}
+      <div class="app-topbar">
+        <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-controls="app-sidebar" aria-label="Open navigation">
+          <span aria-hidden="true">☰</span>
         </button>
       </div>
-
-      {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
       {% endif %}
 
-      {% block content %}{% endblock %}
-    </main>
+      <main class="app-main {% block main_class %}{% endblock %}">
+        <div class="page-hero-sds-wrap">
+          {% block page_hero %}{% endblock %}
+          {% block sds_help_open_button %}
+          <button type="button" class="sds-help-trigger sds-help-trigger--in-hero" id="sds-help-open" aria-haspopup="dialog" aria-controls="sds-help-dialog" title="SDS: user stories for this page">
+            <span class="sds-help-trigger__icon" aria-hidden="true">i</span>
+            <span class="visually-hidden">Open SDS user-story info for this page</span>
+          </button>
+          {% endblock %}
+        </div>
 
-    <footer class="app-footer">
-      {% block footer %}
-        <span>Personal Budgeting · CS251</span>
-      {% endblock %}
-    </footer>
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer class="app-footer">
+        {% block footer %}
+          <span>Personal Budgeting · CS251</span>
+        {% endblock %}
+      </footer>
+    </div>
   </div>
+  {% endwith %}
+
+  {% if user.is_authenticated %}
+  <div id="kbd-help-backdrop" class="kbd-shortcuts-backdrop" hidden></div>
+  <div id="kbd-help-dialog" class="kbd-shortcuts-dialog" role="dialog" aria-modal="true" aria-labelledby="kbd-help-title" hidden>
+    <h2 id="kbd-help-title" class="section-title" style="margin-top:0;">Keyboard shortcuts</h2>
+    <ul class="muted" style="margin:0.5rem 0 0;line-height:1.9;">
+      <li><kbd>g</kbd> then <kbd>d</kbd> — Dashboard</li>
+      <li><kbd>g</kbd> then <kbd>t</kbd> — Transactions</li>
+      <li><kbd>n</kbd> — New transaction</li>
+      <li><kbd>?</kbd> — Show this dialog</li>
+      <li><kbd>Esc</kbd> — Close dialogs</li>
+    </ul>
+    <button type="button" class="secondary" id="kbd-help-close" style="margin-top:1rem;width:100%;">Close</button>
+  </div>
+  {% endif %}
 
   <div class="sds-help-backdrop" id="sds-help-backdrop" hidden></div>
   <div class="sds-help-dialog" id="sds-help-dialog" role="dialog" aria-modal="true" aria-labelledby="sds-help-title" hidden>
@@ -93,6 +165,7 @@
       </div>
     </div>
   </div>
+
   <script>
   (function () {
     var openBtn = document.getElementById("sds-help-open");
@@ -117,6 +190,119 @@
     backdrop.addEventListener("click", close);
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && !dialog.hidden) close();
+    });
+  })();
+
+  {% if user.is_authenticated %}
+  (function () {
+    var kbdDlg = document.getElementById("kbd-help-dialog");
+    var kbdBd = document.getElementById("kbd-help-backdrop");
+    var kbdClose = document.getElementById("kbd-help-close");
+    function closeKbd() {
+      if (!kbdDlg || !kbdBd) return;
+      kbdDlg.hidden = true;
+      kbdBd.hidden = true;
+    }
+    function openKbd() {
+      if (!kbdDlg || !kbdBd) return;
+      kbdDlg.hidden = false;
+      kbdBd.hidden = false;
+      if (kbdClose) kbdClose.focus();
+    }
+    if (kbdBd) kbdBd.addEventListener("click", closeKbd);
+    if (kbdClose) kbdClose.addEventListener("click", closeKbd);
+
+    var ROUTES = {
+      dashboard: "{% url 'dashboard' %}",
+      transactions: "{% url 'transaction_list' %}",
+      addTx: "{% url 'transaction_add' %}",
+    };
+
+    var awaitingG = false;
+    var gTimer;
+
+    document.addEventListener(
+      "keydown",
+      function (e) {
+        if (kbdDlg && !kbdDlg.hidden && e.key === "Escape") {
+          e.preventDefault();
+          closeKbd();
+          return;
+        }
+      },
+      true
+    );
+
+    document.addEventListener("keydown", function (e) {
+      var tag = e.target && e.target.nodeName;
+      if (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        (e.target.closest && e.target.closest("[contenteditable]"))
+      )
+        return;
+
+      if (e.key === "?") {
+        e.preventDefault();
+        if (kbdDlg) {
+          if (kbdDlg.hidden) openKbd();
+          else closeKbd();
+        }
+        return;
+      }
+
+      if ((e.key === "g" || e.key === "G") && !e.ctrlKey && !e.metaKey) {
+        awaitingG = true;
+        clearTimeout(gTimer);
+        gTimer = setTimeout(function () {
+          awaitingG = false;
+        }, 950);
+        return;
+      }
+
+      if (awaitingG) {
+        clearTimeout(gTimer);
+        awaitingG = false;
+        if (e.key === "d" || e.key === "D") {
+          window.location.href = ROUTES.dashboard;
+          return;
+        }
+        if (e.key === "t" || e.key === "T") {
+          window.location.href = ROUTES.transactions;
+          return;
+        }
+        return;
+      }
+
+      if (e.key === "n" || e.key === "N") {
+        window.location.href = ROUTES.addTx;
+      }
+    });
+  })();
+  {% endif %}
+
+  (function () {
+    var toggle = document.getElementById("sidebar-toggle");
+    var closeBtn = document.getElementById("sidebar-close");
+    var backdrop = document.getElementById("app-sidebar-backdrop");
+    if (!toggle || !backdrop) return;
+    function open() {
+      document.body.classList.add("has-sidebar-open");
+      backdrop.hidden = false;
+    }
+    function close() {
+      document.body.classList.remove("has-sidebar-open");
+      backdrop.hidden = true;
+    }
+    toggle.addEventListener("click", function () {
+      if (document.body.classList.contains("has-sidebar-open")) close();
+      else open();
+    });
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && document.body.classList.contains("has-sidebar-open")) close();
     });
   })();
   </script>

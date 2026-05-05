@@ -7,40 +7,60 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="card">
+
+<div class="card card--inline-toolbar card--toolbar-premium">
   <div class="card-toolbar">
-    <p class="muted card-toolbar__text">Track targets, deadlines, and monthly savings needed.</p>
-    <a href="{% url 'goal_create' %}" class="btn">Create goal</a>
+    <p class="muted card-toolbar__text card-toolbar__text--compact">Progress, deadline, and suggested monthly savings on each goal.</p>
+    <a href="{% url 'goal_create' %}" class="btn btn--toolbar">Create goal</a>
   </div>
-  {% if goals %}
-    {% for goal in goals %}
-      <div class="goal-card">
-        <div class="goal-header">
-          <span class="goal-name">{{ goal.name }}</span>
-          <span class="goal-amounts">{{ goal.current_amount|floatformat:2 }} / {{ goal.target_amount|floatformat:2 }}</span>
-        </div>
-        <div class="progress-bar-wrap" title="{{ goal.get_progress_percentage|floatformat:0 }}% complete">
-          <div class="progress-bar {% if goal.check_goal_completion %}progress-bar--complete{% endif %}"
-               style="width: {{ goal.get_progress_percentage|floatformat:0 }}%"></div>
-        </div>
-        <div class="goal-meta">
-          <span class="muted">{{ goal.get_progress_percentage|floatformat:0 }}% · Deadline: {{ goal.deadline }}</span>
-          {% if not goal.check_goal_completion %}
-            <span class="muted"> · ~{{ goal.get_monthly_savings_needed|floatformat:2 }}/month needed</span>
-          {% else %}
-            <span class="badge-income"> Goal reached!</span>
-          {% endif %}
-        </div>
-        {% if not goal.check_goal_completion %}
-          <a href="{% url 'goal_contribute' goal.pk %}" class="btn" style="margin-top:0.75rem;">Add contribution</a>
-        {% endif %}
-      </div>
-      {% if not forloop.last %}<hr class="goal-divider">{% endif %}
-    {% endfor %}
-  {% else %}
-    <p class="muted">No goals yet. Create one to start saving toward a target.</p>
-  {% endif %}
 </div>
+
+{% if goals %}
+<div class="goal-grid goal-grid--lift">
+  {% for goal in goals %}
+  <article class="goal-panel {% if goal.check_goal_completion %}goal-panel--complete{% endif %}">
+    <header class="goal-panel__top">
+      <div>
+        <p class="goal-panel__eyebrow">Savings goal</p>
+        <h2 class="goal-panel__title">{{ goal.name }}</h2>
+      </div>
+      {% if goal.check_goal_completion %}
+      <span class="goal-panel__badge goal-panel__badge--done">Complete</span>
+      {% endif %}
+    </header>
+
+    <div class="goal-panel__figures">
+      <span class="goal-panel__current">{{ goal.current_amount|floatformat:2 }}</span>
+      <span class="goal-panel__sep">/</span>
+      <span class="goal-panel__target">{{ goal.target_amount|floatformat:2 }}</span>
+    </div>
+
+    <div class="goal-panel__progress progress-bar-wrap" title="{{ goal.get_progress_percentage|floatformat:0 }}% complete">
+      <div class="progress-bar {% if goal.check_goal_completion %}progress-bar--complete{% endif %}"
+           style="width: {{ goal.get_progress_percentage|floatformat:0 }}%"></div>
+    </div>
+
+    <div class="goal-panel__meta">
+      <span class="goal-chip"><strong>{{ goal.get_progress_percentage|floatformat:0 }}%</strong> funded</span>
+      <span class="goal-chip">Due <strong>{{ goal.deadline }}</strong></span>
+      {% if not goal.check_goal_completion %}
+      <span class="goal-chip goal-chip--accent">~{{ goal.get_monthly_savings_needed|floatformat:2 }}/mo suggested</span>
+      {% endif %}
+    </div>
+
+    {% if not goal.check_goal_completion %}
+    <a href="{% url 'goal_contribute' goal.pk %}" class="btn btn--block">Add contribution</a>
+    {% else %}
+    <p class="goal-panel__celebrate muted" style="margin:0;text-align:center;">You did it — outstanding discipline.</p>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card empty-state">
+  <p class="muted">No goals yet. <a href="{% url 'goal_create' %}">Create one</a> to start saving toward a target.</p>
+</div>
+{% endif %}
 {% endblock %}
 {% block sds_help %}
 <ul class="sds-us-list">

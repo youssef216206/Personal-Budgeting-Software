@@ -1,18 +1,38 @@
 import calendar
 import json
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import Sum
+from django.db.models import Q, Sum
+from django.db.models.functions import TruncDate
+from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .forms import BudgetForm, ContributionForm, SavingsGoalForm, SignUpForm, TransactionForm
-from .models import Budget, Notification, SavingsGoal, Transaction
+from .forms import (
+    BudgetForm,
+    CategoryForm,
+    ContributionForm,
+    SavingsGoalForm,
+    SignUpForm,
+    SubscriptionForm,
+    TransactionForm,
+    transaction_form_voice_hidden,
+)
+from .health import compute_health
+from .insights import dashboard_insights
+from .models import (
+    Budget,
+    Category,
+    Notification,
+    SavingsGoal,
+    Subscription,
+    Transaction,
+)
 
 
 def signup(request):
@@ -50,6 +70,9 @@ def dashboard(request):
     month_end = month_start.replace(
         day=calendar.monthrange(month_start.year, month_start.month)[1]
     )
+
+    prev_month_end = month_start - timedelta(days=1)
+    prev_month_start = prev_month_end.replace(day=1)
 
     recent_transactions = Transaction.objects.filter(user=user).select_related("category")[:8]
     budgets = list(Budget.objects.filter(user=user).select_related("category"))
@@ -93,6 +116,121 @@ def dashboard(request):
     has_data = Transaction.objects.filter(user=user).exists()
     savings_goals = SavingsGoal.objects.filter(user=user)[:5]
 
+    category_breakdown = list(
+        Transaction.objects.filter(
+            user=user,
+            kind=Transaction.KIND_EXPENSE,
+            occurred_at__date__gte=month_start,
+            occurred_at__date__lte=month_end,
+        )
+        .values("category__name")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+    )
+    # Donut: at most 11 slices; merge 11th-ranked and below into one "Other categories" slice
+    _chart_cat_max_slices = 11
+    if len(category_breakdown) > _chart_cat_max_slices:
+        _top_rows = category_breakdown[: _chart_cat_max_slices - 1]
+        _tail_total = sum(
+            float(r["total"] or 0)
+            for r in category_breakdown[_chart_cat_max_slices - 1 :]
+        )
+        chart_category_rows = list(_top_rows)
+        if _tail_total > 0:
+            chart_category_rows.append(
+                {"category__name": "Other categories", "total": _tail_total}
+            )
+    else:
+        chart_category_rows = category_breakdown
+    chart_cat_labels = [
+        (row["category__name"] or "Uncategorized") for row in chart_category_rows
+    ]
+    chart_cat_data = [float(row["total"]) for row in chart_category_rows]
+
+    daily_rows = (
+        Transaction.objects.filter(
+            user=user,
+            kind=Transaction.KIND_EXPENSE,
+            occurred_at__date__gte=month_start,
+            occurred_at__date__lte=month_end,
+        )
+        .annotate(day=TruncDate("occurred_at"))
+        .values("day")
+        .annotate(total=Sum("amount"))
+    )
+    by_day = {r["day"]: float(r["total"]) for r in daily_rows}
+    days_in_month = (month_end - month_start).days + 1
+    daily_series = []
+    for i in range(days_in_month):
+        d = month_start + timedelta(days=i)
+        daily_series.append({"day": d, "total": by_day.get(d, 0.0)})
+    chart_day_labels = [d["day"].strftime("%b %d") for d in daily_series]
+    chart_day_data = [d["total"] for d in daily_series]
+
+    has_chart_data = any(v > 0 for v in chart_cat_data) or any(
+        v > 0 for v in chart_day_data
+    )
+
+    heat_start = today - timedelta(days=83)
+    start_monday = heat_start - timedelta(days=heat_start.weekday())
+    heat_rows = (
+        Transaction.objects.filter(
+            user=user,
+            kind=Transaction.KIND_EXPENSE,
+            occurred_at__date__gte=start_monday,
+            occurred_at__date__lte=today,
+        )
+        .annotate(d=TruncDate("occurred_at"))
+        .values("d")
+        .annotate(total=Sum("amount"))
+    )
+    by_heat = {r["d"]: float(r["total"]) for r in heat_rows}
+    max_heat = max(by_heat.values() or [0])
+
+    def heat_level(amt):
+        if max_heat <= 0 or amt <= 0:
+            return 0
+        r = amt / max_heat
+        if r < 0.2:
+            return 1
+        if r < 0.4:
+            return 2
+        if r < 0.65:
+            return 3
+        return 4
+
+    heatmap_cols = []
+    for w in range(12):
+        col = []
+        for dow in range(7):
+            d = start_monday + timedelta(days=w * 7 + dow)
+            if d > today:
+                col.append({"date": d, "amount": 0, "level": 0, "future": True})
+            else:
+                amt = by_heat.get(d, 0.0)
+                col.append(
+                    {
+                        "date": d,
+                        "amount": amt,
+                        "level": heat_level(amt),
+                        "future": False,
+                    }
+                )
+        heatmap_cols.append(col)
+
+    insight_items = dashboard_insights(
+        user, month_start, month_end, prev_month_start, prev_month_end
+    )
+    health = compute_health(user)
+
+    voice_categories_json = json.dumps(
+        list(
+            Category.objects.filter(Q(user__isnull=True) | Q(user=user))
+            .order_by("name")
+            .values("id", "name")
+        )
+    )
+
     return render(
         request,
         "budgeting/dashboard.html",
@@ -107,12 +245,29 @@ def dashboard(request):
             "has_data": has_data,
             "savings_goals": savings_goals,
             "month": month_start.strftime("%B %Y"),
+            "has_chart_data": has_chart_data,
+            "chart_cat_labels": json.dumps(chart_cat_labels),
+            "chart_cat_data": json.dumps(chart_cat_data),
+            "chart_day_labels": json.dumps(chart_day_labels),
+            "chart_day_data": json.dumps(chart_day_data),
+            "heatmap_cols": heatmap_cols,
+            "insight_items": insight_items,
+            "health": health,
+            "voice_categories_json": voice_categories_json,
+            "voice_quick_form": transaction_form_voice_hidden(user),
         },
     )
 
 
 @login_required
 def transaction_add(request):
+    voice_categories_json = json.dumps(
+        list(
+            Category.objects.filter(Q(user__isnull=True) | Q(user=request.user))
+            .order_by("name")
+            .values("id", "name")
+        )
+    )
     if request.method == "POST":
         form = TransactionForm(request.POST, user=request.user)
         if form.is_valid():
@@ -126,10 +281,258 @@ def transaction_add(request):
             for alert in new_alerts:
                 messages.warning(request, alert.message)
             messages.success(request, "Transaction saved successfully.")
+            if request.POST.get("next") == "dashboard":
+                return redirect("dashboard")
+            return redirect("transaction_list")
+        if request.POST.get("next") == "dashboard":
+            for field, errs in form.errors.items():
+                for msg in errs:
+                    name = "Transaction" if field == "__all__" else field.replace("_", " ").title()
+                    messages.error(request, f"{name}: {msg}")
             return redirect("dashboard")
     else:
         form = TransactionForm(user=request.user)
-    return render(request, "budgeting/transaction_form.html", {"form": form})
+    return render(
+        request,
+        "budgeting/transaction_form.html",
+        {
+            "form": form,
+            "heading": "Add transaction",
+            "submit_label": "Save transaction",
+            "back_url_name": "dashboard",
+            "voice_categories_json": voice_categories_json,
+        },
+    )
+
+
+@login_required
+def transaction_list(request):
+    user = request.user
+    qs = Transaction.objects.filter(user=user).select_related("category")
+
+    kind = request.GET.get("kind", "").strip()
+    category_id = request.GET.get("category", "").strip()
+    from_date_str = request.GET.get("from_date", "").strip()
+    to_date_str = request.GET.get("to_date", "").strip()
+    q = request.GET.get("q", "").strip()
+
+    if kind in (Transaction.KIND_INCOME, Transaction.KIND_EXPENSE):
+        qs = qs.filter(kind=kind)
+    if category_id.isdigit():
+        qs = qs.filter(category_id=int(category_id))
+    from_date = None
+    to_date = None
+    if from_date_str:
+        try:
+            from_date = date.fromisoformat(from_date_str)
+            qs = qs.filter(occurred_at__date__gte=from_date)
+        except ValueError:
+            from_date = None
+    if to_date_str:
+        try:
+            to_date = date.fromisoformat(to_date_str)
+            qs = qs.filter(occurred_at__date__lte=to_date)
+        except ValueError:
+            to_date = None
+    if q:
+        qs = qs.filter(description__icontains=q)
+
+    totals = qs.aggregate(
+        income=Sum("amount", filter=Q(kind=Transaction.KIND_INCOME)),
+        expense=Sum("amount", filter=Q(kind=Transaction.KIND_EXPENSE)),
+    )
+
+    available_categories = Category.objects.filter(
+        Q(user__isnull=True) | Q(user=user)
+    ).order_by("name")
+
+    has_filters = any([kind, category_id, from_date_str, to_date_str, q])
+
+    return render(
+        request,
+        "budgeting/transaction_list.html",
+        {
+            "transactions": qs,
+            "available_categories": available_categories,
+            "filter_kind": kind,
+            "filter_category": category_id,
+            "filter_from_date": from_date_str,
+            "filter_to_date": to_date_str,
+            "filter_q": q,
+            "filter_count": qs.count(),
+            "filter_income": totals["income"] or 0,
+            "filter_expense": totals["expense"] or 0,
+            "has_filters": has_filters,
+        },
+    )
+
+
+@login_required
+def transaction_edit(request, pk):
+    t = get_object_or_404(Transaction, pk=pk, user=request.user)
+    voice_categories_json = json.dumps(
+        list(
+            Category.objects.filter(Q(user__isnull=True) | Q(user=request.user))
+            .order_by("name")
+            .values("id", "name")
+        )
+    )
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=t, user=request.user)
+        if form.is_valid():
+            before_save = timezone.now()
+            form.save()
+            new_alerts = Notification.objects.filter(
+                user=request.user, created_at__gte=before_save
+            )
+            for alert in new_alerts:
+                messages.warning(request, alert.message)
+            messages.success(request, "Transaction updated.")
+            return redirect("transaction_list")
+    else:
+        form = TransactionForm(instance=t, user=request.user)
+    return render(
+        request,
+        "budgeting/transaction_form.html",
+        {
+            "form": form,
+            "heading": "Edit transaction",
+            "submit_label": "Save changes",
+            "back_url_name": "transaction_list",
+            "transaction": t,
+            "voice_categories_json": voice_categories_json,
+        },
+    )
+
+
+@login_required
+def transaction_delete(request, pk):
+    t = get_object_or_404(Transaction, pk=pk, user=request.user)
+    if request.method == "POST":
+        t.delete()
+        messages.success(request, "Transaction deleted.")
+        return redirect("transaction_list")
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET", "POST"])
+    return render(
+        request,
+        "budgeting/transaction_confirm_delete.html",
+        {"transaction": t},
+    )
+
+
+@login_required
+def category_list(request):
+    user = request.user
+    if request.method == "POST":
+        form = CategoryForm(request.POST, user=user)
+        if form.is_valid():
+            cat = form.save()
+            messages.success(request, f"Category '{cat.name}' added.")
+            return redirect("category_list")
+    else:
+        form = CategoryForm(user=user)
+
+    defaults = Category.objects.filter(user__isnull=True).order_by("name")
+    mine = Category.objects.filter(user=user).order_by("name")
+
+    return render(
+        request,
+        "budgeting/category_list.html",
+        {
+            "form": form,
+            "defaults": defaults,
+            "mine": mine,
+        },
+    )
+
+
+@login_required
+def subscription_list(request):
+    items = Subscription.objects.filter(user=request.user).select_related("category")
+    return render(request, "budgeting/subscription_list.html", {"subscriptions": items})
+
+
+def _subscription_save_message(request, saved_verb: str):
+    """After save, post any due subscription expenses and surface one clear toast."""
+    posted = Subscription.objects.process_due_for(request.user)
+    if posted:
+        names = ", ".join(posted[:6])
+        more = "…" if len(posted) > 6 else ""
+        messages.success(
+            request,
+            f"{saved_verb}. Posted expense(s): {names}{more}.",
+        )
+    else:
+        messages.success(request, saved_verb + ".")
+
+
+@login_required
+def subscription_add(request):
+    if request.method == "POST":
+        form = SubscriptionForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            _subscription_save_message(request, "Subscription saved")
+            return redirect("subscription_list")
+    else:
+        form = SubscriptionForm(
+            user=request.user,
+            initial={"next_due": timezone.now().date()},
+        )
+    return render(
+        request,
+        "budgeting/subscription_form.html",
+        {"form": form, "heading": "Add subscription"},
+    )
+
+
+@login_required
+def subscription_edit(request, pk):
+    sub = get_object_or_404(Subscription, pk=pk, user=request.user)
+    if request.method == "POST":
+        form = SubscriptionForm(request.POST, instance=sub, user=request.user)
+        if form.is_valid():
+            form.save()
+            _subscription_save_message(request, "Subscription updated")
+            return redirect("subscription_list")
+    else:
+        form = SubscriptionForm(instance=sub, user=request.user)
+    return render(
+        request,
+        "budgeting/subscription_form.html",
+        {"form": form, "heading": "Edit subscription", "subscription": sub},
+    )
+
+
+@login_required
+def subscription_delete(request, pk):
+    sub = get_object_or_404(Subscription, pk=pk, user=request.user)
+    if request.method == "POST":
+        sub.delete()
+        messages.success(request, "Subscription deleted.")
+        return redirect("subscription_list")
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET", "POST"])
+    return render(
+        request,
+        "budgeting/subscription_confirm_delete.html",
+        {"subscription": sub},
+    )
+
+
+@login_required
+def subscription_toggle(request, pk):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+    sub = get_object_or_404(Subscription, pk=pk, user=request.user)
+    sub.is_active = not sub.is_active
+    sub.save(update_fields=["is_active"])
+    messages.info(
+        request,
+        "Subscription resumed." if sub.is_active else "Subscription paused.",
+    )
+    return redirect("subscription_list")
 
 
 @login_required

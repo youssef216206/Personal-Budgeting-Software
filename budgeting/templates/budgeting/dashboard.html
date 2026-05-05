@@ -1,4 +1,5 @@
 {% extends "budgeting/base.html" %}
+{% load static %}
 {% block title %}Dashboard — MyBudget Desk{% endblock %}
 {% block page_hero %}
 <div class="page-hero">
@@ -8,28 +9,136 @@
 {% endblock %}
 {% block content %}
 
-{% if not has_data %}
-<div class="card empty-state">
-  <p class="muted">No financial data available yet. <a href="{% url 'transaction_add' %}">Add your first transaction</a> to get started.</p>
-</div>
-{% endif %}
-
-<div class="card">
-  <h2 class="section-title">Summary</h2>
-  <div class="row">
-    <div class="stat-pill">
+<div class="card dash-kpi-card">
+  <h2 class="section-title section-title--kpi">{{ month }} overview</h2>
+  {% if not has_data %}
+  <p class="dash-empty-hint muted">No ledger entries yet. <a href="{% url 'transaction_add' %}">Add a transaction</a> or use Speak below when you’re ready.</p>
+  {% endif %}
+  <div class="row dash-kpi-row">
+    <div class="stat-pill dash-stat dash-stat--balance">
       <strong>Total balance</strong>
       <span class="amount {% if total_balance >= 0 %}amount--income{% else %}amount--expense{% endif %}">{{ total_balance|floatformat:2 }}</span>
     </div>
-    <div class="stat-pill">
-      <strong>{{ month }} income</strong>
+    <div class="stat-pill dash-stat dash-stat--income">
+      <strong>Income · this month</strong>
       <span class="amount amount--income">{{ income_total|floatformat:2 }}</span>
     </div>
-    <div class="stat-pill">
-      <strong>{{ month }} expenses</strong>
+    <div class="stat-pill dash-stat dash-stat--expense">
+      <strong>Expenses · this month</strong>
       <span class="amount amount--expense">{{ expense_total|floatformat:2 }}</span>
     </div>
   </div>
+</div>
+
+<div class="card dash-voice-card">
+  <h2 class="section-title">Speak to add a transaction</h2>
+  <p class="muted dash-voice-lede" style="margin-top:0;">Use Chrome or Edge: click below, allow the microphone, say something like <strong>“spent 42 on groceries yesterday”</strong> or <strong>“received salary 2100 income”</strong>. We parse it and save—you’ll land here again.</p>
+  <div class="voice-row dash-voice-row">
+    <button type="button" class="secondary" id="dash-voice-mic-btn">Speak transaction</button>
+    <span id="dash-voice-status" class="muted">Tap, allow the mic, then talk.</span>
+  </div>
+  <form id="dash-voice-form" action="{% url 'transaction_add' %}" method="post" class="dash-voice-form" novalidate aria-hidden="true">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="dashboard" />
+    {% for field in voice_quick_form %}{{ field }}{% endfor %}
+  </form>
+</div>
+<script type="application/json" id="dash-voice-categories-data">{{ voice_categories_json|safe }}</script>
+
+<div class="card health-card">
+  <h2 class="section-title">Financial health</h2>
+  <p class="health-score-explainer">Your score from 0–100 is built from habits in the last 30 days—not your bank balance. It mixes how much income you keep versus spend, staying inside active budgets, progress on savings goals, and how consistently you log activity.</p>
+  <p class="muted health-card__note" style="margin-top:0;">{{ health.savings_note }}</p>
+  <div class="health-card__body">
+    <div class="health-ring-wrap">
+      <svg class="health-ring" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="{{ health.ring_r }}" fill="none" stroke="rgba(99, 102, 241, 0.12)" stroke-width="10"/>
+        <circle cx="60" cy="60" r="{{ health.ring_r }}" fill="none" stroke="url(#healthGrad)" stroke-width="10"
+          stroke-linecap="round" stroke-dasharray="{{ health.ring_circ }}" stroke-dashoffset="{{ health.ring_offset }}"
+          transform="rotate(-90 60 60)"/>
+        <defs>
+          <linearGradient id="healthGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#2563eb"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+        </defs>
+        <text x="60" y="66" text-anchor="middle">{{ health.score }}</text>
+      </svg>
+      <span class="muted" style="font-size:0.82rem;font-weight:600;">out of 100</span>
+    </div>
+    <div class="health-breakdown">
+      {% for row in health.breakdown %}
+      <div class="health-bar-row">
+        <span class="health-bar-label">{{ row.label }}</span>
+        <div class="health-bar-track">
+          {% if row.label == "Savings posture (vs income)" %}
+          <div class="health-bar-fill" style="width: {% widthratio row.points 40 100 %}%"></div>
+          {% elif row.label == "Budget adherence" %}
+          <div class="health-bar-fill" style="width: {% widthratio row.points 30 100 %}%"></div>
+          {% elif row.label == "Goal momentum" %}
+          <div class="health-bar-fill" style="width: {% widthratio row.points 20 100 %}%"></div>
+          {% else %}
+          <div class="health-bar-fill" style="width: {% widthratio row.points 10 100 %}%"></div>
+          {% endif %}
+        </div>
+        <span class="muted" style="font-size:0.78rem;min-width:2.5rem;text-align:right;">{{ row.points }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if health.tips %}
+  <ul class="health-tips">
+    {% for tip in health.tips %}<li>{{ tip }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+{% if insight_items %}
+<div class="card">
+  <h2 class="section-title">Smart insights</h2>
+  <ul class="insight-list--dashboard">
+    {% for line in insight_items %}
+    <li class="insight-item--dash">{{ line }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="card chart-card chart-card--dashboard">
+  <h2 class="section-title">Spending overview · {{ month }}</h2>
+  <p class="heatmap-head chart-caption" style="margin-top:0;">Daily spend heatmap</p>
+  <div class="heatmap-wrap" role="img" aria-label="Daily expense heatmap">
+    <div class="heatmap-cols">
+      {% for col in heatmap_cols %}
+      <div class="heatmap-col">
+        {% for cell in col %}
+        <span class="heat-square heat-l{{ cell.level }}{% if cell.future %} heat-future{% endif %}"
+          title="{{ cell.date|date:'Y-m-d' }}{% if not cell.future %}: {{ cell.amount|floatformat:2 }}{% endif %}"></span>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if has_chart_data %}
+  <div class="charts-row">
+    <div class="chart-wrap">
+      <h3 class="chart-caption">By category</h3>
+      <div class="chart-canvas-host chart-canvas-host--mini">
+        <canvas id="dashCatChart" aria-label="Expenses by category for the current month"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <h3 class="chart-caption">Daily spend</h3>
+      <div class="chart-canvas-host chart-canvas-host--mini">
+        <canvas id="dashDayChart" aria-label="Daily spending across the current month"></canvas>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="chart-canvas-host chart-canvas-host--empty">
+    <p class="chart-empty muted">No expense data yet for {{ month }}. Add an expense transaction to see the breakdown and the daily-spend trend.</p>
+  </div>
+  {% endif %}
 </div>
 
 {% if budget_warnings %}
@@ -84,6 +193,7 @@
         </tbody>
       </table>
     </div>
+    <p style="margin-top:1rem;margin-bottom:0;"><a href="{% url 'transaction_list' %}">View all transactions →</a></p>
   {% else %}
     <p class="muted">No transactions yet. <a href="{% url 'transaction_add' %}">Add one</a>.</p>
   {% endif %}
@@ -144,7 +254,131 @@
 <ul class="sds-us-list">
   <li>
     <strong>US #10 — Dashboard overview</strong>
-    Opening the app loads a summary: totals, recent transactions, budget warnings, and unread notifications. The SDS sequence shows DashboardUI gathering data from transactions, budgets, and notifications when the user opens the application.
+    Opening the app loads a summary: totals, recent transactions, budget warnings, unread notifications, and optional voice quick-add via the browser speech API onto the transaction pipeline. The SDS sequence shows DashboardUI gathering data from transactions, budgets, and notifications when the user opens the application.
+  </li>
+  <li>
+    <strong>US #7 — Spending overview charts</strong>
+    Category donut and daily-spend line for the current month, plus a twelve-week expense heatmap, complement the Reports view.
+  </li>
+  <li>
+    <strong>Insights &amp; financial health</strong>
+    Lightweight rule-based tips and an aggregate 0–100 score summarise budgets, savings rate, goals, and logging rhythm.
   </li>
 </ul>
+{% endblock %}
+
+{% block extra_js %}
+{% if has_chart_data %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const palette = [
+    '#3b82f6','#6366f1','#8b5cf6','#a78bfa',
+    '#60a5fa','#818cf8','#c4b5fd','#7c3aed',
+    '#2563eb','#4f46e5',
+  ];
+
+  const catLabels = {{ chart_cat_labels|safe }};
+  const catData   = {{ chart_cat_data|safe }};
+  const dayLabels = {{ chart_day_labels|safe }};
+  const dayData   = {{ chart_day_data|safe }};
+
+  const catCanvas = document.getElementById('dashCatChart');
+  if (catCanvas && catData.length > 0) {
+    new Chart(catCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: catLabels,
+        datasets: [{
+          data: catData,
+          backgroundColor: palette.slice(0, catData.length),
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 8,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '58%',
+        layout: { padding: { top: 4, right: 4, bottom: 4, left: 4 } },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { family: 'Inter', size: 11 },
+              padding: 8,
+              boxWidth: 10,
+              usePointStyle: true,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.raw;
+                const n = typeof v === 'number' ? v : parseFloat(v);
+                return ` ${ctx.label}: ${Number.isFinite(n) ? n.toFixed(2) : v}`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  const dayCanvas = document.getElementById('dashDayChart');
+  if (dayCanvas && dayData.length > 0) {
+    new Chart(dayCanvas, {
+      type: 'line',
+      data: {
+        labels: dayLabels,
+        datasets: [{
+          data: dayData,
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.16)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.32,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#7c3aed',
+          pointHoverBorderColor: '#ffffff',
+          pointHoverBorderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 8, bottom: 4, left: 4 } },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${Number(ctx.parsed.y || 0).toFixed(2)}`,
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(15, 23, 42, 0.06)' },
+            ticks: { font: { family: 'Inter', size: 10 }, maxTicksLimit: 5 },
+          },
+          x: {
+            grid: { display: false },
+            ticks: {
+              font: { family: 'Inter', size: 10 },
+              maxRotation: 0,
+              autoSkip: true,
+              maxTicksLimit: 8,
+            },
+          },
+        },
+      },
+    });
+  }
+})();
+</script>
+{% endif %}
+<script src="{% static 'budgeting/js/voice.js' %}"></script>
 {% endblock %}

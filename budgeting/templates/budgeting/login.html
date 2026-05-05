@@ -3,32 +3,75 @@
 {% block body_class %}auth-body{% endblock %}
 {% block main_class %}app-main--auth{% endblock %}
 {% block meta_description %}Sign in to MyBudget Desk with your email.{% endblock %}
+{% block guest_header %}{% endblock %}
+{% block sds_help_open_button %}{% endblock %}
 {% block content %}
-<div class="auth-shell">
-  <div class="auth-card card form-card">
-    <header class="auth-card__header">
-      <div class="auth-brand-mark" aria-hidden="true"></div>
-      <h1 class="auth-card__title">Welcome back</h1>
-      <p class="auth-card__lead">Sign in with the email and password for your MyBudget Desk account.</p>
-    </header>
-    <form method="post" class="auth-form">
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-        <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
-      {% endif %}
-      {% for field in form %}
-        <label for="{{ field.id_for_label }}" class="auth-label">{% if field.name == 'username' %}Email{% else %}{{ field.label }}{% endif %}</label>
-        {{ field }}
-        {{ field.errors }}
-      {% endfor %}
-      <div class="form-actions form-actions--auth">
-        <button type="submit">Log in</button>
+<div class="auth-page">
+  <header class="auth-chrome" aria-label="Site">
+    <a href="{% url 'login' %}" class="auth-chrome__brand">
+      <span class="auth-chrome__mark" aria-hidden="true"></span>
+      <span class="auth-chrome__word">MyBudget Desk</span>
+    </a>
+    <nav class="auth-chrome__nav" aria-label="Account">
+      <a href="{% url 'signup' %}" class="auth-chrome__pill auth-chrome__pill--cta">Create account</a>
+    </nav>
+  </header>
+
+  <div class="auth-split auth-split--lite">
+    <div class="auth-split__story auth-split__story--login">
+      <div class="auth-split__grain" aria-hidden="true"></div>
+      <div class="auth-split__orb auth-split__orb--a"></div>
+      <div class="auth-split__orb auth-split__orb--b"></div>
+      <div class="auth-split__mesh" aria-hidden="true"></div>
+      <div class="auth-split__story-inner">
+        <div class="auth-split__story-top">
+          <p class="auth-split__eyebrow">Trusted personal finance workspace</p>
+          <button type="button" class="auth-info-btn" id="sds-help-open" aria-label="Course and SDS notes for this screen" aria-haspopup="dialog" aria-controls="sds-help-dialog" title="Course / SDS notes for this screen">
+            <span class="auth-info-btn__glyph" aria-hidden="true">i</span>
+          </button>
+        </div>
+        <h2 class="auth-split__story-title">Every dollar,<br>a clear decision.</h2>
+        <p class="auth-split__story-lede">Income, subscriptions, budgets, and goals stay in sync—without fighting a maze of spreadsheets.</p>
+        <ul class="auth-split__highlights">
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Health score built from calm 30‑day rhythms</li>
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Subscriptions surface as tracked expenses automatically</li>
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Reports and dashboards when you actually need answers</li>
+        </ul>
+        <div class="auth-split__trust">
+          <span class="auth-split__trust-chip">Privacy-first · your ledger</span>
+        </div>
+
       </div>
-    </form>
-    <footer class="auth-card__footer">
-      <span class="auth-card__footer-hint">New here?</span>
-      <a href="{% url 'signup' %}">Create an account</a>
-    </footer>
+    </div>
+
+    <div class="auth-split__panel">
+      <div class="auth-split__panel-scrim"></div>
+      <div class="auth-split__panel-card">
+        <div class="auth-split__badge">Welcome back</div>
+        <header class="auth-split__panel-head">
+          <h1 class="auth-split__panel-title">Sign in</h1>
+          <p class="auth-split__panel-sub">Enter the email and password from when you joined.</p>
+        </header>
+        <form method="post" class="auth-form auth-form--split" autocomplete="on">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
+          {% endif %}
+          {% for field in form %}
+            <label for="{{ field.id_for_label }}" class="auth-label auth-label--split">{% if field.name == 'username' %}Email{% else %}{{ field.label }}{% endif %}</label>
+            {{ field }}
+            {{ field.errors }}
+          {% endfor %}
+          <div class="form-actions form-actions--auth auth-form-split__actions">
+            <button type="submit" class="auth-btn-primary">Continue to dashboard</button>
+          </div>
+        </form>
+        <footer class="auth-split__swap">
+          <span class="auth-split__swap-text">Need an account?</span>
+          <a href="{% url 'signup' %}">Join MyBudget Desk</a>
+        </footer>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -1,0 +1,49 @@
+{% extends "budgeting/base.html" %}
+{% block title %}{{ heading }} — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>{{ heading }}</h1>
+  <p class="lead">Name, category, cadence, and next charge date. Expenses appear when next due is today or earlier.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <form method="post" novalidate class="subscription-form">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.name == 'is_active' %}
+      <div class="sub-active-card">
+        <p class="sub-active-card__eyebrow">Status</p>
+        <div class="sub-active-row-wrap">
+          {{ field }}
+          <label class="sub-active-row" for="{{ field.id_for_label }}">
+            <span class="sub-active-row__text">
+              <span class="sub-active-row__title">{{ field.label }}</span>
+              {% if field.help_text %}<span class="sub-active-row__hint muted">{{ field.help_text }}</span>{% endif %}
+            </span>
+            <span class="sub-active-switch" aria-hidden="true">
+              <span class="sub-active-switch__thumb"></span>
+            </span>
+          </label>
+        </div>
+        {% if field.errors %}
+          <ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      {% else %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<p class="field-help muted">{{ field.help_text }}</p>{% endif %}
+      {{ field.errors }}
+      {% endif %}
+    {% endfor %}
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <div class="form-actions">
+      <button type="submit">Save</button>
+      <a href="{% url 'subscription_list' %}" class="btn secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

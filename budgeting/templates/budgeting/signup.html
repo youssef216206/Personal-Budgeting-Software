@@ -3,32 +3,75 @@
 {% block body_class %}auth-body{% endblock %}
 {% block main_class %}app-main--auth{% endblock %}
 {% block meta_description %}Create your MyBudget Desk account — secure sign up with email verification flow.{% endblock %}
+{% block guest_header %}{% endblock %}
+{% block sds_help_open_button %}{% endblock %}
 {% block content %}
-<div class="auth-shell">
-  <div class="auth-card card form-card">
-    <header class="auth-card__header">
-      <div class="auth-brand-mark" aria-hidden="true"></div>
-      <h1 class="auth-card__title">Create account</h1>
-      <p class="auth-card__lead">Choose a strong password. We keep emails unique and sign you in when you’re done.</p>
-    </header>
-    <form method="post" class="auth-form" novalidate>
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-        <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
-      {% endif %}
-      {% for field in form %}
-        <label for="{{ field.id_for_label }}" class="auth-label">{{ field.label }}</label>
-        {{ field }}
-        {{ field.errors }}
-      {% endfor %}
-      <div class="form-actions form-actions--auth">
-        <button type="submit">Create account</button>
+<div class="auth-page">
+  <header class="auth-chrome" aria-label="Site">
+    <a href="{% url 'login' %}" class="auth-chrome__brand">
+      <span class="auth-chrome__mark" aria-hidden="true"></span>
+      <span class="auth-chrome__word">MyBudget Desk</span>
+    </a>
+    <nav class="auth-chrome__nav" aria-label="Account">
+      <a href="{% url 'login' %}" class="auth-chrome__pill auth-chrome__pill--ghost">Sign in instead</a>
+    </nav>
+  </header>
+
+  <div class="auth-split auth-split--lite">
+    <div class="auth-split__story auth-split__story--signup">
+      <div class="auth-split__grain" aria-hidden="true"></div>
+      <div class="auth-split__orb auth-split__orb--c"></div>
+      <div class="auth-split__orb auth-split__orb--d"></div>
+      <div class="auth-split__mesh auth-split__mesh--signup" aria-hidden="true"></div>
+      <div class="auth-split__story-inner">
+        <div class="auth-split__story-top">
+          <p class="auth-split__eyebrow">Onboard in one minute</p>
+          <button type="button" class="auth-info-btn" id="sds-help-open" aria-label="Course and SDS notes for this screen" aria-haspopup="dialog" aria-controls="sds-help-dialog" title="Course / SDS notes for this screen">
+            <span class="auth-info-btn__glyph" aria-hidden="true">i</span>
+          </button>
+        </div>
+        <h2 class="auth-split__story-title">Momentum starts<br>when it’s effortless.</h2>
+        <p class="auth-split__story-lede">Pair transactions with budgets and goals—from the same calm surface you actually open every week.</p>
+        <ul class="auth-split__highlights">
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Guided categories · no bookkeeping degree required</li>
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Goals with progress cues and pacing</li>
+          <li><span class="auth-split__tick" aria-hidden="true"></span> Your data isolated to your account</li>
+        </ul>
+        <div class="auth-split__trust">
+          <span class="auth-split__trust-chip">No ads · built for coursework clarity</span>
+        </div>
+
       </div>
-    </form>
-    <footer class="auth-card__footer">
-      <span class="auth-card__footer-hint">Already registered?</span>
-      <a href="{% url 'login' %}">Log in instead</a>
-    </footer>
+    </div>
+
+    <div class="auth-split__panel">
+      <div class="auth-split__panel-scrim"></div>
+      <div class="auth-split__panel-card">
+        <div class="auth-split__badge auth-split__badge--accent">Begin</div>
+        <header class="auth-split__panel-head">
+          <h1 class="auth-split__panel-title">Create your account</h1>
+          <p class="auth-split__panel-sub">Your email is your username; your password is hashed and kept private.</p>
+        </header>
+        <form method="post" class="auth-form auth-form--split" novalidate autocomplete="on">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <ul class="errorlist errorlist--auth">{{ form.non_field_errors }}</ul>
+          {% endif %}
+          {% for field in form %}
+            <label for="{{ field.id_for_label }}" class="auth-label auth-label--split">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+          {% endfor %}
+          <div class="form-actions form-actions--auth auth-form-split__actions">
+            <button type="submit" class="auth-btn-primary">Finish &amp; open dashboard</button>
+          </div>
+        </form>
+        <footer class="auth-split__swap">
+          <span class="auth-split__swap-text">Returning member?</span>
+          <a href="{% url 'login' %}">Sign in instead</a>
+        </footer>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -36,7 +79,7 @@
 <ul class="sds-us-list">
   <li>
     <strong>US #1 — User sign-up</strong>
-    A new user enters registration data; the system validates input, ensures the email is unique, saves the user, and redirects to the dashboard on success. See SDS “Sequence Diagram 1: User Sign up” and the US #1 row in the class–sequence usage table.
+    A new user enters registration data; the system validates input, ensures the email is unique, saves the user, and redirects to the dashboard on success. See SDS “Sequence Diagram 1: User sign up” and the US #1 row in the class–sequence usage table.
   </li>
 </ul>
 {% endblock %}

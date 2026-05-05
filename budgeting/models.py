@@ -1,5 +1,8 @@
+import calendar
+from datetime import date, datetime, time, timedelta
+
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 
 
@@ -19,6 +22,12 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "user"],
+                name="uniq_category_name_per_user",
+            ),
+        ]
 
     def __str__(self):
         return self.name
@@ -145,21 +154,149 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.kind} {self.amount} ({self.occurred_at.date()})"
 
+    @staticmethod
+    def _matching_budgets(user, category_id, on_date):
+        if not category_id or on_date is None:
+            return Budget.objects.none()
+        return Budget.objects.filter(
+            user=user,
+            category_id=category_id,
+            start_date__lte=on_date,
+            end_date__gte=on_date,
+        )
+
+    @transaction.atomic
     def save(self, *args, **kwargs):
         is_new = self.pk is None
+        old_snapshot = None
+        if not is_new:
+            try:
+                prev = Transaction.objects.select_for_update().get(pk=self.pk)
+                old_snapshot = {
+                    "kind": prev.kind,
+                    "amount": prev.amount,
+                    "category_id": prev.category_id,
+                    "on_date": prev.occurred_at.date() if prev.occurred_at else None,
+                    "user_id": prev.user_id,
+                }
+            except Transaction.DoesNotExist:
+                old_snapshot = None
+
         super().save(*args, **kwargs)
-        if is_new and self.kind == self.KIND_EXPENSE and self.category_id:
-            on_date = self.occurred_at.date()
-            matching = Budget.objects.filter(
-                user=self.user,
-                category=self.category,
-                start_date__lte=on_date,
-                end_date__gte=on_date,
-            )
-            for budget in matching:
+
+        if old_snapshot and old_snapshot["kind"] == self.KIND_EXPENSE:
+            for b in self._matching_budgets(
+                self.user_id, old_snapshot["category_id"], old_snapshot["on_date"]
+            ):
+                b.spent_amount = max(0, b.spent_amount - old_snapshot["amount"])
+                b.save(update_fields=["spent_amount"])
+
+        if self.kind == self.KIND_EXPENSE and self.category_id:
+            on_date = self.occurred_at.date() if self.occurred_at else None
+            triggered = []
+            for budget in self._matching_budgets(self.user_id, self.category_id, on_date):
                 budget.spent_amount += self.amount
                 budget.save(update_fields=["spent_amount"])
+                triggered.append(budget)
+            for budget in triggered:
                 budget.trigger_alert()
+
+    @transaction.atomic
+    def delete(self, *args, **kwargs):
+        if self.kind == self.KIND_EXPENSE and self.category_id and self.occurred_at:
+            on_date = self.occurred_at.date()
+            for b in self._matching_budgets(self.user_id, self.category_id, on_date):
+                b.spent_amount = max(0, b.spent_amount - self.amount)
+                b.save(update_fields=["spent_amount"])
+        return super().delete(*args, **kwargs)
+
+
+class SubscriptionManager(models.Manager):
+    def process_due_for(self, user, max_iter_per_subscription=72):
+        today = timezone.now().date()
+        posted = []
+        with transaction.atomic():
+            qs = (
+                self.filter(user=user, is_active=True, next_due__lte=today)
+                .select_related("category")
+                .select_for_update()
+            )
+            for sub in qs:
+                n_left = max_iter_per_subscription
+                next_due = sub.next_due
+                while sub.is_active and next_due <= today and n_left > 0:
+                    occurred = timezone.make_aware(datetime.combine(next_due, time(12, 0)))
+                    Transaction.objects.create(
+                        user_id=sub.user_id,
+                        kind=Transaction.KIND_EXPENSE,
+                        amount=sub.amount,
+                        category_id=sub.category_id,
+                        description=f"Subscription · {sub.name}",
+                        occurred_at=occurred,
+                    )
+                    posted.append(sub.name)
+                    next_due = Subscription.advance_date(next_due, sub.cycle)
+                    n_left -= 1
+                self.filter(pk=sub.pk).update(next_due=next_due)
+        return posted
+
+
+class Subscription(models.Model):
+    """Recurring subscription or bill charge (processed on dashboard load)."""
+
+    CYCLE_WEEKLY = "weekly"
+    CYCLE_MONTHLY = "monthly"
+    CYCLE_YEARLY = "yearly"
+    CYCLE_CHOICES = [
+        (CYCLE_WEEKLY, "Weekly"),
+        (CYCLE_MONTHLY, "Monthly"),
+        (CYCLE_YEARLY, "Yearly"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="subscriptions",
+    )
+    name = models.CharField(max_length=200)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name="subscriptions",
+    )
+    cycle = models.CharField(max_length=10, choices=CYCLE_CHOICES, default=CYCLE_MONTHLY)
+    next_due = models.DateField(help_text="Next charge date; advances after posting")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["next_due", "name"]
+
+    def __str__(self):
+        return f"{self.name} ({self.cycle})"
+
+    @classmethod
+    def advance_date(cls, from_date, cycle: str):
+        d = from_date if isinstance(from_date, date) else datetime.combine(from_date, time.min).date()
+        if cycle == cls.CYCLE_WEEKLY:
+            return d + timedelta(weeks=1)
+        if cycle == cls.CYCLE_MONTHLY:
+            y, m, day = d.year, d.month, d.day
+            if m == 12:
+                y, m = y + 1, 1
+            else:
+                m += 1
+            last = calendar.monthrange(y, m)[1]
+            return date(y, m, min(day, last))
+        if cycle == cls.CYCLE_YEARLY:
+            try:
+                return d.replace(year=d.year + 1)
+            except ValueError:
+                return date(d.year + 1, 2, 28)
+        return d
+
+    objects = SubscriptionManager()
 
 
 class SavingsGoal(models.Model):

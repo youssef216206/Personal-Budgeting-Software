@@ -1,0 +1,75 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Categories — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Categories</h1>
+  <p class="lead">Built-in categories are shared with everyone. Add your own to better fit your spending.</p>
+</div>
+{% endblock %}
+{% block content %}
+
+<div class="card form-card catalog-card catalog-card--add surface-premium">
+  <div class="catalog-card__head">
+    <div class="catalog-card__glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+    </div>
+    <div>
+      <h2 class="catalog-card__title">Add a category</h2>
+      <p class="catalog-card__sub muted">Custom labels show up instantly in budgets, transactions, and reports.</p>
+    </div>
+  </div>
+  <form method="post" class="category-add-form" novalidate>
+    {% csrf_token %}
+    <div class="category-add-row">
+      <div class="category-add-row__field">
+        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+        {{ form.name }}
+        {{ form.name.errors }}
+      </div>
+      <button type="submit">Add</button>
+    </div>
+    {% if form.non_field_errors %}
+      <ul class="errorlist">{{ form.non_field_errors }}</ul>
+    {% endif %}
+    <p class="muted catalog-card__hint">Built-in defaults stay shared; yours are private to your account.</p>
+  </form>
+</div>
+
+<div class="card catalog-card catalog-card--list surface-premium">
+  <div class="catalog-card__block-head">
+    <h2 class="catalog-card__block-title">My categories</h2>
+    <p class="catalog-card__block-sub muted">Your personal tags.</p>
+  </div>
+  {% if mine %}
+    <ul class="category-list category-list--elevated">
+      {% for c in mine %}
+        <li class="category-chip"><span class="category-chip__name">{{ c.name }}</span><span class="tag-pill tag-pill--mine">Custom</span></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">No custom categories yet — add one above.</p>
+  {% endif %}
+</div>
+
+<div class="card catalog-card catalog-card--list surface-premium surface-premium--subtle">
+  <div class="catalog-card__block-head">
+    <h2 class="catalog-card__block-title">Built-in categories</h2>
+    <p class="catalog-card__block-sub muted">Shared with everyone — read-only templates for common spending.</p>
+  </div>
+  <ul class="category-list category-list--elevated">
+    {% for c in defaults %}
+      <li class="category-chip"><span class="category-chip__name">{{ c.name }}</span><span class="tag-pill tag-pill--default">Built-in</span></li>
+    {% endfor %}
+  </ul>
+  <p class="muted catalog-card__footnote">Combine built-ins with your own for a workspace that fits how you spend.</p>
+</div>
+
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #3 / US #4 supporting flow — Categories</strong>
+    Transactions and budgets reference categories. The system seeds a default set; this page lets each user add their own. Newly added categories are scoped to the logged-in user and appear in the transaction and budget category dropdowns automatically.
+  </li>
+</ul>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Budget, Category, Notification, SavingsGoal, Transaction
+from .models import Budget, Category, Notification, SavingsGoal, Subscription, Transaction
 
 
 @admin.register(Category)
@@ -11,6 +11,11 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
     list_display = ("user", "category", "limit_amount", "spent_amount", "start_date", "end_date")
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ("user", "name", "amount", "category", "cycle", "next_due", "is_active")
 
 
 @admin.register(Transaction)

@@ -1,0 +1,15 @@
+# Python
+/Personal-Budgeting-Software/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# Django / local DB (don’t push)
+*.sqlite3
+db.sqlite3
+*.db
+
+# Env (often has secrets — don’t push)
+.env
+.env.*

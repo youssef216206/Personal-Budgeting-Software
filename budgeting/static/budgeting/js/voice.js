@@ -1,0 +1,235 @@
+/**
+ * Speech-to-fill / auto-save for transaction fields (Web Speech API).
+ * Transaction form: fill only. Dashboard: hidden form + optional auto-submit.
+ */
+(function () {
+  function parseTranscript(raw, cats) {
+    var t = (raw || "").toLowerCase().trim();
+    var out = {
+      kind: "expense",
+      amount: null,
+      categoryId: null,
+      description: raw || "",
+    };
+
+    if (/\breceived\b|\bearned\b|\bsalary\b|\bincome\b/.test(t)) {
+      out.kind = "income";
+    }
+
+    var numMatch = t.match(/\d+[.,]?\d*/);
+    if (numMatch) {
+      var n = parseFloat(numMatch[0].replace(",", "."));
+      if (Number.isFinite(n) && n > 0) {
+        out.amount = n.toFixed(2);
+      }
+    }
+
+    function pickCategory(lower, list) {
+      for (var i = 0; i < list.length; i++) {
+        var name = (list[i].name || "").toLowerCase();
+        if (!name.length) continue;
+        if (lower.indexOf(name) !== -1) return String(list[i].id);
+      }
+      var synonyms = [
+        [["food", "groceries", "grocery", "restaurant", "pizza"], "Food"],
+        [["uber", "taxi", "train", "bus", "transport", "gas", "petrol"], "Transport"],
+        [["netflix", "spotify", "cinema", "movie", "entertain"], "Entertainment"],
+        [["rent", "electric", "water", "internet", "bill"], "Bills"],
+        [["doctor", "pharmacy", "clinic", "health"], "Healthcare"],
+        [["salary", "paycheck", "wage"], "Salary"],
+      ];
+      for (var s = 0; s < synonyms.length; s++) {
+        var words = synonyms[s][0];
+        var tgt = synonyms[s][1];
+        for (var w = 0; w < words.length; w++) {
+          if (lower.indexOf(words[w]) !== -1) {
+            for (var j = 0; j < list.length; j++) {
+              if ((list[j].name || "").toLowerCase().indexOf(tgt.toLowerCase()) !== -1) {
+                return String(list[j].id);
+              }
+            }
+          }
+        }
+      }
+      return null;
+    }
+
+    out.categoryId = pickCategory(t, cats);
+
+    var now = new Date();
+    var when = now;
+    if (/\byesterday\b/.test(t)) {
+      when.setDate(now.getDate() - 1);
+    } else if (/\btoday\b/.test(t)) {
+      /* keep */
+    } else if (/\blast week\b/.test(t)) {
+      when.setDate(now.getDate() - 7);
+    }
+
+    function pad(v) {
+      return v < 10 ? "0" + v : String(v);
+    }
+    var y = when.getFullYear();
+    var m = pad(when.getMonth() + 1);
+    var d = pad(when.getDate());
+    out.datetimeLocal = y + "-" + m + "-" + d + "T12:00";
+
+    return out;
+  }
+
+  function fillTransactionForm(parsed, root) {
+    root = root || document;
+    var kindEl = root.querySelector('[name="kind"]');
+    if (kindEl) kindEl.value = parsed.kind;
+
+    var amtEl = root.querySelector('input[name="amount"]');
+    if (amtEl && parsed.amount !== null) amtEl.value = parsed.amount;
+
+    var catEl = root.querySelector('select[name="category"], input[name="category"]');
+    if (catEl && parsed.categoryId) catEl.value = parsed.categoryId;
+
+    var descEl = root.querySelector('input[name="description"], textarea[name="description"]');
+    if (descEl) descEl.value = (parsed.description || "").trim();
+
+    var whenEl = root.querySelector('input[name="occurred_at"]');
+    if (whenEl && parsed.datetimeLocal) whenEl.value = parsed.datetimeLocal;
+  }
+
+  function canAutoSubmit(parsed) {
+    if (!parsed.amount) return false;
+    if (parsed.kind === "expense" && !parsed.categoryId) return false;
+    return true;
+  }
+
+  function attachMic(cfg) {
+    var micBtnId = cfg.micBtnId;
+    var statusId = cfg.statusId;
+    var categoriesId = cfg.categoriesId;
+    var formId = cfg.formId || "";
+    var autoSubmit = !!cfg.autoSubmit;
+
+    var btn = document.getElementById(micBtnId);
+    var statusEl = document.getElementById(statusId);
+    var catEl = document.getElementById(categoriesId);
+    if (!btn || !catEl) return;
+
+    var formEl = formId ? document.getElementById(formId) : null;
+    var root = formEl || document;
+
+    var categories;
+    try {
+      categories = JSON.parse(catEl.textContent || "[]");
+    } catch (_) {
+      categories = [];
+    }
+
+    var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      if (statusEl) {
+        statusEl.textContent =
+          "Speech needs Chrome, Edge, or Safari with the Web Speech API enabled.";
+      }
+      btn.disabled = true;
+      return;
+    }
+
+    var recognition = new SpeechRec();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    btn.addEventListener("click", function () {
+      if (statusEl) statusEl.textContent = "Listening…";
+      try {
+        recognition.stop();
+      } catch (_) {}
+      try {
+        recognition.start();
+      } catch (e) {
+        if (statusEl) {
+          statusEl.textContent = "Could not start mic — try again or check permissions.";
+        }
+      }
+    });
+
+    recognition.onerror = function (ev) {
+      var err = (ev && ev.error) || "unknown";
+      if (err === "aborted" || err === "no-speech") {
+        if (statusEl) {
+          statusEl.textContent = "No speech heard — click again and speak after the beep.";
+        }
+        return;
+      }
+      if (statusEl) {
+        statusEl.textContent =
+          "Speech error (" + err + "). Try Chrome/Edge and allow the microphone.";
+      }
+    };
+
+    recognition.onend = function () {
+      if (statusEl && statusEl.textContent === "Listening…") {
+        statusEl.textContent =
+          "Session ended. Click the button again if you did not speak in time.";
+      }
+    };
+
+    recognition.onresult = function (ev) {
+      var text = "";
+      try {
+        text = ev.results[0][0].transcript;
+      } catch (_) {}
+      var parsed = parseTranscript(text, categories);
+      fillTransactionForm(parsed, root);
+
+      if (autoSubmit && formEl) {
+        if (canAutoSubmit(parsed)) {
+          if (statusEl) {
+            statusEl.textContent = "Saving: “" + text + "”…";
+          }
+          formEl.submit();
+          return;
+        }
+        var why = [];
+        if (!parsed.amount) why.push("say an amount");
+        if (parsed.kind === "expense" && !parsed.categoryId) {
+          why.push("name a category that matches your list (e.g. food, bills)");
+        }
+        if (statusEl) {
+          statusEl.textContent =
+            "Heard “" +
+            text +
+            "” — need " +
+            why.join(" and ") +
+            ". Or use Add transaction to finish by hand.";
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.textContent = "Filled from: “" + text + "”. Review fields, then save.";
+      }
+    };
+  }
+
+  function init() {
+    attachMic({
+      micBtnId: "voice-mic-btn",
+      statusId: "voice-mic-status",
+      categoriesId: "voice-categories-data",
+      autoSubmit: false,
+    });
+    attachMic({
+      micBtnId: "dash-voice-mic-btn",
+      statusId: "dash-voice-status",
+      categoriesId: "dash-voice-categories-data",
+      formId: "dash-voice-form",
+      autoSubmit: true,
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

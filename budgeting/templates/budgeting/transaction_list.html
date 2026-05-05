@@ -1,0 +1,136 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Transactions — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Transactions</h1>
+  <p class="lead">Browse, filter, edit, and delete every income or expense you've recorded.</p>
+</div>
+{% endblock %}
+{% block content %}
+
+<div class="card form-card card--filters-premium">
+  <div class="card-toolbar card-toolbar--dense">
+    <div class="filters-heading">
+      <div class="filters-heading__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+      </div>
+      <div class="filters-heading__body">
+        <h2 class="section-title section-title--inline">Search &amp; filters</h2>
+        <p class="filters-heading__hint muted">Filter by description, type, category, or any date range.</p>
+      </div>
+    </div>
+    <a href="{% url 'transaction_add' %}" class="btn btn--toolbar">+ New transaction</a>
+  </div>
+  <form method="get" class="filters-row filters-row--dense">
+    <div class="filter-field filter-field--dense">
+      <label for="f_q">Search</label>
+      <input type="search" id="f_q" name="q" value="{{ filter_q }}" placeholder="Description…">
+    </div>
+    <div class="filter-field filter-field--dense">
+      <label for="f_kind">Type</label>
+      <select id="f_kind" name="kind">
+        <option value="">All</option>
+        <option value="income"  {% if filter_kind == 'income' %}selected{% endif %}>Income</option>
+        <option value="expense" {% if filter_kind == 'expense' %}selected{% endif %}>Expense</option>
+      </select>
+    </div>
+    <div class="filter-field filter-field--dense">
+      <label for="f_category">Category</label>
+      <select id="f_category" name="category">
+        <option value="">All</option>
+        {% for c in available_categories %}
+          <option value="{{ c.pk }}" {% if filter_category == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-field filter-field--dense">
+      <label for="f_from">From</label>
+      <input type="date" id="f_from" name="from_date" value="{{ filter_from_date }}">
+    </div>
+    <div class="filter-field filter-field--dense">
+      <label for="f_to">To</label>
+      <input type="date" id="f_to" name="to_date" value="{{ filter_to_date }}">
+    </div>
+    <div class="filter-actions">
+      <button type="submit">Apply</button>
+      {% if has_filters %}
+        <a href="{% url 'transaction_list' %}" class="btn secondary">Reset</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<div class="card tx-ledger-card surface-premium">
+  <div class="tx-ledger-head">
+    <div>
+      <h2 class="tx-ledger-head__title">Ledger</h2>
+      <p class="tx-ledger-head__meta muted">
+        {{ filter_count }} transaction{{ filter_count|pluralize }}
+        {% if filter_income or filter_expense %}
+          <span class="tx-ledger-head__dot" aria-hidden="true">·</span>
+          <span class="tx-ledger-head__inline">income <strong class="amount--income">{{ filter_income|floatformat:2 }}</strong></span>
+          <span class="tx-ledger-head__dot" aria-hidden="true">·</span>
+          <span class="tx-ledger-head__inline">expenses <strong class="amount--expense">{{ filter_expense|floatformat:2 }}</strong></span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  {% if transactions %}
+    <div class="table-wrap table-wrap--premium table-wrap--ledger">
+      <table class="table-actions table--ledger">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>When</th>
+            <th>Description</th>
+            <th class="row-actions__cell" aria-label="Actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in transactions %}
+            <tr class="ledger-row">
+              <td>{% if t.kind == 'expense' %}<span class="ledger-badge ledger-badge--expense">Expense</span>{% else %}<span class="ledger-badge ledger-badge--income">Income</span>{% endif %}</td>
+              <td class="ledger-amount {% if t.kind == 'expense' %}ledger-amount--out{% else %}ledger-amount--in{% endif %}">{{ t.amount }}</td>
+              <td>{% if t.category %}<span class="ledger-cat">{{ t.category.name }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+              <td class="ledger-when muted">{{ t.occurred_at|date:"Y-m-d H:i" }}</td>
+              <td class="ledger-desc">{% if t.description %}{{ t.description }}{% else %}<span class="muted">—</span>{% endif %}</td>
+              <td class="row-actions__cell">
+                <div class="row-actions">
+                  <a class="row-action row-action--edit" href="{% url 'transaction_edit' t.pk %}">Edit</a>
+                  <form method="post" action="{% url 'transaction_delete' t.pk %}" class="row-actions__form" onsubmit="return confirm('Delete this transaction?');">
+                    {% csrf_token %}
+                    <button type="submit" class="row-action row-action--delete">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">
+      {% if has_filters %}
+        No transactions match these filters. <a href="{% url 'transaction_list' %}">Reset filters</a>.
+      {% else %}
+        No transactions yet. <a href="{% url 'transaction_add' %}">Add your first one</a>.
+      {% endif %}
+    </p>
+  {% endif %}
+</div>
+
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #3 — Manage transactions</strong>
+    Beyond simply adding a transaction, this page lets the user list, filter (by kind, category, date range, free-text search), edit, and delete previously recorded transactions. Editing or deleting an expense automatically reconciles any matching budget's spent amount.
+  </li>
+</ul>
+{% endblock %}

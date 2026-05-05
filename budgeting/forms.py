@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from .models import Budget, Category, SavingsGoal, Transaction
+from .models import Budget, Category, SavingsGoal, Subscription, Transaction
 
 
 class SignUpForm(forms.Form):
@@ -70,6 +70,14 @@ class TransactionForm(forms.ModelForm):
             self.add_error("category", "Expense transactions require a category.")
 
         return data
+
+
+def transaction_form_voice_hidden(user):
+    """Every field hidden — used to POST a browser-parsed voice phrase from the dashboard."""
+    form = TransactionForm(user=user)
+    for field in form.fields.values():
+        field.widget = forms.HiddenInput()
+    return form
 
 
 class BudgetForm(forms.ModelForm):
@@ -181,3 +189,88 @@ class ContributionForm(forms.Form):
         label="Contribution amount",
         widget=forms.NumberInput(attrs={"placeholder": "0.00", "step": "0.01"}),
     )
+
+
+class SubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = Subscription
+        fields = ["name", "amount", "category", "cycle", "next_due", "is_active"]
+        widgets = {
+            "next_due": forms.DateInput(attrs={"type": "date"}),
+            "name": forms.TextInput(attrs={"placeholder": "e.g. Netflix, Gym"}),
+            "is_active": forms.CheckboxInput(
+                attrs={"class": "sub-active-checkbox", "role": "switch"}
+            ),
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+        self.fields["amount"].widget.attrs.setdefault("placeholder", "0.00")
+        self.fields["amount"].widget.attrs.setdefault("step", "0.01")
+        self.fields["is_active"].label = "Subscription active"
+        self.fields[
+            "is_active"
+        ].help_text = "When paused, no automatic expense is posted until you resume."
+        self.fields["next_due"].help_text = (
+            "We add an expense when this date is today or earlier (runs right after you save)."
+        )
+        if user:
+            self.fields["category"].queryset = Category.objects.filter(
+                Q(user__isnull=True) | Q(user=user)
+            ).order_by("name")
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get("amount")
+        if amount is not None and amount <= 0:
+            raise forms.ValidationError("Amount must be greater than zero.")
+        return amount
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        if self.user is not None:
+            obj.user = self.user
+        if commit:
+            obj.save()
+        return obj
+
+
+class CategoryForm(forms.ModelForm):
+    """Form for creating a personal category (defaults are read-only)."""
+
+    class Meta:
+        model = Category
+        fields = ["name"]
+        widgets = {
+            "name": forms.TextInput(attrs={"placeholder": "e.g. Coffee, Pets, Gym"}),
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_name(self):
+        name = (self.cleaned_data.get("name") or "").strip()
+        if not name:
+            raise forms.ValidationError("Category name is required.")
+        if len(name) < 2:
+            raise forms.ValidationError("Use at least 2 characters.")
+
+        existing = Category.objects.filter(name__iexact=name)
+        if self.user is not None:
+            existing = existing.filter(Q(user__isnull=True) | Q(user=self.user))
+        if self.instance and self.instance.pk:
+            existing = existing.exclude(pk=self.instance.pk)
+        if existing.exists():
+            raise forms.ValidationError(
+                "That name is already taken (built-in or one of your categories)."
+            )
+        return name
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        if self.user is not None:
+            obj.user = self.user
+        if commit:
+            obj.save()
+        return obj

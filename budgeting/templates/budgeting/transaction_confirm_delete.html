@@ -1,0 +1,35 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Delete transaction — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Delete transaction?</h1>
+  <p class="lead">This cannot be undone. Any matching budget will be adjusted automatically.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <dl class="confirm-summary">
+    <div><dt>Type</dt><dd>{% if transaction.kind == 'expense' %}<span class="badge-expense">Expense</span>{% else %}<span class="badge-income">Income</span>{% endif %}</dd></div>
+    <div><dt>Amount</dt><dd class="{% if transaction.kind == 'expense' %}amount--expense{% else %}amount--income{% endif %}">{{ transaction.amount }}</dd></div>
+    <div><dt>Category</dt><dd>{% if transaction.category %}{{ transaction.category.name }}{% else %}<span class="muted">—</span>{% endif %}</dd></div>
+    <div><dt>When</dt><dd class="muted">{{ transaction.occurred_at|date:"Y-m-d H:i" }}</dd></div>
+    {% if transaction.description %}<div><dt>Description</dt><dd>{{ transaction.description }}</dd></div>{% endif %}
+  </dl>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions">
+      <button type="submit" class="danger">Delete permanently</button>
+      <a href="{% url 'transaction_list' %}" class="btn secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block sds_help %}
+<ul class="sds-us-list">
+  <li>
+    <strong>US #3 — Delete transaction</strong>
+    Removing a transaction reverses its effect on the system: for expenses, any matching budget's spent amount is decremented within the same atomic transaction so totals never drift.
+  </li>
+</ul>
+{% endblock %}

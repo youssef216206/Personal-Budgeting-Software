@@ -1,0 +1,18 @@
+{% extends "budgeting/base.html" %}
+{% block title %}Delete subscription — MyBudget Desk{% endblock %}
+{% block page_hero %}
+<div class="page-hero">
+  <h1>Delete subscription</h1>
+  <p class="lead">This does not remove past transactions that were already posted.</p>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <p>Remove <strong>{{ subscription.name }}</strong> ({{ subscription.get_cycle_display }}, {{ subscription.amount }})?</p>
+  <form method="post" class="form-actions">
+    {% csrf_token %}
+    <button type="submit" class="secondary">Delete</button>
+    <a href="{% url 'subscription_list' %}" class="btn">Cancel</a>
+  </form>
+</div>
+{% endblock %}
