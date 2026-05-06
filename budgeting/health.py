@@ -9,9 +9,17 @@ from django.utils import timezone
 
 
 def compute_health(user):
-    """
-    Return dict: score (0–100 rounded int), breakdown (list of labels + pts),
-    and tips (strings).
+    """Compute a simple 0–100 financial health score and UI hints.
+
+    Weights savings rate, staying within active budgets, savings-goal progress,
+    and how consistently the user logs transactions (last 30 days).
+
+    Args:
+        user: Django user instance.
+
+    Returns:
+        dict: Keys ``score``, ``breakdown``, ``tips``, ``savings_note``,
+        and SVG ring helpers ``ring_r``, ``ring_circ``, ``ring_offset``.
     """
     from .models import Budget, SavingsGoal, Transaction
 
@@ -75,7 +83,10 @@ def compute_health(user):
     tips = []
     if savings_pts < 15 and fi > fe:
         tips.append("Increasing income categories or trimming top expenses lifts your score fastest.")
-    overs = sum(1 for b in Budget.objects.filter(user=user, start_date__lte=today, end_date__gte=today) if b.is_over_limit())
+    active_budgets = Budget.objects.filter(
+        user=user, start_date__lte=today, end_date__gte=today
+    )
+    overs = sum(1 for b in active_budgets if b.is_over_limit())
     if overs:
         tips.append(f"{overs} budget(s) are currently over limit — adjust spending or limits.")
     elif adherence_pts < 15 and active.exists():

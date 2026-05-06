@@ -101,6 +101,50 @@
     return true;
   }
 
+  function micBlockedHelp() {
+    return (
+      "Microphone blocked. In the address bar, click the lock or tune icon → Site settings → " +
+      "Microphone → Allow, then reload and try again. On Windows, also check Settings → Privacy & security → " +
+      "Microphone for the browser. Use https:// or http://127.0.0.1 — plain http:// on a LAN IP is blocked."
+    );
+  }
+
+  function speechServiceBlockedHelp() {
+    return (
+      "Speech recognition was blocked by the browser or network (often extensions, VPN, or school/work policy). " +
+      "Try another network, disable strict blockers, or review Microphone in the browser’s site permissions."
+    );
+  }
+
+  function requestMicAccess(statusEl, onGranted) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      onGranted();
+      return;
+    }
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(function (stream) {
+        try {
+          stream.getTracks().forEach(function (t) {
+            t.stop();
+          });
+        } catch (_) {}
+        onGranted();
+      })
+      .catch(function (err) {
+        var name = err && err.name;
+        if (!statusEl) return;
+        if (name === "NotAllowedError" || name === "PermissionDeniedError") {
+          statusEl.textContent = micBlockedHelp();
+        } else if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+          statusEl.textContent = "No microphone found. Plug one in or choose the right input in system settings.";
+        } else {
+          statusEl.textContent =
+            "Could not access the microphone" + (name ? " (" + name + ")." : ".");
+        }
+      });
+  }
+
   function attachMic(cfg) {
     var micBtnId = cfg.micBtnId;
     var statusId = cfg.statusId;
@@ -133,23 +177,35 @@
       return;
     }
 
+    if (typeof window.isSecureContext !== "undefined" && !window.isSecureContext) {
+      if (statusEl) {
+        statusEl.textContent =
+          "Voice needs a secure page: use https:// or open the app at http://127.0.0.1 (not http://192.168… on plain HTTP).";
+      }
+      btn.disabled = true;
+      return;
+    }
+
     var recognition = new SpeechRec();
     recognition.lang = "en-US";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
     btn.addEventListener("click", function () {
-      if (statusEl) statusEl.textContent = "Listening…";
-      try {
-        recognition.stop();
-      } catch (_) {}
-      try {
-        recognition.start();
-      } catch (e) {
-        if (statusEl) {
-          statusEl.textContent = "Could not start mic — try again or check permissions.";
+      if (statusEl) statusEl.textContent = "Allow the mic if prompted…";
+      requestMicAccess(statusEl, function () {
+        if (statusEl) statusEl.textContent = "Listening…";
+        try {
+          recognition.stop();
+        } catch (_) {}
+        try {
+          recognition.start();
+        } catch (e) {
+          if (statusEl) {
+            statusEl.textContent = "Could not start listening — wait a second and click again.";
+          }
         }
-      }
+      });
     });
 
     recognition.onerror = function (ev) {
@@ -160,9 +216,24 @@
         }
         return;
       }
+      if (err === "not-allowed") {
+        if (statusEl) statusEl.textContent = micBlockedHelp();
+        return;
+      }
+      if (err === "service-not-allowed") {
+        if (statusEl) statusEl.textContent = speechServiceBlockedHelp();
+        return;
+      }
+      if (err === "audio-capture") {
+        if (statusEl) {
+          statusEl.textContent =
+            "No microphone input. Check that the mic isn’t muted in Windows sound settings and try again.";
+        }
+        return;
+      }
       if (statusEl) {
         statusEl.textContent =
-          "Speech error (" + err + "). Try Chrome/Edge and allow the microphone.";
+          "Speech error (" + err + "). Try Chrome/Edge; if it persists, check the mic and site permissions.";
       }
     };
 

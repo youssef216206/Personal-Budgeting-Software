@@ -1,3 +1,5 @@
+"""URL routes for the budgeting app (included at site root)."""
+
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 

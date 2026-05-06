@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.health &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">budgeting.health</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for budgeting.health</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Aggregate financial-health score with a simple weighted breakdown.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TruncDate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="compute_health">
+<a class="viewcode-back" href="../../api/budgeting_health.html#budgeting.health.compute_health">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_health</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a simple 0–100 financial health score and UI hints.</span>
+
+<span class="sd">    Weights savings rate, staying within active budgets, savings-goal progress,</span>
+<span class="sd">    and how consistently the user logs transactions (last 30 days).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user: Django user instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Keys ``score``, ``breakdown``, ``tips``, ``savings_note``,</span>
+<span class="sd">        and SVG ring helpers ``ring_r``, ``ring_circ``, ``ring_offset``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Budget</span><span class="p">,</span> <span class="n">SavingsGoal</span><span class="p">,</span> <span class="n">Transaction</span>
+
+    <span class="n">today</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+    <span class="n">start30</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">start30</span><span class="p">)</span>
+    <span class="n">income</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">expense</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+
+    <span class="n">savings_pts</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">fi</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">income</span><span class="p">)</span>
+    <span class="n">fe</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">expense</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fi</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">fe</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">savings_note</span> <span class="o">=</span> <span class="s2">&quot;Log income and expenses to score your savings rate.&quot;</span>
+    <span class="k">elif</span> <span class="n">fi</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">savings_note</span> <span class="o">=</span> <span class="s2">&quot;Add income in the last 30 days so we can measure savings rate.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rate</span> <span class="o">=</span> <span class="p">(</span><span class="n">fi</span> <span class="o">-</span> <span class="n">fe</span><span class="p">)</span> <span class="o">/</span> <span class="n">fi</span>
+        <span class="n">savings_pts</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">rate</span> <span class="o">*</span> <span class="mi">40</span><span class="p">))</span>
+        <span class="n">savings_note</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Savings trend (last 30d): income </span><span class="si">{</span><span class="n">fi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, expenses </span><span class="si">{</span><span class="n">fe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="c1"># Budget adherence among active budgets</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">start_date__lte</span><span class="o">=</span><span class="n">today</span><span class="p">,</span> <span class="n">end_date__gte</span><span class="o">=</span><span class="n">today</span>
+    <span class="p">)</span>
+    <span class="n">adherence_pts</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">active</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">active</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="o">.</span><span class="n">is_over_limit</span><span class="p">())</span>
+        <span class="n">adherence_pts</span> <span class="o">=</span> <span class="p">(</span><span class="n">ok</span> <span class="o">/</span> <span class="n">active</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="o">*</span> <span class="mi">30</span>
+
+    <span class="n">goals</span> <span class="o">=</span> <span class="n">SavingsGoal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">goal_pts</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">goals</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">total_prog</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">get_progress_percentage</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">goals</span><span class="p">)</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="n">total_prog</span> <span class="o">/</span> <span class="n">goals</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">goal_pts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">avg</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">)</span>
+
+    <span class="n">n_days</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">start30</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="n">TruncDate</span><span class="p">(</span><span class="s2">&quot;occurred_at&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">activity_pts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_days</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">12</span><span class="p">))</span>
+
+    <span class="n">breakdown</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Savings posture (vs income)&quot;</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">savings_pts</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget adherence&quot;</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">adherence_pts</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Goal momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">goal_pts</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Logging consistency&quot;</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">activity_pts</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+    <span class="p">]</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">savings_pts</span> <span class="o">+</span> <span class="n">adherence_pts</span> <span class="o">+</span> <span class="n">goal_pts</span> <span class="o">+</span> <span class="n">activity_pts</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">raw</span><span class="p">)))</span>
+
+    <span class="n">tips</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">savings_pts</span> <span class="o">&lt;</span> <span class="mi">15</span> <span class="ow">and</span> <span class="n">fi</span> <span class="o">&gt;</span> <span class="n">fe</span><span class="p">:</span>
+        <span class="n">tips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Increasing income categories or trimming top expenses lifts your score fastest.&quot;</span><span class="p">)</span>
+    <span class="n">active_budgets</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">start_date__lte</span><span class="o">=</span><span class="n">today</span><span class="p">,</span> <span class="n">end_date__gte</span><span class="o">=</span><span class="n">today</span>
+    <span class="p">)</span>
+    <span class="n">overs</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">active_budgets</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">is_over_limit</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">overs</span><span class="p">:</span>
+        <span class="n">tips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">overs</span><span class="si">}</span><span class="s2"> budget(s) are currently over limit — adjust spending or limits.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">adherence_pts</span> <span class="o">&lt;</span> <span class="mi">15</span> <span class="ow">and</span> <span class="n">active</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">tips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Stay inside each budget through the period to raise your adherence score.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">activity_pts</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">tips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Log expenses on more days — consistency earns easy points.&quot;</span><span class="p">)</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">52</span>
+    <span class="n">circumference</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">ring_dash_offset</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">circumference</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">score</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">score</span><span class="p">,</span>
+        <span class="s2">&quot;breakdown&quot;</span><span class="p">:</span> <span class="n">breakdown</span><span class="p">,</span>
+        <span class="s2">&quot;tips&quot;</span><span class="p">:</span> <span class="n">tips</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">&quot;savings_note&quot;</span><span class="p">:</span> <span class="n">savings_note</span><span class="p">,</span>
+        <span class="s2">&quot;ring_r&quot;</span><span class="p">:</span> <span class="n">R</span><span class="p">,</span>
+        <span class="s2">&quot;ring_circ&quot;</span><span class="p">:</span> <span class="n">circumference</span><span class="p">,</span>
+        <span class="s2">&quot;ring_offset&quot;</span><span class="p">:</span> <span class="n">ring_dash_offset</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

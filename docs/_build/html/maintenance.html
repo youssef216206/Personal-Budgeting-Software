@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance notes &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ca225bdf" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api/modules.html" />
+    <link rel="prev" title="Developer guide" href="developer_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Maintenance notes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/maintenance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="maintenance-notes">
+<h1>Maintenance notes<a class="headerlink" href="#maintenance-notes" title="Link to this heading"></a></h1>
+<p>Operational and housekeeping notes for people who ship or host <strong>Personal Budgeting Software</strong>
+and regenerate its documentation.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#documentation-build" id="id1">Documentation build</a></p></li>
+<li><p><a class="reference internal" href="#content-map" id="id2">Content map</a></p></li>
+<li><p><a class="reference internal" href="#application-dependencies" id="id3">Application dependencies</a></p></li>
+<li><p><a class="reference internal" href="#voice-feature-support-boundaries" id="id4">Voice feature: support boundaries</a></p></li>
+<li><p><a class="reference internal" href="#static-assets" id="id5">Static assets</a></p></li>
+<li><p><a class="reference internal" href="#database-and-migrations" id="id6">Database and migrations</a></p></li>
+<li><p><a class="reference internal" href="#backups" id="id7">Backups</a></p></li>
+<li><p><a class="reference internal" href="#related-docs" id="id8">Related docs</a></p></li>
+</ul>
+</nav>
+<section id="documentation-build">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Documentation build</a><a class="headerlink" href="#documentation-build" title="Link to this heading"></a></h2>
+<p>Dependencies are listed in <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> (Sphinx and <code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme</span></code>).</p>
+<p>From the repository root:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sphinx</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">docs</span> <span class="n">docs</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>(If <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> is on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, you can use <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">docs</span> <span class="pre">docs/_build/html</span></code> instead.)</p>
+<p>Open <code class="docutils literal notranslate"><span class="pre">docs/_build/html/index.html</span></code> in a browser (or serve the folder with any static file
+host).</p>
+<p><strong>Tip:</strong> After changing <code class="docutils literal notranslate"><span class="pre">docs/conf.py</span></code>, extensions, or docstrings heavily, do a clean build:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sphinx</span> <span class="o">-</span><span class="n">E</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">docs</span> <span class="n">docs</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+</pre></div>
+</div>
+</section>
+<section id="content-map">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Content map</a><a class="headerlink" href="#content-map" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Guides</strong> — <code class="docutils literal notranslate"><span class="pre">user_guide.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">developer_guide.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">maintenance.rst</span></code> (this file).</p></li>
+<li><p><strong>API</strong> — <code class="docutils literal notranslate"><span class="pre">docs/api/*.rst</span></code> generated around autodoc; <code class="docutils literal notranslate"><span class="pre">docs/api/modules.rst</span></code> is the
+entry toctree.</p></li>
+<li><p><strong>Theme/UI</strong> — <code class="docutils literal notranslate"><span class="pre">docs/_static/custom.css</span></code>, <code class="docutils literal notranslate"><span class="pre">html_theme_options</span></code> in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>.</p></li>
+</ul>
+<p>When you add a new <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file, link it from <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> (or from another guide) so it
+appears in navigation.</p>
+</section>
+<section id="application-dependencies">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Application dependencies</a><a class="headerlink" href="#application-dependencies" title="Link to this heading"></a></h2>
+<p>Production libraries live in <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>. Keep Django and security-related pins
+reviewed on a schedule you define for your team.</p>
+<p>Before a release, typical checks include:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">test</span>
+</pre></div>
+</div>
+</section>
+<section id="voice-feature-support-boundaries">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Voice feature: support boundaries</a><a class="headerlink" href="#voice-feature-support-boundaries" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Client-side only</strong> — recognition quality and availability depend on the user’s browser,
+OS microphone permissions, and network (some environments block cloud speech endpoints).</p></li>
+<li><p><strong>Secure context</strong> — document that HTTP on LAN IPs is unsupported for mic access; prefer
+HTTPS or <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> for demos (see <a class="reference internal" href="user_guide.html"><span class="doc">User guide</span></a>).</p></li>
+<li><p><strong>Privacy</strong> — remind deployers that Web Speech in Chromium-based browsers may send audio to
+vendor speech services; an internal deployment should follow organisational policy.</p></li>
+</ul>
+</section>
+<section id="static-assets">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Static assets</a><a class="headerlink" href="#static-assets" title="Link to this heading"></a></h2>
+<p>User-facing CSS/JS is under <code class="docutils literal notranslate"><span class="pre">budgeting/static/budgeting/</span></code>. After edits, run or configure
+<code class="docutils literal notranslate"><span class="pre">collectstatic</span></code> for production per your Django deployment pattern so <code class="docutils literal notranslate"><span class="pre">voice.js</span></code> updates
+are actually served.</p>
+</section>
+<section id="database-and-migrations">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Database and migrations</a><a class="headerlink" href="#database-and-migrations" title="Link to this heading"></a></h2>
+<p>Follow Django’s normal migration workflow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+<p>Never edit production data directly without backups.</p>
+</section>
+<section id="backups">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Backups</a><a class="headerlink" href="#backups" title="Link to this heading"></a></h2>
+<p>Back up the database and user-uploaded media (if any) according to your hosting provider.
+The codebase alone does not restore user transactions.</p>
+</section>
+<section id="related-docs">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Related docs</a><a class="headerlink" href="#related-docs" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="user_guide.html"><span class="doc">User guide</span></a></p></li>
+<li><p><a class="reference internal" href="developer_guide.html"><span class="doc">Developer guide</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="developer_guide.html" class="btn btn-neutral float-left" title="Developer guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/modules.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

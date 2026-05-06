@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.forms &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="budgeting.urls" href="budgeting_urls.html" />
+    <link rel="prev" title="budgeting.views" href="budgeting_views.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API reference</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/budgeting_forms.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-budgeting.forms">
+<span id="budgeting-forms"></span><h1><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code><a class="headerlink" href="#module-budgeting.forms" title="Link to this heading"></a></h1>
+<p>Django forms for signup, transactions, budgets, goals, subscriptions, categories.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SignUpForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<p>Collect full name, email-as-username, and password with confirmation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm.clean_email">
+<span class="sig-name descname"><span class="pre">clean_email</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm.clean_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm.clean_email" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm.clean" title="Link to this definition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'confirm_password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;,</span> <span class="pre">'full_name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SignUpForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'confirm_password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;,</span> <span class="pre">'full_name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SignUpForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.SignUpForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SignUpForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">TransactionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Create or edit a <a class="reference internal" href="budgeting_models.html#budgeting.models.Transaction" title="budgeting.models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a> for the current user.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="budgeting_models.html#budgeting.models.Transaction" title="budgeting.models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['kind',</span> <span class="pre">'amount',</span> <span class="pre">'category',</span> <span class="pre">'description',</span> <span class="pre">'occurred_at']</span></em><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'occurred_at':</span> <span class="pre">&lt;django.forms.widgets.DateTimeInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm.clean" title="Link to this definition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;,</span> <span class="pre">'category':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'description':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'kind':</span> <span class="pre">&lt;django.forms.fields.TypedChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'occurred_at':</span> <span class="pre">&lt;django.forms.fields.DateTimeField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.TransactionForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budgeting.forms.TransactionForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.TransactionForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.TransactionForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.forms.transaction_form_voice_hidden">
+<span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">transaction_form_voice_hidden</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#transaction_form_voice_hidden"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.transaction_form_voice_hidden" title="Link to this definition"></a></dt>
+<dd><p>Every field hidden — used to POST a browser-parsed voice phrase from the dashboard.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">BudgetForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Create or edit a <a class="reference internal" href="budgeting_models.html#budgeting.models.Budget" title="budgeting.models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a> with overlap validation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="budgeting_models.html#budgeting.models.Budget" title="budgeting.models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['category',</span> <span class="pre">'limit_amount',</span> <span class="pre">'start_date',</span> <span class="pre">'end_date',</span> <span class="pre">'alert_threshold_percent']</span></em><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'end_date':</span> <span class="pre">&lt;django.forms.widgets.DateInput</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date':</span> <span class="pre">&lt;django.forms.widgets.DateInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.clean" title="Link to this definition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.save" title="Link to this definition"></a></dt>
+<dd><p>Save this form’s self.instance object if commit=True. Otherwise, add
+a save_m2m() method to the form which can be called after the instance
+is saved manually at a later time. Return the model instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alert_threshold_percent':</span> <span class="pre">&lt;django.forms.fields.IntegerField</span> <span class="pre">object&gt;,</span> <span class="pre">'category':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'end_date':</span> <span class="pre">&lt;django.forms.fields.DateField</span> <span class="pre">object&gt;,</span> <span class="pre">'limit_amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date':</span> <span class="pre">&lt;django.forms.fields.DateField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.BudgetForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budgeting.forms.BudgetForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.BudgetForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.BudgetForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SavingsGoalForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for creating a savings goal (SDS US #6 GoalsUI.submitGoal).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="budgeting_models.html#budgeting.models.SavingsGoal" title="budgeting.models.SavingsGoal"><code class="xref py py-class docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['name',</span> <span class="pre">'target_amount',</span> <span class="pre">'deadline']</span></em><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'deadline':</span> <span class="pre">&lt;django.forms.widgets.DateInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.clean_target_amount">
+<span class="sig-name descname"><span class="pre">clean_target_amount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm.clean_target_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.clean_target_amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.clean_deadline">
+<span class="sig-name descname"><span class="pre">clean_deadline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm.clean_deadline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.clean_deadline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'deadline':</span> <span class="pre">&lt;django.forms.fields.DateField</span> <span class="pre">object&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'target_amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.ContributionForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">ContributionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#ContributionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.ContributionForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<p>Form for adding a contribution to an existing goal (SDS US #6 GoalsUI.addContribution).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.ContributionForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.ContributionForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.ContributionForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.ContributionForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.ContributionForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.ContributionForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SubscriptionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Manage a recurring <a class="reference internal" href="budgeting_models.html#budgeting.models.Subscription" title="budgeting.models.Subscription"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscription</span></code></a> and next due date.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="budgeting_models.html#budgeting.models.Subscription" title="budgeting.models.Subscription"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscription</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['name',</span> <span class="pre">'amount',</span> <span class="pre">'category',</span> <span class="pre">'cycle',</span> <span class="pre">'next_due',</span> <span class="pre">'is_active']</span></em><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'is_active':</span> <span class="pre">&lt;django.forms.widgets.CheckboxInput</span> <span class="pre">object&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;django.forms.widgets.TextInput</span> <span class="pre">object&gt;,</span> <span class="pre">'next_due':</span> <span class="pre">&lt;django.forms.widgets.DateInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.clean_amount">
+<span class="sig-name descname"><span class="pre">clean_amount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm.clean_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm.clean_amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm.save" title="Link to this definition"></a></dt>
+<dd><p>Save this form’s self.instance object if commit=True. Otherwise, add
+a save_m2m() method to the form which can be called after the instance
+is saved manually at a later time. Return the model instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;,</span> <span class="pre">'category':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'cycle':</span> <span class="pre">&lt;django.forms.fields.TypedChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'is_active':</span> <span class="pre">&lt;django.forms.fields.BooleanField</span> <span class="pre">object&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'next_due':</span> <span class="pre">&lt;django.forms.fields.DateField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.SubscriptionForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budgeting.forms.SubscriptionForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SubscriptionForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">CategoryForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for creating a personal category (defaults are read-only).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="budgeting_models.html#budgeting.models.Category" title="budgeting.models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['name']</span></em><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name':</span> <span class="pre">&lt;django.forms.widgets.TextInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.clean_name">
+<span class="sig-name descname"><span class="pre">clean_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm.clean_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm.clean_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm.save" title="Link to this definition"></a></dt>
+<dd><p>Save this form’s self.instance object if commit=True. Otherwise, add
+a save_m2m() method to the form which can be called after the instance
+is saved manually at a later time. Return the model instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#budgeting.forms.CategoryForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budgeting.forms.CategoryForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="budgeting.forms.CategoryForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.CategoryForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="budgeting_views.html" class="btn btn-neutral float-left" title="budgeting.views" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="budgeting_urls.html" class="btn btn-neutral float-right" title="budgeting.urls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

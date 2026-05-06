@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.views &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="budgeting.forms" href="budgeting_forms.html" />
+    <link rel="prev" title="budgeting.models" href="budgeting_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API reference</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/budgeting_views.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-budgeting.views">
+<span id="budgeting-views"></span><h1><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code><a class="headerlink" href="#module-budgeting.views" title="Link to this heading"></a></h1>
+<p>HTTP views: authentication, dashboard, CRUD flows, and reports.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.signup">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">signup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#signup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.signup" title="Link to this definition"></a></dt>
+<dd><p>Show signup form; on POST create user, log in, redirect to dashboard.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.views.UserLoginView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">UserLoginView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#UserLoginView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.UserLoginView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.views.LoginView" title="(in Django v6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoginView</span></code></a></p>
+<p>Login page using <code class="docutils literal notranslate"><span class="pre">budgeting/login.html</span></code>.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.views.UserLoginView.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'budgeting/login.html'</span></em><a class="headerlink" href="#budgeting.views.UserLoginView.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.views.UserLoginView.redirect_authenticated_user">
+<span class="sig-name descname"><span class="pre">redirect_authenticated_user</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#budgeting.views.UserLoginView.redirect_authenticated_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.dashboard">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">dashboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#dashboard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.dashboard" title="Link to this definition"></a></dt>
+<dd><p>Main dashboard: charts, heatmap, health score, budgets, voice quick-add.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.transaction_add">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">transaction_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#transaction_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.transaction_add" title="Link to this definition"></a></dt>
+<dd><p>GET: empty form. POST: save income/expense and surface budget alerts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.transaction_list">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">transaction_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#transaction_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.transaction_list" title="Link to this definition"></a></dt>
+<dd><p>Filterable, paginated list with per-filter income/expense totals.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.transaction_edit">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">transaction_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#transaction_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.transaction_edit" title="Link to this definition"></a></dt>
+<dd><p>Edit an existing transaction owned by the current user.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.transaction_delete">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">transaction_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#transaction_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.transaction_delete" title="Link to this definition"></a></dt>
+<dd><p>Confirm on GET; POST deletes the transaction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.category_list">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">category_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#category_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.category_list" title="Link to this definition"></a></dt>
+<dd><p>List global default categories and the user’s custom ones; POST adds custom.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.subscription_list">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">subscription_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#subscription_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.subscription_list" title="Link to this definition"></a></dt>
+<dd><p>All subscriptions for the logged-in user.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views._subscription_save_message">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">_subscription_save_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saved_verb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#_subscription_save_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views._subscription_save_message" title="Link to this definition"></a></dt>
+<dd><p>After save, post any due subscription expenses and surface one clear toast.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.subscription_add">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">subscription_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#subscription_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.subscription_add" title="Link to this definition"></a></dt>
+<dd><p>Create subscription; may immediately post due charges.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.subscription_edit">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">subscription_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#subscription_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.subscription_edit" title="Link to this definition"></a></dt>
+<dd><p>Update subscription; may post catch-up charges after save.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.subscription_delete">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">subscription_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#subscription_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.subscription_delete" title="Link to this definition"></a></dt>
+<dd><p>Confirm on GET; POST removes the subscription row only (not past transactions).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.subscription_toggle">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">subscription_toggle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#subscription_toggle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.subscription_toggle" title="Link to this definition"></a></dt>
+<dd><p>Pause or resume automatic posting (POST only).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.budget_list">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">budget_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#budget_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.budget_list" title="Link to this definition"></a></dt>
+<dd><p>Budget cards for the user.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.budget_create">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">budget_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#budget_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.budget_create" title="Link to this definition"></a></dt>
+<dd><p>Show budget form; POST validates and saves.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.budget_edit">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">budget_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#budget_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.budget_edit" title="Link to this definition"></a></dt>
+<dd><p>Edit budget limits and dates for one row.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.goals_list">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">goals_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#goals_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.goals_list" title="Link to this definition"></a></dt>
+<dd><p>Savings goals overview.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.goal_create">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">goal_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#goal_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.goal_create" title="Link to this definition"></a></dt>
+<dd><p>Create a new <a class="reference internal" href="budgeting_models.html#budgeting.models.SavingsGoal" title="budgeting.models.SavingsGoal"><code class="xref py py-class docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.goal_contribute">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">goal_contribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#goal_contribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.goal_contribute" title="Link to this definition"></a></dt>
+<dd><p>Add money toward a goal; may emit a completion notification.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.reports">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">reports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#reports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.reports" title="Link to this definition"></a></dt>
+<dd><p>Date-range report with category breakdown and simple narrative insights.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budgeting.views.notifications_view">
+<span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">notifications_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#notifications_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.notifications_view" title="Link to this definition"></a></dt>
+<dd><p>List all notifications and mark unread ones as read.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="budgeting_models.html" class="btn btn-neutral float-left" title="budgeting.models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="budgeting_forms.html" class="btn btn-neutral float-right" title="budgeting.forms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

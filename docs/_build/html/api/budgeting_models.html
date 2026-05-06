@@ -1,0 +1,905 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.models &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="budgeting.views" href="budgeting_views.html" />
+    <link rel="prev" title="API reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API reference</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/budgeting_models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-budgeting.models">
+<span id="budgeting-models"></span><h1><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code><a class="headerlink" href="#module-budgeting.models" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.Category">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Category" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Spending/income category (global defaults or per-user custom).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#budgeting.models.Category.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.Category.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.budgets">
+<span class="sig-name descname"><span class="pre">budgets</span></span><a class="headerlink" href="#budgeting.models.Category.budgets" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.Category.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.Category.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.subscriptions">
+<span class="sig-name descname"><span class="pre">subscriptions</span></span><a class="headerlink" href="#budgeting.models.Category.subscriptions" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.transactions">
+<span class="sig-name descname"><span class="pre">transactions</span></span><a class="headerlink" href="#budgeting.models.Category.transactions" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Category.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.Category.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.Notification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Notification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Notification" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>System alert persisted for a user (SDS US #5, #10).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.TYPE_WARNING">
+<span class="sig-name descname"><span class="pre">TYPE_WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'warning'</span></em><a class="headerlink" href="#budgeting.models.Notification.TYPE_WARNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.TYPE_ALERT">
+<span class="sig-name descname"><span class="pre">TYPE_ALERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'alert'</span></em><a class="headerlink" href="#budgeting.models.Notification.TYPE_ALERT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.TYPE_INFO">
+<span class="sig-name descname"><span class="pre">TYPE_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'info'</span></em><a class="headerlink" href="#budgeting.models.Notification.TYPE_INFO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.TYPE_SUCCESS">
+<span class="sig-name descname"><span class="pre">TYPE_SUCCESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'success'</span></em><a class="headerlink" href="#budgeting.models.Notification.TYPE_SUCCESS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.TYPE_CHOICES">
+<span class="sig-name descname"><span class="pre">TYPE_CHOICES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('warning',</span> <span class="pre">'Warning'),</span> <span class="pre">('alert',</span> <span class="pre">'Alert'),</span> <span class="pre">('info',</span> <span class="pre">'Info'),</span> <span class="pre">('success',</span> <span class="pre">'Success')]</span></em><a class="headerlink" href="#budgeting.models.Notification.TYPE_CHOICES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.Notification.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#budgeting.models.Notification.type" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#budgeting.models.Notification.message" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.is_read">
+<span class="sig-name descname"><span class="pre">is_read</span></span><a class="headerlink" href="#budgeting.models.Notification.is_read" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#budgeting.models.Notification.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Notification.mark_as_read">
+<span class="sig-name descname"><span class="pre">mark_as_read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Notification.mark_as_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Notification.mark_as_read" title="Link to this definition"></a></dt>
+<dd><p>Persist <code class="docutils literal notranslate"><span class="pre">is_read=True</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.Notification.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.Notification.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Notification.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.Notification.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.Budget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Spending limit for one category through a date range.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.Budget.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.category">
+<span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#budgeting.models.Budget.category" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.limit_amount">
+<span class="sig-name descname"><span class="pre">limit_amount</span></span><a class="headerlink" href="#budgeting.models.Budget.limit_amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.start_date">
+<span class="sig-name descname"><span class="pre">start_date</span></span><a class="headerlink" href="#budgeting.models.Budget.start_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.end_date">
+<span class="sig-name descname"><span class="pre">end_date</span></span><a class="headerlink" href="#budgeting.models.Budget.end_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.alert_threshold_percent">
+<span class="sig-name descname"><span class="pre">alert_threshold_percent</span></span><a class="headerlink" href="#budgeting.models.Budget.alert_threshold_percent" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.spent_amount">
+<span class="sig-name descname"><span class="pre">spent_amount</span></span><a class="headerlink" href="#budgeting.models.Budget.spent_amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#budgeting.models.Budget.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Budget.spent_percentage">
+<span class="sig-name descname"><span class="pre">spent_percentage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget.spent_percentage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget.spent_percentage" title="Link to this definition"></a></dt>
+<dd><p>Return percent of <code class="docutils literal notranslate"><span class="pre">limit_amount</span></code> represented by <code class="docutils literal notranslate"><span class="pre">spent_amount</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Budget.is_over_limit">
+<span class="sig-name descname"><span class="pre">is_over_limit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget.is_over_limit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget.is_over_limit" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">spent_amount</span></code> exceeds <code class="docutils literal notranslate"><span class="pre">limit_amount</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Budget.should_alert">
+<span class="sig-name descname"><span class="pre">should_alert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget.should_alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget.should_alert" title="Link to this definition"></a></dt>
+<dd><p>Whether spending crossed the threshold or the limit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Budget.get_alert_message">
+<span class="sig-name descname"><span class="pre">get_alert_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget.get_alert_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget.get_alert_message" title="Link to this definition"></a></dt>
+<dd><p>Human-readable warning or alert for notifications.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Budget.trigger_alert">
+<span class="sig-name descname"><span class="pre">trigger_alert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget.trigger_alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget.trigger_alert" title="Link to this definition"></a></dt>
+<dd><p>Create a <a class="reference internal" href="#budgeting.models.Notification" title="budgeting.models.Notification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Notification</span></code></a> if <a class="reference internal" href="#budgeting.models.Budget.should_alert" title="budgeting.models.Budget.should_alert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">should_alert()</span></code></a> is true.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.category_id">
+<span class="sig-name descname"><span class="pre">category_id</span></span><a class="headerlink" href="#budgeting.models.Budget.category_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.Budget.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.Budget.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Budget.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.Budget.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.Transaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Income or expense logged by the user; rolls up into budgets.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.KIND_INCOME">
+<span class="sig-name descname"><span class="pre">KIND_INCOME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'income'</span></em><a class="headerlink" href="#budgeting.models.Transaction.KIND_INCOME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.KIND_EXPENSE">
+<span class="sig-name descname"><span class="pre">KIND_EXPENSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'expense'</span></em><a class="headerlink" href="#budgeting.models.Transaction.KIND_EXPENSE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.KIND_CHOICES">
+<span class="sig-name descname"><span class="pre">KIND_CHOICES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('income',</span> <span class="pre">'Income'),</span> <span class="pre">('expense',</span> <span class="pre">'Expense')]</span></em><a class="headerlink" href="#budgeting.models.Transaction.KIND_CHOICES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.Transaction.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.kind">
+<span class="sig-name descname"><span class="pre">kind</span></span><a class="headerlink" href="#budgeting.models.Transaction.kind" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><a class="headerlink" href="#budgeting.models.Transaction.amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.category">
+<span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#budgeting.models.Transaction.category" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#budgeting.models.Transaction.description" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.occurred_at">
+<span class="sig-name descname"><span class="pre">occurred_at</span></span><a class="headerlink" href="#budgeting.models.Transaction.occurred_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Transaction._matching_budgets">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_matching_budgets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction._matching_budgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction._matching_budgets" title="Link to this definition"></a></dt>
+<dd><p>Budget rows for <code class="docutils literal notranslate"><span class="pre">user</span></code>/<code class="docutils literal notranslate"><span class="pre">category</span></code> active on <code class="docutils literal notranslate"><span class="pre">on_date</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction.save" title="Link to this definition"></a></dt>
+<dd><p>Save the row and update related <a class="reference internal" href="#budgeting.models.Budget" title="budgeting.models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a> <code class="docutils literal notranslate"><span class="pre">spent_amount</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction.delete" title="Link to this definition"></a></dt>
+<dd><p>Remove expense amounts from overlapping budgets, then delete.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.category_id">
+<span class="sig-name descname"><span class="pre">category_id</span></span><a class="headerlink" href="#budgeting.models.Transaction.category_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.Transaction.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.Transaction.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Transaction.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.Transaction.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.SubscriptionManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SubscriptionManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SubscriptionManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SubscriptionManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Manager</span></code></p>
+<p>Custom manager that posts due subscription charges.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.SubscriptionManager.process_due_for">
+<span class="sig-name descname"><span class="pre">process_due_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter_per_subscription</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SubscriptionManager.process_due_for"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SubscriptionManager.process_due_for" title="Link to this definition"></a></dt>
+<dd><p>Create expense transactions for active subscriptions at or past <code class="docutils literal notranslate"><span class="pre">next_due</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – Owner of the subscriptions.</p></li>
+<li><p><strong>max_iter_per_subscription</strong> – Safety cap on loops per row (catch-up).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of subscription names that received at least one posted charge.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.Subscription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Subscription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Recurring subscription or bill charge (processed on dashboard load).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.CYCLE_WEEKLY">
+<span class="sig-name descname"><span class="pre">CYCLE_WEEKLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'weekly'</span></em><a class="headerlink" href="#budgeting.models.Subscription.CYCLE_WEEKLY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.CYCLE_MONTHLY">
+<span class="sig-name descname"><span class="pre">CYCLE_MONTHLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'monthly'</span></em><a class="headerlink" href="#budgeting.models.Subscription.CYCLE_MONTHLY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.CYCLE_YEARLY">
+<span class="sig-name descname"><span class="pre">CYCLE_YEARLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'yearly'</span></em><a class="headerlink" href="#budgeting.models.Subscription.CYCLE_YEARLY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.CYCLE_CHOICES">
+<span class="sig-name descname"><span class="pre">CYCLE_CHOICES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('weekly',</span> <span class="pre">'Weekly'),</span> <span class="pre">('monthly',</span> <span class="pre">'Monthly'),</span> <span class="pre">('yearly',</span> <span class="pre">'Yearly')]</span></em><a class="headerlink" href="#budgeting.models.Subscription.CYCLE_CHOICES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.Subscription.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#budgeting.models.Subscription.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><a class="headerlink" href="#budgeting.models.Subscription.amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.category">
+<span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#budgeting.models.Subscription.category" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.cycle">
+<span class="sig-name descname"><span class="pre">cycle</span></span><a class="headerlink" href="#budgeting.models.Subscription.cycle" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.next_due">
+<span class="sig-name descname"><span class="pre">next_due</span></span><a class="headerlink" href="#budgeting.models.Subscription.next_due" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.is_active">
+<span class="sig-name descname"><span class="pre">is_active</span></span><a class="headerlink" href="#budgeting.models.Subscription.is_active" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#budgeting.models.Subscription.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.advance_date">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">advance_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription.advance_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription.advance_date" title="Link to this definition"></a></dt>
+<dd><p>Next charge date after <code class="docutils literal notranslate"><span class="pre">from_date</span></code> for the given <code class="docutils literal notranslate"><span class="pre">cycle</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;budgeting.models.SubscriptionManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.Subscription.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.category_id">
+<span class="sig-name descname"><span class="pre">category_id</span></span><a class="headerlink" href="#budgeting.models.Subscription.category_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.Subscription.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.Subscription.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.Subscription.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SavingsGoal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>User savings goal with progress tracking (SDS US #6).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.target_amount">
+<span class="sig-name descname"><span class="pre">target_amount</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.target_amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.current_amount">
+<span class="sig-name descname"><span class="pre">current_amount</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.current_amount" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.deadline">
+<span class="sig-name descname"><span class="pre">deadline</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.deadline" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.get_progress_percentage">
+<span class="sig-name descname"><span class="pre">get_progress_percentage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal.get_progress_percentage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal.get_progress_percentage" title="Link to this definition"></a></dt>
+<dd><p>Funded fraction of <code class="docutils literal notranslate"><span class="pre">target_amount</span></code> capped at 100%.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.get_monthly_savings_needed">
+<span class="sig-name descname"><span class="pre">get_monthly_savings_needed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal.get_monthly_savings_needed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal.get_monthly_savings_needed" title="Link to this definition"></a></dt>
+<dd><p>Rough monthly deposit to reach <code class="docutils literal notranslate"><span class="pre">target_amount</span></code> by <code class="docutils literal notranslate"><span class="pre">deadline</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.add_contribution">
+<span class="sig-name descname"><span class="pre">add_contribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal.add_contribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal.add_contribution" title="Link to this definition"></a></dt>
+<dd><p>Increase <code class="docutils literal notranslate"><span class="pre">current_amount</span></code> by <code class="docutils literal notranslate"><span class="pre">amount</span></code> and save.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.check_goal_completion">
+<span class="sig-name descname"><span class="pre">check_goal_completion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal.check_goal_completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal.check_goal_completion" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">current_amount</span></code> meets or exceeds <code class="docutils literal notranslate"><span class="pre">target_amount</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#budgeting.models.SavingsGoal.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budgeting.models.SavingsGoal.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#budgeting.models.SavingsGoal.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="budgeting_views.html" class="btn btn-neutral float-right" title="budgeting.views" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,3 +1,5 @@
+"""Django admin registrations for budgeting models."""
+
 from django.contrib import admin
 
 from .models import Budget, Category, Notification, SavingsGoal, Subscription, Transaction
@@ -5,30 +7,36 @@ from .models import Budget, Category, Notification, SavingsGoal, Subscription, T
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "user")
+    """List and search helpers for :class:`~budgeting.models.Category`."""
+
 
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
-    list_display = ("user", "category", "limit_amount", "spent_amount", "start_date", "end_date")
+    """Admin columns for budget periods and spend."""
+
 
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ("user", "name", "amount", "category", "cycle", "next_due", "is_active")
+    """Subscription billing schedule overview."""
+
 
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ("user", "kind", "amount", "category", "occurred_at")
+    """Transaction ledger columns."""
+
 
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ("user", "type", "message", "is_read", "created_at")
+    """In-app notifications with type and read filters."""
+
     list_filter = ("type", "is_read")
 
 
 @admin.register(SavingsGoal)
 class SavingsGoalAdmin(admin.ModelAdmin):
-    list_display = ("user", "name", "target_amount", "current_amount", "deadline")
+    """Savings targets and progress."""
+

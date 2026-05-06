@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User guide &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c953341b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Developer guide" href="developer_guide.html" />
+    <link rel="prev" title="Personal Budgeting Software" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">User guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/user_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="user-guide">
+<h1>User guide<a class="headerlink" href="#user-guide" title="Link to this heading"></a></h1>
+<p>This guide is for people using <strong>MyBudget Desk</strong> in the browser: recording money in and out,
+staying inside budgets, and using optional <strong>voice</strong> shortcuts.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#getting-started" id="id1">Getting started</a></p></li>
+<li><p><a class="reference internal" href="#transactions" id="id2">Transactions</a></p></li>
+<li><p><a class="reference internal" href="#speak-to-add-voice" id="id3">Speak to add (voice)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#where-it-appears" id="id4">Where it appears</a></p></li>
+<li><p><a class="reference internal" href="#example-phrases" id="id5">Example phrases</a></p></li>
+<li><p><a class="reference internal" href="#microphone-and-not-allowed-errors" id="id6">Microphone and “not allowed” errors</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#budgets-and-alerts" id="id7">Budgets and alerts</a></p></li>
+<li><p><a class="reference internal" href="#savings-goals-and-reports" id="id8">Savings goals and reports</a></p></li>
+<li><p><a class="reference internal" href="#where-to-go-next" id="id9">Where to go next</a></p></li>
+</ul>
+</nav>
+<section id="getting-started">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Getting started</a><a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+<p>After you sign in, the <strong>Dashboard</strong> shows your balance, income and expenses for the current
+month, budgets, goals, and recent activity. Use <strong>Add transaction</strong> (or the links in empty
+states) whenever you need a full form with every field visible.</p>
+</section>
+<section id="transactions">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Transactions</a><a class="headerlink" href="#transactions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Expenses</strong> reduce your balance and can be tied to a <strong>category</strong> so budgets update.</p></li>
+<li><p><strong>Income</strong> increases your balance; say or type phrases that include words like <em>salary</em>,
+<em>received</em>, or <em>income</em> so the app treats the line as income.</p></li>
+<li><p>Always check the <strong>amount</strong>, <strong>date</strong>, and <strong>category</strong> before saving—especially after voice
+input, which is a helper, not a replacement for your review.</p></li>
+</ul>
+</section>
+<section id="speak-to-add-voice">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Speak to add (voice)</a><a class="headerlink" href="#speak-to-add-voice" title="Link to this heading"></a></h2>
+<p>Voice uses your browser’s <strong>Web Speech API</strong> (dictation). It works best in <strong>Google Chrome</strong>
+or <strong>Microsoft Edge</strong> on a desktop or laptop.</p>
+<section id="where-it-appears">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Where it appears</a><a class="headerlink" href="#where-it-appears" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Dashboard</strong> — <strong>Speak transaction</strong> fills a hidden form and <strong>submits</strong> when the phrase
+is complete enough (amount + category for expenses; income only needs amount and income
+wording).</p></li>
+<li><p><strong>Add / edit transaction</strong> — <strong>Talk to fill form</strong> only fills visible fields; you press
+<strong>Save</strong> yourself.</p></li>
+</ul>
+</section>
+<section id="example-phrases">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Example phrases</a><a class="headerlink" href="#example-phrases" title="Link to this heading"></a></h3>
+<p>Use clear numbers and plain words. Your <strong>category names</strong> are matched if you say them;
+the app also understands a few synonyms (e.g. <em>groceries</em> → Food).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>You say (examples)</p></th>
+<th class="head"><p>What happens</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>“Spent <strong>42</strong> on <strong>groceries</strong> <strong>yesterday</strong>”</p></td>
+<td><p>Expense, amount 42, category if “Groceries” (or similar) exists, date shifted back one day.</p></td>
+</tr>
+<tr class="row-odd"><td><p>“<strong>Received</strong> <strong>salary</strong> <strong>2100</strong> <strong>income</strong>”</p></td>
+<td><p>Income, amount 2100.</p></td>
+</tr>
+<tr class="row-even"><td><p>“Paid <strong>25</strong> for <strong>food</strong> <strong>today</strong>”</p></td>
+<td><p>Expense with today’s date.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Relative dates understood include <strong>yesterday</strong>, <strong>today</strong>, and <strong>last week</strong> (approximate).</p>
+</section>
+<section id="microphone-and-not-allowed-errors">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Microphone and “not allowed” errors</a><a class="headerlink" href="#microphone-and-not-allowed-errors" title="Link to this heading"></a></h3>
+<p>Browsers only allow the microphone on a <strong>secure</strong> page. That usually means:</p>
+<ul class="simple">
+<li><p><strong>HTTPS</strong>, or</p></li>
+<li><p><strong>http://127.0.0.1:</strong>port (or <code class="docutils literal notranslate"><span class="pre">localhost</span></code>) for local development.</p></li>
+</ul>
+<p>Plain <strong>http://</strong> on a <strong>LAN IP</strong> (for example <code class="docutils literal notranslate"><span class="pre">192.168.x.x</span></code>) often blocks the mic. If you
+see a <strong>not-allowed</strong> or permission error:</p>
+<ol class="arabic simple">
+<li><p>Click the <strong>lock</strong> or <strong>tune</strong> icon in the address bar → <strong>Site settings</strong> → set
+<strong>Microphone</strong> to <strong>Allow</strong>, then reload.</p></li>
+<li><p>On <strong>Windows</strong>: <strong>Settings → Privacy &amp; security → Microphone</strong> — allow your browser.</p></li>
+<li><p>Open the app at <strong>http://127.0.0.1:PORT</strong> (replace PORT with your server port) or deploy
+behind <strong>HTTPS</strong>.</p></li>
+</ol>
+<p>If recognition starts but nothing is saved, the status line explains what was missing (for
+example category name on an expense).</p>
+</section>
+</section>
+<section id="budgets-and-alerts">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Budgets and alerts</a><a class="headerlink" href="#budgets-and-alerts" title="Link to this heading"></a></h2>
+<p>When you log an <strong>expense</strong> in a <strong>category</strong> that has an active <strong>budget</strong>, the spent total
+updates. If you configure <strong>alert</strong> thresholds, you may see notifications when you approach
+or exceed a limit.</p>
+</section>
+<section id="savings-goals-and-reports">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Savings goals and reports</a><a class="headerlink" href="#savings-goals-and-reports" title="Link to this heading"></a></h2>
+<p><strong>Goals</strong> track targets over time; <strong>reports</strong> help you see patterns. Exact layouts may vary
+by release—use the on-screen labels and the <strong>developer</strong> docs if you need field-level
+details.</p>
+</section>
+<section id="where-to-go-next">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Where to go next</a><a class="headerlink" href="#where-to-go-next" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="developer_guide.html"><span class="doc">Developer guide</span></a> — how the voice feature is wired in code.</p></li>
+<li><p><a class="reference internal" href="maintenance.html"><span class="doc">Maintenance notes</span></a> — for admins: docs build, deployment notes.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Personal Budgeting Software" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developer_guide.html" class="btn btn-neutral float-right" title="Developer guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

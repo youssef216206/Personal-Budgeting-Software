@@ -31,11 +31,21 @@
 </div>
 
 <div class="card dash-voice-card">
-  <h2 class="section-title">Speak to add a transaction</h2>
-  <p class="muted dash-voice-lede" style="margin-top:0;">Use Chrome or Edge: click below, allow the microphone, say something like <strong>“spent 42 on groceries yesterday”</strong> or <strong>“received salary 2100 income”</strong>. We parse it and save—you’ll land here again.</p>
-  <div class="voice-row dash-voice-row">
-    <button type="button" class="secondary" id="dash-voice-mic-btn">Speak transaction</button>
-    <span id="dash-voice-status" class="muted">Tap, allow the mic, then talk.</span>
+  <div class="dash-voice-card__head">
+    <div class="dash-voice-card__titles">
+      <h2 class="section-title dash-voice-card__title">Speak to add a transaction</h2>
+      <p class="dash-voice-card__sub muted">Quick hands-free entry when Chrome or Edge can use your mic.</p>
+    </div>
+    <span class="dash-voice-badge" title="Best with Chromium-based browsers">Chrome · Edge</span>
+  </div>
+  <p class="muted dash-voice-lede">Click the button, allow the microphone if asked, then say a short phrase. We parse it and save—you’ll land here again. If the mic is blocked, use <strong>http://127.0.0.1</strong> (with your port) or HTTPS, and allow the mic in the site lock icon and in Windows Privacy → Microphone.</p>
+  <ul class="dash-voice-examples" aria-label="Example phrases">
+    <li><span class="dash-voice-examples__tag">Expense</span> “spent 42 on groceries yesterday”</li>
+    <li><span class="dash-voice-examples__tag">Income</span> “received salary 2100 income”</li>
+  </ul>
+  <div class="dash-voice-actions">
+    <button type="button" class="secondary dash-voice-mic" id="dash-voice-mic-btn">Speak transaction</button>
+    <span id="dash-voice-status" class="dash-voice-status muted" role="status">Tap the button, allow the mic, then talk.</span>
   </div>
   <form id="dash-voice-form" action="{% url 'transaction_add' %}" method="post" class="dash-voice-form" novalidate aria-hidden="true">
     {% csrf_token %}

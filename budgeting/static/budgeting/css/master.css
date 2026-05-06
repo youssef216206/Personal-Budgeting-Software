@@ -4559,6 +4559,131 @@ button.danger:hover,
   max-width: 52rem;
 }
 
+.dash-voice-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.dash-voice-card__titles {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.dash-voice-card__title {
+  margin: 0 0 0.35rem;
+}
+
+.dash-voice-card__sub {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  max-width: 36rem;
+}
+
+.dash-voice-badge {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #4338ca;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  align-self: center;
+}
+
+.dash-voice-lede {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.dash-voice-examples {
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.dash-voice-examples li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  padding: 0.45rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  max-width: 100%;
+}
+
+.dash-voice-examples__tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4338ca;
+  background: #fff;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  white-space: nowrap;
+}
+
+.dash-voice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.dash-voice-mic {
+  flex-shrink: 0;
+}
+
+.dash-voice-status {
+  flex: 1 1 200px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  min-width: 0;
+}
+
+.voice-panel {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), rgba(15, 23, 42, 0.03));
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+.voice-panel__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.65rem 1rem;
+}
+
+.voice-panel__btn {
+  flex-shrink: 0;
+}
+
+.voice-panel__status {
+  flex: 1 1 220px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  min-width: 0;
+}
+
 .dash-voice-form {
   display: none;
 }

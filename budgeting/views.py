@@ -1,3 +1,5 @@
+"""HTTP views: authentication, dashboard, CRUD flows, and reports."""
+
 import calendar
 import json
 from datetime import date, timedelta
@@ -36,6 +38,7 @@ from .models import (
 
 
 def signup(request):
+    """Show signup form; on POST create user, log in, redirect to dashboard."""
     if request.user.is_authenticated:
         return redirect("dashboard")
     if request.method == "POST":
@@ -58,12 +61,15 @@ def signup(request):
 
 
 class UserLoginView(LoginView):
+    """Login page using ``budgeting/login.html``."""
+
     template_name = "budgeting/login.html"
     redirect_authenticated_user = True
 
 
 @login_required
 def dashboard(request):
+    """Main dashboard: charts, heatmap, health score, budgets, voice quick-add."""
     user = request.user
     today = date.today()
     month_start = today.replace(day=1)
@@ -261,6 +267,7 @@ def dashboard(request):
 
 @login_required
 def transaction_add(request):
+    """GET: empty form. POST: save income/expense and surface budget alerts."""
     voice_categories_json = json.dumps(
         list(
             Category.objects.filter(Q(user__isnull=True) | Q(user=request.user))
@@ -307,6 +314,7 @@ def transaction_add(request):
 
 @login_required
 def transaction_list(request):
+    """Filterable, paginated list with per-filter income/expense totals."""
     user = request.user
     qs = Transaction.objects.filter(user=user).select_related("category")
 
@@ -369,7 +377,8 @@ def transaction_list(request):
 
 @login_required
 def transaction_edit(request, pk):
-    t = get_object_or_404(Transaction, pk=pk, user=request.user)
+    """Edit an existing transaction owned by the current user."""
+
     voice_categories_json = json.dumps(
         list(
             Category.objects.filter(Q(user__isnull=True) | Q(user=request.user))
@@ -407,7 +416,8 @@ def transaction_edit(request, pk):
 
 @login_required
 def transaction_delete(request, pk):
-    t = get_object_or_404(Transaction, pk=pk, user=request.user)
+    """Confirm on GET; POST deletes the transaction."""
+
     if request.method == "POST":
         t.delete()
         messages.success(request, "Transaction deleted.")
@@ -423,6 +433,7 @@ def transaction_delete(request, pk):
 
 @login_required
 def category_list(request):
+    """List global default categories and the user's custom ones; POST adds custom."""
     user = request.user
     if request.method == "POST":
         form = CategoryForm(request.POST, user=user)
@@ -449,6 +460,7 @@ def category_list(request):
 
 @login_required
 def subscription_list(request):
+    """All subscriptions for the logged-in user."""
     items = Subscription.objects.filter(user=request.user).select_related("category")
     return render(request, "budgeting/subscription_list.html", {"subscriptions": items})
 
@@ -469,6 +481,7 @@ def _subscription_save_message(request, saved_verb: str):
 
 @login_required
 def subscription_add(request):
+    """Create subscription; may immediately post due charges."""
     if request.method == "POST":
         form = SubscriptionForm(request.POST, user=request.user)
         if form.is_valid():
@@ -489,6 +502,7 @@ def subscription_add(request):
 
 @login_required
 def subscription_edit(request, pk):
+    """Update subscription; may post catch-up charges after save."""
     sub = get_object_or_404(Subscription, pk=pk, user=request.user)
     if request.method == "POST":
         form = SubscriptionForm(request.POST, instance=sub, user=request.user)
@@ -507,6 +521,7 @@ def subscription_edit(request, pk):
 
 @login_required
 def subscription_delete(request, pk):
+    """Confirm on GET; POST removes the subscription row only (not past transactions)."""
     sub = get_object_or_404(Subscription, pk=pk, user=request.user)
     if request.method == "POST":
         sub.delete()
@@ -523,6 +538,7 @@ def subscription_delete(request, pk):
 
 @login_required
 def subscription_toggle(request, pk):
+    """Pause or resume automatic posting (POST only)."""
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
     sub = get_object_or_404(Subscription, pk=pk, user=request.user)
@@ -537,12 +553,14 @@ def subscription_toggle(request, pk):
 
 @login_required
 def budget_list(request):
+    """Budget cards for the user."""
     items = Budget.objects.filter(user=request.user).select_related("category")
     return render(request, "budgeting/budget_list.html", {"budgets": items})
 
 
 @login_required
 def budget_create(request):
+    """Show budget form; POST validates and saves."""
     if request.method == "POST":
         form = BudgetForm(request.POST, user=request.user)
         if form.is_valid():
@@ -560,6 +578,7 @@ def budget_create(request):
 
 @login_required
 def budget_edit(request, pk):
+    """Edit budget limits and dates for one row."""
     budget = get_object_or_404(Budget, pk=pk, user=request.user)
     if request.method == "POST":
         form = BudgetForm(request.POST, user=request.user, instance=budget)
@@ -578,12 +597,14 @@ def budget_edit(request, pk):
 
 @login_required
 def goals_list(request):
+    """Savings goals overview."""
     goals = SavingsGoal.objects.filter(user=request.user)
     return render(request, "budgeting/goals_list.html", {"goals": goals})
 
 
 @login_required
 def goal_create(request):
+    """Create a new :class:`~budgeting.models.SavingsGoal`."""
     if request.method == "POST":
         form = SavingsGoalForm(request.POST)
         if form.is_valid():
@@ -602,6 +623,7 @@ def goal_create(request):
 
 @login_required
 def goal_contribute(request, pk):
+    """Add money toward a goal; may emit a completion notification."""
     goal = get_object_or_404(SavingsGoal, pk=pk, user=request.user)
     if request.method == "POST":
         form = ContributionForm(request.POST)
@@ -634,6 +656,7 @@ def goal_contribute(request, pk):
 
 @login_required
 def reports(request):
+    """Date-range report with category breakdown and simple narrative insights."""
     today = date.today()
     default_from = today.replace(day=1).isoformat()
     default_to = today.isoformat()
@@ -714,6 +737,7 @@ def reports(request):
 
 @login_required
 def notifications_view(request):
+    """List all notifications and mark unread ones as read."""
     all_notifs = Notification.objects.filter(user=request.user)
     Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
     return render(request, "budgeting/notifications.html", {"notifications": all_notifs})

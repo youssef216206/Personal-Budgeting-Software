@@ -64,11 +64,14 @@ class Notification(models.Model):
         return f"{self.type}: {self.message[:60]}"
 
     def mark_as_read(self):
+        """Persist ``is_read=True``."""
         self.is_read = True
         self.save(update_fields=["is_read"])
 
 
 class Budget(models.Model):
+    """Spending limit for one category through a date range."""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="budgets"
     )
@@ -91,18 +94,22 @@ class Budget(models.Model):
         return f"{self.user} · {self.category} ({self.start_date}–{self.end_date})"
 
     def spent_percentage(self):
+        """Return percent of ``limit_amount`` represented by ``spent_amount``."""
         if not self.limit_amount or self.limit_amount == 0:
             return 0
         return float((self.spent_amount / self.limit_amount) * 100)
 
     def is_over_limit(self):
+        """``True`` if ``spent_amount`` exceeds ``limit_amount``."""
         return self.spent_amount > self.limit_amount
 
     def should_alert(self):
+        """Whether spending crossed the threshold or the limit."""
         pct = self.spent_percentage()
         return pct >= self.alert_threshold_percent or self.is_over_limit()
 
     def get_alert_message(self):
+        """Human-readable warning or alert for notifications."""
         if self.is_over_limit():
             return (
                 f"Budget exceeded for {self.category.name}! "
@@ -115,6 +122,7 @@ class Budget(models.Model):
         )
 
     def trigger_alert(self):
+        """Create a :class:`Notification` if :meth:`should_alert` is true."""
         if self.should_alert():
             ntype = (
                 Notification.TYPE_ALERT
@@ -129,6 +137,8 @@ class Budget(models.Model):
 
 
 class Transaction(models.Model):
+    """Income or expense logged by the user; rolls up into budgets."""
+
     KIND_INCOME = "income"
     KIND_EXPENSE = "expense"
     KIND_CHOICES = [(KIND_INCOME, "Income"), (KIND_EXPENSE, "Expense")]
@@ -156,6 +166,7 @@ class Transaction(models.Model):
 
     @staticmethod
     def _matching_budgets(user, category_id, on_date):
+        """Budget rows for ``user``/``category`` active on ``on_date``."""
         if not category_id or on_date is None:
             return Budget.objects.none()
         return Budget.objects.filter(
@@ -167,6 +178,7 @@ class Transaction(models.Model):
 
     @transaction.atomic
     def save(self, *args, **kwargs):
+        """Save the row and update related :class:`Budget` ``spent_amount``."""
         is_new = self.pk is None
         old_snapshot = None
         if not is_new:
@@ -203,6 +215,7 @@ class Transaction(models.Model):
 
     @transaction.atomic
     def delete(self, *args, **kwargs):
+        """Remove expense amounts from overlapping budgets, then delete."""
         if self.kind == self.KIND_EXPENSE and self.category_id and self.occurred_at:
             on_date = self.occurred_at.date()
             for b in self._matching_budgets(self.user_id, self.category_id, on_date):
@@ -212,7 +225,18 @@ class Transaction(models.Model):
 
 
 class SubscriptionManager(models.Manager):
+    """Custom manager that posts due subscription charges."""
+
     def process_due_for(self, user, max_iter_per_subscription=72):
+        """Create expense transactions for active subscriptions at or past ``next_due``.
+
+        Args:
+            user: Owner of the subscriptions.
+            max_iter_per_subscription: Safety cap on loops per row (catch-up).
+
+        Returns:
+            List of subscription names that received at least one posted charge.
+        """
         today = timezone.now().date()
         posted = []
         with transaction.atomic():
@@ -278,7 +302,12 @@ class Subscription(models.Model):
 
     @classmethod
     def advance_date(cls, from_date, cycle: str):
-        d = from_date if isinstance(from_date, date) else datetime.combine(from_date, time.min).date()
+        """Next charge date after ``from_date`` for the given ``cycle``."""
+        d = (
+            from_date
+            if isinstance(from_date, date)
+            else datetime.combine(from_date, time.min).date()
+        )
         if cycle == cls.CYCLE_WEEKLY:
             return d + timedelta(weeks=1)
         if cycle == cls.CYCLE_MONTHLY:
@@ -320,12 +349,14 @@ class SavingsGoal(models.Model):
         return self.name
 
     def get_progress_percentage(self):
+        """Funded fraction of ``target_amount`` capped at 100%."""
         if not self.target_amount or self.target_amount == 0:
             return 0
         pct = float((self.current_amount / self.target_amount) * 100)
         return min(pct, 100)
 
     def get_monthly_savings_needed(self):
+        """Rough monthly deposit to reach ``target_amount`` by ``deadline``."""
         today = timezone.now().date()
         remaining = float(self.target_amount - self.current_amount)
         if remaining <= 0:
@@ -341,8 +372,10 @@ class SavingsGoal(models.Model):
         return round(remaining / months, 2)
 
     def add_contribution(self, amount):
+        """Increase ``current_amount`` by ``amount`` and save."""
         self.current_amount += amount
         self.save(update_fields=["current_amount"])
 
     def check_goal_completion(self):
+        """``True`` when ``current_amount`` meets or exceeds ``target_amount``."""
         return self.current_amount >= self.target_amount

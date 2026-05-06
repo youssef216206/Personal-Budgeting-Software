@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.models &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=c953341b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">budgeting.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for budgeting.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">calendar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="Category">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Category">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Category</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spending/income category (global defaults or per-user custom).&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;categories&quot;</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Null = available to all users&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;categories&quot;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">UniqueConstraint</span><span class="p">(</span>
+                <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;uniq_category_name_per_user&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+
+<div class="viewcode-block" id="Notification">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Notification">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Notification</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;System alert persisted for a user (SDS US #5, #10).&quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_WARNING</span> <span class="o">=</span> <span class="s2">&quot;warning&quot;</span>
+    <span class="n">TYPE_ALERT</span> <span class="o">=</span> <span class="s2">&quot;alert&quot;</span>
+    <span class="n">TYPE_INFO</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+    <span class="n">TYPE_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+    <span class="n">TYPE_CHOICES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">TYPE_WARNING</span><span class="p">,</span> <span class="s2">&quot;Warning&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">TYPE_ALERT</span><span class="p">,</span> <span class="s2">&quot;Alert&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">TYPE_INFO</span><span class="p">,</span> <span class="s2">&quot;Info&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">TYPE_SUCCESS</span><span class="p">,</span> <span class="s2">&quot;Success&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;notifications&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">TYPE_CHOICES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">TYPE_INFO</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">is_read</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-created_at&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">[:</span><span class="mi">60</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="Notification.mark_as_read">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Notification.mark_as_read">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mark_as_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist ``is_read=True``.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_read</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;is_read&quot;</span><span class="p">])</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Budget">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Budget</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spending limit for one category through a date range.&quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;budgets&quot;</span>
+    <span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Category</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;budgets&quot;</span>
+    <span class="p">)</span>
+    <span class="n">limit_amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+    <span class="n">alert_threshold_percent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveSmallIntegerField</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Notify when spent </span><span class="si">% r</span><span class="s2">eaches this value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">spent_amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-start_date&quot;</span><span class="p">,</span> <span class="s2">&quot;category__name&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2"> · </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="si">}</span><span class="s2">–</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end_date</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Budget.spent_percentage">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget.spent_percentage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spent_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return percent of ``limit_amount`` represented by ``spent_amount``.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Budget.is_over_limit">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget.is_over_limit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_over_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``True`` if ``spent_amount`` exceeds ``limit_amount``.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span></div>
+
+
+<div class="viewcode-block" id="Budget.should_alert">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget.should_alert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_alert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether spending crossed the threshold or the limit.&quot;&quot;&quot;</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spent_percentage</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pct</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alert_threshold_percent</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_over_limit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Budget.get_alert_message">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget.get_alert_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_alert_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Human-readable warning or alert for notifications.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_over_limit</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Budget exceeded for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">! &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Spent </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spent_amount</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spent_percentage</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Budget warning for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% used &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spent_amount</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">limit_amount</span><span class="si">}</span><span class="s2">).&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Budget.trigger_alert">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Budget.trigger_alert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">trigger_alert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a :class:`Notification` if :meth:`should_alert` is true.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_alert</span><span class="p">():</span>
+            <span class="n">ntype</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Notification</span><span class="o">.</span><span class="n">TYPE_ALERT</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_over_limit</span><span class="p">()</span>
+                <span class="k">else</span> <span class="n">Notification</span><span class="o">.</span><span class="n">TYPE_WARNING</span>
+            <span class="p">)</span>
+            <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">user_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">ntype</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_alert_message</span><span class="p">(),</span>
+            <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Transaction">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Transaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Transaction</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Income or expense logged by the user; rolls up into budgets.&quot;&quot;&quot;</span>
+
+    <span class="n">KIND_INCOME</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
+    <span class="n">KIND_EXPENSE</span> <span class="o">=</span> <span class="s2">&quot;expense&quot;</span>
+    <span class="n">KIND_CHOICES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">KIND_INCOME</span><span class="p">,</span> <span class="s2">&quot;Income&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">KIND_EXPENSE</span><span class="p">,</span> <span class="s2">&quot;Expense&quot;</span><span class="p">)]</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;transactions&quot;</span>
+    <span class="p">)</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">KIND_CHOICES</span><span class="p">)</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Category</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span>
+        <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;transactions&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">occurred_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-occurred_at&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">occurred_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Transaction._matching_budgets">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Transaction._matching_budgets">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_matching_budgets</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">on_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Budget rows for ``user``/``category`` active on ``on_date``.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">category_id</span> <span class="ow">or</span> <span class="n">on_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">category_id</span><span class="o">=</span><span class="n">category_id</span><span class="p">,</span>
+            <span class="n">start_date__lte</span><span class="o">=</span><span class="n">on_date</span><span class="p">,</span>
+            <span class="n">end_date__gte</span><span class="o">=</span><span class="n">on_date</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Transaction.save">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Transaction.save">[docs]</a>
+    <span class="nd">@transaction</span><span class="o">.</span><span class="n">atomic</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save the row and update related :class:`Budget` ``spent_amount``.&quot;&quot;&quot;</span>
+        <span class="n">is_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="n">old_snapshot</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_new</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+                <span class="n">old_snapshot</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span>
+                    <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+                    <span class="s2">&quot;category_id&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">category_id</span><span class="p">,</span>
+                    <span class="s2">&quot;on_date&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">occurred_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="k">if</span> <span class="n">prev</span><span class="o">.</span><span class="n">occurred_at</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="k">except</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+                <span class="n">old_snapshot</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">old_snapshot</span> <span class="ow">and</span> <span class="n">old_snapshot</span><span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matching_budgets</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">old_snapshot</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">],</span> <span class="n">old_snapshot</span><span class="p">[</span><span class="s2">&quot;on_date&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">-</span> <span class="n">old_snapshot</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">])</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spent_amount&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">KIND_EXPENSE</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_id</span><span class="p">:</span>
+            <span class="n">on_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">occurred_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">occurred_at</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">triggered</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matching_budgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_id</span><span class="p">,</span> <span class="n">on_date</span><span class="p">):</span>
+                <span class="n">budget</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span>
+                <span class="n">budget</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spent_amount&quot;</span><span class="p">])</span>
+                <span class="n">triggered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">triggered</span><span class="p">:</span>
+                <span class="n">budget</span><span class="o">.</span><span class="n">trigger_alert</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Transaction.delete">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Transaction.delete">[docs]</a>
+    <span class="nd">@transaction</span><span class="o">.</span><span class="n">atomic</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove expense amounts from overlapping budgets, then delete.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">KIND_EXPENSE</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_id</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">occurred_at</span><span class="p">:</span>
+            <span class="n">on_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">occurred_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matching_budgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_id</span><span class="p">,</span> <span class="n">on_date</span><span class="p">):</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">spent_amount</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">)</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spent_amount&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SubscriptionManager">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SubscriptionManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SubscriptionManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom manager that posts due subscription charges.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SubscriptionManager.process_due_for">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SubscriptionManager.process_due_for">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_due_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">max_iter_per_subscription</span><span class="o">=</span><span class="mi">72</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create expense transactions for active subscriptions at or past ``next_due``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user: Owner of the subscriptions.</span>
+<span class="sd">            max_iter_per_subscription: Safety cap on loops per row (catch-up).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of subscription names that received at least one posted charge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">today</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">posted</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">transaction</span><span class="o">.</span><span class="n">atomic</span><span class="p">():</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">is_active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">next_due__lte</span><span class="o">=</span><span class="n">today</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">qs</span><span class="p">:</span>
+                <span class="n">n_left</span> <span class="o">=</span> <span class="n">max_iter_per_subscription</span>
+                <span class="n">next_due</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">next_due</span>
+                <span class="k">while</span> <span class="n">sub</span><span class="o">.</span><span class="n">is_active</span> <span class="ow">and</span> <span class="n">next_due</span> <span class="o">&lt;=</span> <span class="n">today</span> <span class="ow">and</span> <span class="n">n_left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">occurred</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">make_aware</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">next_due</span><span class="p">,</span> <span class="n">time</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                    <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                        <span class="n">user_id</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
+                        <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
+                        <span class="n">amount</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+                        <span class="n">category_id</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">category_id</span><span class="p">,</span>
+                        <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Subscription · </span><span class="si">{</span><span class="n">sub</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">occurred_at</span><span class="o">=</span><span class="n">occurred</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">posted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">next_due</span> <span class="o">=</span> <span class="n">Subscription</span><span class="o">.</span><span class="n">advance_date</span><span class="p">(</span><span class="n">next_due</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+                    <span class="n">n_left</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">next_due</span><span class="o">=</span><span class="n">next_due</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">posted</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Subscription">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Subscription">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Subscription</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recurring subscription or bill charge (processed on dashboard load).&quot;&quot;&quot;</span>
+
+    <span class="n">CYCLE_WEEKLY</span> <span class="o">=</span> <span class="s2">&quot;weekly&quot;</span>
+    <span class="n">CYCLE_MONTHLY</span> <span class="o">=</span> <span class="s2">&quot;monthly&quot;</span>
+    <span class="n">CYCLE_YEARLY</span> <span class="o">=</span> <span class="s2">&quot;yearly&quot;</span>
+    <span class="n">CYCLE_CHOICES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">CYCLE_WEEKLY</span><span class="p">,</span> <span class="s2">&quot;Weekly&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">CYCLE_MONTHLY</span><span class="p">,</span> <span class="s2">&quot;Monthly&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">CYCLE_YEARLY</span><span class="p">,</span> <span class="s2">&quot;Yearly&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;subscriptions&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Category</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;subscriptions&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">cycle</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">CYCLE_CHOICES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">CYCLE_MONTHLY</span><span class="p">)</span>
+    <span class="n">next_due</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Next charge date; advances after posting&quot;</span><span class="p">)</span>
+    <span class="n">is_active</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;next_due&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Subscription.advance_date">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.Subscription.advance_date">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">advance_date</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">from_date</span><span class="p">,</span> <span class="n">cycle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Next charge date after ``from_date`` for the given ``cycle``.&quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">from_date</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_date</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">from_date</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">cycle</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CYCLE_WEEKLY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">d</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cycle</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CYCLE_MONTHLY</span><span class="p">:</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">day</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+                <span class="n">y</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">m</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">last</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">cycle</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CYCLE_YEARLY</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">SubscriptionManager</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="SavingsGoal">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SavingsGoal</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User savings goal with progress tracking (SDS US #6).&quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;savings_goals&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">target_amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">current_amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">deadline</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-created_at&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+<div class="viewcode-block" id="SavingsGoal.get_progress_percentage">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal.get_progress_percentage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_progress_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Funded fraction of ``target_amount`` capped at 100%.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_amount</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_amount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">current_amount</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_amount</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">pct</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SavingsGoal.get_monthly_savings_needed">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal.get_monthly_savings_needed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_monthly_savings_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rough monthly deposit to reach ``target_amount`` by ``deadline``.&quot;&quot;&quot;</span>
+        <span class="n">today</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_amount</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_amount</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">&lt;=</span> <span class="n">today</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remaining</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">today</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span>
+            <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="n">today</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">months</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remaining</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">remaining</span> <span class="o">/</span> <span class="n">months</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SavingsGoal.add_contribution">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal.add_contribution">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Increase ``current_amount`` by ``amount`` and save.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_amount</span> <span class="o">+=</span> <span class="n">amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;current_amount&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="SavingsGoal.check_goal_completion">
+<a class="viewcode-back" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal.check_goal_completion">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_goal_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``True`` when ``current_amount`` meets or exceeds ``target_amount``.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_amount</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_amount</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,3 +1,5 @@
+"""Django forms for signup, transactions, budgets, goals, subscriptions, categories."""
+
 from django import forms
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -7,6 +9,8 @@ from .models import Budget, Category, SavingsGoal, Subscription, Transaction
 
 
 class SignUpForm(forms.Form):
+    """Collect full name, email-as-username, and password with confirmation."""
+
     full_name = forms.CharField(max_length=150)
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -30,6 +34,8 @@ class SignUpForm(forms.Form):
 
 
 class TransactionForm(forms.ModelForm):
+    """Create or edit a :class:`~budgeting.models.Transaction` for the current user."""
+
     class Meta:
         model = Transaction
         fields = ["kind", "amount", "category", "description", "occurred_at"]
@@ -81,6 +87,8 @@ def transaction_form_voice_hidden(user):
 
 
 class BudgetForm(forms.ModelForm):
+    """Create or edit a :class:`~budgeting.models.Budget` with overlap validation."""
+
     class Meta:
         model = Budget
         fields = [
@@ -192,6 +200,8 @@ class ContributionForm(forms.Form):
 
 
 class SubscriptionForm(forms.ModelForm):
+    """Manage a recurring :class:`~budgeting.models.Subscription` and next due date."""
+
     class Meta:
         model = Subscription
         fields = ["name", "amount", "category", "cycle", "next_due", "is_active"]

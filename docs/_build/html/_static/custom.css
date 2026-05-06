@@ -1,0 +1,239 @@
+/*
+ * Personal Budgeting Software — Sphinx (Read the Docs theme) overrides
+ */
+
+:root {
+  --docs-accent: #4f46e5;
+  --docs-accent-soft: #eef2ff;
+  --docs-surface: #f8fafc;
+  --docs-border: #e2e8f0;
+  --docs-text: #0f172a;
+  --docs-nav-bg: #1e1b4b;
+  --docs-nav-search: #312e81;
+}
+
+/* --- Layout & reading width --------------------------------------------- */
+
+.wy-nav-content {
+  max-width: 52rem;
+}
+
+.wy-nav-content .rst-content {
+  min-height: 65vh;
+}
+
+.rst-content .section > h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--docs-text);
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--docs-border);
+  padding-bottom: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.rst-content h2 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid transparent;
+  color: #1e293b;
+}
+
+.rst-content h3 {
+  font-size: 1.12rem;
+  color: #334155;
+}
+
+/* --- Navigation ----------------------------------------------------------- */
+
+.wy-side-nav-search,
+.wy-nav-top {
+  background-color: var(--docs-nav-search) !important;
+}
+
+.wy-nav-side {
+  background-color: var(--docs-nav-bg) !important;
+}
+
+.wy-menu-vertical a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.wy-menu-vertical a:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Section captions (GUIDES, API REFERENCE) */
+.wy-menu-vertical .caption-text,
+.wy-menu-vertical span.caption-text {
+  color: #e0e7ff !important;
+  letter-spacing: 0.04em;
+}
+
+/* Expanded current section: RTD uses a light panel — links must be dark for contrast */
+.wy-menu-vertical li.toctree-l1.current {
+  background: #e8eaf6 !important;
+}
+
+.wy-menu-vertical li.toctree-l1.current > a {
+  color: #1e1b4b !important;
+  background: transparent !important;
+  border-right: 3px solid var(--docs-accent);
+}
+
+.wy-menu-vertical li.toctree-l1.current ul {
+  background: transparent !important;
+}
+
+.wy-menu-vertical li.toctree-l1.current ul a {
+  color: #1e2439 !important;
+  opacity: 1 !important;
+}
+
+.wy-menu-vertical li.toctree-l1.current ul a:hover {
+  background: rgba(79, 70, 229, 0.2) !important;
+  color: #0f172a !important;
+}
+
+/* Active subsection under an expanded chapter */
+.wy-menu-vertical li.toctree-l1.current li.toctree-l2.current > a,
+.wy-menu-vertical li.toctree-l1.current li.toctree-l3.current > a {
+  font-weight: 600;
+  color: #0f172a !important;
+  background: rgba(79, 70, 229, 0.14) !important;
+}
+
+/* API / other trees: same pattern whenever a branch is .current and shows a submenu */
+.wy-menu-vertical li.current > ul {
+  background: #e8eaf6 !important;
+}
+
+.wy-menu-vertical li.current > ul a {
+  color: #1e2439 !important;
+  opacity: 1 !important;
+}
+
+.wy-menu-vertical li.current > ul a:hover {
+  background: rgba(79, 70, 229, 0.2) !important;
+  color: #0f172a !important;
+}
+
+.wy-side-nav-search input[type="text"] {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* --- Homepage guide list -------------------------------------------------- */
+
+.rst-content .docs-guide-list-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin: 2rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.rst-content ul.docs-guide-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rst-content ul.docs-guide-list > li {
+  list-style: none;
+  margin-left: 0 !important;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid var(--docs-border);
+  background: linear-gradient(135deg, #ffffff 0%, var(--docs-surface) 100%);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.rst-content ul.docs-guide-list > li > p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.rst-content ul.docs-guide-list strong {
+  color: var(--docs-accent);
+  font-weight: 600;
+}
+
+.rst-content ul.docs-guide-list a {
+  color: var(--docs-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rst-content ul.docs-guide-list a:hover {
+  text-decoration: underline;
+}
+
+/* --- Admonitions & tables ------------------------------------------------- */
+
+.rst-content .admonition {
+  border-radius: 10px;
+  border-width: 1px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.rst-content .admonition.note,
+.rst-content .admonition.seealso {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.rst-content .admonition.tip {
+  background-color: var(--docs-accent-soft);
+  border-color: #818cf8;
+}
+
+.rst-content .admonition.warning {
+  background-color: #fffbeb;
+  border-color: #fbbf24;
+}
+
+.rst-content table.docutils {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.rst-content table.docutils thead {
+  background: var(--docs-surface);
+}
+
+.rst-content table.docutils th {
+  border-bottom: 2px solid var(--docs-border);
+}
+
+.rst-content table.docutils td,
+.rst-content table.docutils th {
+  padding: 0.5rem 0.75rem;
+}
+
+/* --- Code ---------------------------------------------------------------- */
+
+.rst-content code.literal {
+  color: #4338ca;
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 0.12em 0.35em;
+  font-size: 0.92em;
+}
+
+.rst-content .highlight {
+  border-radius: 8px;
+  border: 1px solid var(--docs-border);
+}
+
+/* --- Contents (local TOC) ------------------------------------------------ */
+
+.rst-content .topic-title {
+  font-weight: 600;
+}

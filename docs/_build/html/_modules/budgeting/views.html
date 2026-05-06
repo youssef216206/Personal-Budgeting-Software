@@ -1,0 +1,907 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budgeting.views &mdash; Personal Budgeting Software 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Personal Budgeting Software
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Personal Budgeting Software</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">budgeting.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for budgeting.views</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;HTTP views: authentication, dashboard, CRUD flows, and reports.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">calendar</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">messages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">login</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoginView</span><span class="p">,</span> <span class="n">LogoutView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Sum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TruncDate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpResponseNotAllowed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.forms</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BudgetForm</span><span class="p">,</span>
+    <span class="n">CategoryForm</span><span class="p">,</span>
+    <span class="n">ContributionForm</span><span class="p">,</span>
+    <span class="n">SavingsGoalForm</span><span class="p">,</span>
+    <span class="n">SignUpForm</span><span class="p">,</span>
+    <span class="n">SubscriptionForm</span><span class="p">,</span>
+    <span class="n">TransactionForm</span><span class="p">,</span>
+    <span class="n">transaction_form_voice_hidden</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.health</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_health</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">dashboard_insights</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Budget</span><span class="p">,</span>
+    <span class="n">Category</span><span class="p">,</span>
+    <span class="n">Notification</span><span class="p">,</span>
+    <span class="n">SavingsGoal</span><span class="p">,</span>
+    <span class="n">Subscription</span><span class="p">,</span>
+    <span class="n">Transaction</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="signup">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.signup">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">signup</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show signup form; on POST create user, log in, redirect to dashboard.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;dashboard&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span>
+            <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
+                <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
+                <span class="n">first_name</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;full_name&quot;</span><span class="p">][:</span><span class="mi">150</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username__iexact</span><span class="o">=</span><span class="n">email</span><span class="p">)</span>
+            <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Welcome! Your account was created.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;dashboard&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/signup.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="UserLoginView">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.UserLoginView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserLoginView</span><span class="p">(</span><span class="n">LoginView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Login page using ``budgeting/login.html``.&quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;budgeting/login.html&quot;</span>
+    <span class="n">redirect_authenticated_user</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="dashboard">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.dashboard">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main dashboard: charts, heatmap, health score, budgets, voice quick-add.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="n">month_start</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">month_end</span> <span class="o">=</span> <span class="n">month_start</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="n">day</span><span class="o">=</span><span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">month_start</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month_start</span><span class="o">.</span><span class="n">month</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">prev_month_end</span> <span class="o">=</span> <span class="n">month_start</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">prev_month_start</span> <span class="o">=</span> <span class="n">prev_month_end</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">recent_transactions</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
+    <span class="n">budgets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Full calendar month (not &quot;through today&quot;) so future-dated rows in this month still count.</span>
+    <span class="n">income_total</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">,</span>
+            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">month_start</span><span class="p">,</span>
+            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">month_end</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">expense_total</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
+            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">month_start</span><span class="p">,</span>
+            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">month_end</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+
+    <span class="n">income_all</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span>
+        <span class="p">)[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">expense_all</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+            <span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span>
+        <span class="p">)[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">total_balance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">income_all</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">expense_all</span><span class="p">)</span>
+
+    <span class="n">budget_warnings</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">budgets</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">should_alert</span><span class="p">()]</span>
+    <span class="n">unread_notifications</span> <span class="o">=</span> <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">is_read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">has_data</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="n">savings_goals</span> <span class="o">=</span> <span class="n">SavingsGoal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="n">category_breakdown</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
+            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">month_start</span><span class="p">,</span>
+            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">month_end</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;category__name&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-total&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># Donut: at most 11 slices; merge 11th-ranked and below into one &quot;Other categories&quot; slice</span>
+    <span class="n">_chart_cat_max_slices</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">category_breakdown</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">_chart_cat_max_slices</span><span class="p">:</span>
+        <span class="n">_top_rows</span> <span class="o">=</span> <span class="n">category_breakdown</span><span class="p">[:</span> <span class="n">_chart_cat_max_slices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">_tail_total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">category_breakdown</span><span class="p">[</span><span class="n">_chart_cat_max_slices</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="p">)</span>
+        <span class="n">chart_category_rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_top_rows</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_tail_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">chart_category_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;category__name&quot;</span><span class="p">:</span> <span class="s2">&quot;Other categories&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="n">_tail_total</span><span class="p">}</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">chart_category_rows</span> <span class="o">=</span> <span class="n">category_breakdown</span>
+    <span class="n">chart_cat_labels</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;category__name&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;Uncategorized&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">chart_category_rows</span>
+    <span class="p">]</span>
+    <span class="n">chart_cat_data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">chart_category_rows</span><span class="p">]</span>
+
+    <span class="n">daily_rows</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
+            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">month_start</span><span class="p">,</span>
+            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">month_end</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="n">TruncDate</span><span class="p">(</span><span class="s2">&quot;occurred_at&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">by_day</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]:</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">daily_rows</span><span class="p">}</span>
+    <span class="n">days_in_month</span> <span class="o">=</span> <span class="p">(</span><span class="n">month_end</span> <span class="o">-</span> <span class="n">month_start</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">daily_series</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">days_in_month</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">month_start</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">daily_series</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="n">by_day</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)})</span>
+    <span class="n">chart_day_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">daily_series</span><span class="p">]</span>
+    <span class="n">chart_day_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">daily_series</span><span class="p">]</span>
+
+    <span class="n">has_chart_data</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chart_cat_data</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chart_day_data</span>
+    <span class="p">)</span>
+
+    <span class="n">heat_start</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">83</span><span class="p">)</span>
+    <span class="n">start_monday</span> <span class="o">=</span> <span class="n">heat_start</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">heat_start</span><span class="o">.</span><span class="n">weekday</span><span class="p">())</span>
+    <span class="n">heat_rows</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
+            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">start_monday</span><span class="p">,</span>
+            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">today</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">TruncDate</span><span class="p">(</span><span class="s2">&quot;occurred_at&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">by_heat</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]:</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">heat_rows</span><span class="p">}</span>
+    <span class="n">max_heat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">by_heat</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">heat_level</span><span class="p">(</span><span class="n">amt</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">max_heat</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">amt</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">amt</span> <span class="o">/</span> <span class="n">max_heat</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.65</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">3</span>
+        <span class="k">return</span> <span class="mi">4</span>
+
+    <span class="n">heatmap_cols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">dow</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">start_monday</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">w</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">+</span> <span class="n">dow</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">today</span><span class="p">:</span>
+                <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;future&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">amt</span> <span class="o">=</span> <span class="n">by_heat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span>
+                        <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">amt</span><span class="p">,</span>
+                        <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">heat_level</span><span class="p">(</span><span class="n">amt</span><span class="p">),</span>
+                        <span class="s2">&quot;future&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+        <span class="n">heatmap_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+    <span class="n">insight_items</span> <span class="o">=</span> <span class="n">dashboard_insights</span><span class="p">(</span>
+        <span class="n">user</span><span class="p">,</span> <span class="n">month_start</span><span class="p">,</span> <span class="n">month_end</span><span class="p">,</span> <span class="n">prev_month_start</span><span class="p">,</span> <span class="n">prev_month_end</span>
+    <span class="p">)</span>
+    <span class="n">health</span> <span class="o">=</span> <span class="n">compute_health</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+    <span class="n">voice_categories_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span>
+            <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/dashboard.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;recent_transactions&quot;</span><span class="p">:</span> <span class="n">recent_transactions</span><span class="p">,</span>
+            <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="n">budgets</span><span class="p">,</span>
+            <span class="s2">&quot;income_total&quot;</span><span class="p">:</span> <span class="n">income_total</span><span class="p">,</span>
+            <span class="s2">&quot;expense_total&quot;</span><span class="p">:</span> <span class="n">expense_total</span><span class="p">,</span>
+            <span class="s2">&quot;total_balance&quot;</span><span class="p">:</span> <span class="n">total_balance</span><span class="p">,</span>
+            <span class="s2">&quot;budget_warnings&quot;</span><span class="p">:</span> <span class="n">budget_warnings</span><span class="p">,</span>
+            <span class="s2">&quot;unread_notifications&quot;</span><span class="p">:</span> <span class="n">unread_notifications</span><span class="p">,</span>
+            <span class="s2">&quot;has_data&quot;</span><span class="p">:</span> <span class="n">has_data</span><span class="p">,</span>
+            <span class="s2">&quot;savings_goals&quot;</span><span class="p">:</span> <span class="n">savings_goals</span><span class="p">,</span>
+            <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="n">month_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%B %Y&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;has_chart_data&quot;</span><span class="p">:</span> <span class="n">has_chart_data</span><span class="p">,</span>
+            <span class="s2">&quot;chart_cat_labels&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_cat_labels</span><span class="p">),</span>
+            <span class="s2">&quot;chart_cat_data&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_cat_data</span><span class="p">),</span>
+            <span class="s2">&quot;chart_day_labels&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_day_labels</span><span class="p">),</span>
+            <span class="s2">&quot;chart_day_data&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_day_data</span><span class="p">),</span>
+            <span class="s2">&quot;heatmap_cols&quot;</span><span class="p">:</span> <span class="n">heatmap_cols</span><span class="p">,</span>
+            <span class="s2">&quot;insight_items&quot;</span><span class="p">:</span> <span class="n">insight_items</span><span class="p">,</span>
+            <span class="s2">&quot;health&quot;</span><span class="p">:</span> <span class="n">health</span><span class="p">,</span>
+            <span class="s2">&quot;voice_categories_json&quot;</span><span class="p">:</span> <span class="n">voice_categories_json</span><span class="p">,</span>
+            <span class="s2">&quot;voice_quick_form&quot;</span><span class="p">:</span> <span class="n">transaction_form_voice_hidden</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transaction_add">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.transaction_add">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transaction_add</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GET: empty form. POST: save income/expense and surface budget alerts.&quot;&quot;&quot;</span>
+    <span class="n">voice_categories_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span>
+            <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">TransactionForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">before_save</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">new_alerts</span> <span class="o">=</span> <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">created_at__gte</span><span class="o">=</span><span class="n">before_save</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">alert</span> <span class="ow">in</span> <span class="n">new_alerts</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">alert</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Transaction saved successfully.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;dashboard&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;dashboard&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;transaction_list&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;dashboard&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">errs</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">errs</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Transaction&quot;</span> <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;__all__&quot;</span> <span class="k">else</span> <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                    <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;dashboard&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">TransactionForm</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/transaction_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+            <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Add transaction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;submit_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Save transaction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;back_url_name&quot;</span><span class="p">:</span> <span class="s2">&quot;dashboard&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;voice_categories_json&quot;</span><span class="p">:</span> <span class="n">voice_categories_json</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transaction_list">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.transaction_list">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transaction_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filterable, paginated list with per-filter income/expense totals.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+
+    <span class="n">kind</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">category_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">from_date_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;from_date&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">to_date_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;to_date&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">,</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">):</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">category_id</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">category_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">category_id</span><span class="p">))</span>
+    <span class="n">from_date</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">to_date</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">from_date_str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">from_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">from_date_str</span><span class="p">)</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">from_date</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">from_date</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">to_date_str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">to_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">to_date_str</span><span class="p">)</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">to_date</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">to_date</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">q</span><span class="p">:</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">description__icontains</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="n">totals</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+        <span class="n">income</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">Q</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">)),</span>
+        <span class="n">expense</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">Q</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">)),</span>
+    <span class="p">)</span>
+
+    <span class="n">available_categories</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+
+    <span class="n">has_filters</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="n">kind</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">from_date_str</span><span class="p">,</span> <span class="n">to_date_str</span><span class="p">,</span> <span class="n">q</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/transaction_list.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;transactions&quot;</span><span class="p">:</span> <span class="n">qs</span><span class="p">,</span>
+            <span class="s2">&quot;available_categories&quot;</span><span class="p">:</span> <span class="n">available_categories</span><span class="p">,</span>
+            <span class="s2">&quot;filter_kind&quot;</span><span class="p">:</span> <span class="n">kind</span><span class="p">,</span>
+            <span class="s2">&quot;filter_category&quot;</span><span class="p">:</span> <span class="n">category_id</span><span class="p">,</span>
+            <span class="s2">&quot;filter_from_date&quot;</span><span class="p">:</span> <span class="n">from_date_str</span><span class="p">,</span>
+            <span class="s2">&quot;filter_to_date&quot;</span><span class="p">:</span> <span class="n">to_date_str</span><span class="p">,</span>
+            <span class="s2">&quot;filter_q&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span>
+            <span class="s2">&quot;filter_count&quot;</span><span class="p">:</span> <span class="n">qs</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span>
+            <span class="s2">&quot;filter_income&quot;</span><span class="p">:</span> <span class="n">totals</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;filter_expense&quot;</span><span class="p">:</span> <span class="n">totals</span><span class="p">[</span><span class="s2">&quot;expense&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;has_filters&quot;</span><span class="p">:</span> <span class="n">has_filters</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transaction_edit">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.transaction_edit">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transaction_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Edit an existing transaction owned by the current user.&quot;&quot;&quot;</span>
+
+    <span class="n">voice_categories_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span>
+            <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">TransactionForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">before_save</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">new_alerts</span> <span class="o">=</span> <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">created_at__gte</span><span class="o">=</span><span class="n">before_save</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">alert</span> <span class="ow">in</span> <span class="n">new_alerts</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">alert</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Transaction updated.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;transaction_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">TransactionForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/transaction_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+            <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Edit transaction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;submit_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Save changes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;back_url_name&quot;</span><span class="p">:</span> <span class="s2">&quot;transaction_list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;transaction&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span>
+            <span class="s2">&quot;voice_categories_json&quot;</span><span class="p">:</span> <span class="n">voice_categories_json</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transaction_delete">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.transaction_delete">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transaction_delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Confirm on GET; POST deletes the transaction.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Transaction deleted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;transaction_list&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseNotAllowed</span><span class="p">([</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/transaction_confirm_delete.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;transaction&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="category_list">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.category_list">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">category_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List global default categories and the user&#39;s custom ones; POST adds custom.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">CategoryForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">cat</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Category &#39;</span><span class="si">{</span><span class="n">cat</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; added.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;category_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">CategoryForm</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+
+    <span class="n">defaults</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="n">mine</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/category_list.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+            <span class="s2">&quot;defaults&quot;</span><span class="p">:</span> <span class="n">defaults</span><span class="p">,</span>
+            <span class="s2">&quot;mine&quot;</span><span class="p">:</span> <span class="n">mine</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subscription_list">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.subscription_list">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subscription_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All subscriptions for the logged-in user.&quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">Subscription</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/subscription_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;subscriptions&quot;</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_subscription_save_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">saved_verb</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;After save, post any due subscription expenses and surface one clear toast.&quot;&quot;&quot;</span>
+    <span class="n">posted</span> <span class="o">=</span> <span class="n">Subscription</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">process_due_for</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">posted</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">posted</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+        <span class="n">more</span> <span class="o">=</span> <span class="s2">&quot;…&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">posted</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">6</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+            <span class="n">request</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">saved_verb</span><span class="si">}</span><span class="s2">. Posted expense(s): </span><span class="si">{</span><span class="n">names</span><span class="si">}{</span><span class="n">more</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">saved_verb</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="subscription_add">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.subscription_add">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subscription_add</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create subscription; may immediately post due charges.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SubscriptionForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">_subscription_save_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Subscription saved&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;subscription_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SubscriptionForm</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;next_due&quot;</span><span class="p">:</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()},</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/subscription_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Add subscription&quot;</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subscription_edit">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.subscription_edit">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subscription_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update subscription; may post catch-up charges after save.&quot;&quot;&quot;</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Subscription</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SubscriptionForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">_subscription_save_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Subscription updated&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;subscription_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SubscriptionForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/subscription_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Edit subscription&quot;</span><span class="p">,</span> <span class="s2">&quot;subscription&quot;</span><span class="p">:</span> <span class="n">sub</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subscription_delete">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.subscription_delete">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subscription_delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Confirm on GET; POST removes the subscription row only (not past transactions).&quot;&quot;&quot;</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Subscription</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Subscription deleted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;subscription_list&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseNotAllowed</span><span class="p">([</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/subscription_confirm_delete.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;subscription&quot;</span><span class="p">:</span> <span class="n">sub</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subscription_toggle">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.subscription_toggle">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subscription_toggle</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pause or resume automatic posting (POST only).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseNotAllowed</span><span class="p">([</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Subscription</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">sub</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sub</span><span class="o">.</span><span class="n">is_active</span>
+    <span class="n">sub</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">update_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;is_active&quot;</span><span class="p">])</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;Subscription resumed.&quot;</span> <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">is_active</span> <span class="k">else</span> <span class="s2">&quot;Subscription paused.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;subscription_list&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="budget_list">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.budget_list">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">budget_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Budget cards for the user.&quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/budget_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="budget_create">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.budget_create">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">budget_create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show budget form; POST validates and saves.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">BudgetForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Budget saved.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;budget_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">BudgetForm</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/budget_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Create budget&quot;</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="budget_edit">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.budget_edit">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">budget_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Edit budget limits and dates for one row.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Budget</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">BudgetForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Budget updated.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;budget_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">BudgetForm</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/budget_form.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Edit budget&quot;</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="goals_list">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.goals_list">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">goals_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Savings goals overview.&quot;&quot;&quot;</span>
+    <span class="n">goals</span> <span class="o">=</span> <span class="n">SavingsGoal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/goals_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;goals&quot;</span><span class="p">:</span> <span class="n">goals</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="goal_create">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.goal_create">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">goal_create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new :class:`~budgeting.models.SavingsGoal`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SavingsGoalForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">goal</span> <span class="o">=</span> <span class="n">SavingsGoal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">target_amount</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;target_amount&quot;</span><span class="p">],</span>
+                <span class="n">deadline</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;deadline&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Goal &#39;</span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; created.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;goals_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SavingsGoalForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/goal_form.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;heading&quot;</span><span class="p">:</span> <span class="s2">&quot;Create goal&quot;</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="goal_contribute">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.goal_contribute">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">goal_contribute</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add money toward a goal; may emit a completion notification.&quot;&quot;&quot;</span>
+    <span class="n">goal</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">SavingsGoal</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContributionForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">was_complete</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">check_goal_completion</span><span class="p">()</span>
+            <span class="n">goal</span><span class="o">.</span><span class="n">add_contribution</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">goal</span><span class="o">.</span><span class="n">check_goal_completion</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">was_complete</span><span class="p">:</span>
+                <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                    <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="n">Notification</span><span class="o">.</span><span class="n">TYPE_SUCCESS</span><span class="p">,</span>
+                    <span class="n">message</span><span class="o">=</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Congratulations on achieving your goal &quot;</span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;! &#39;</span>
+                        <span class="s2">&quot;Great work staying on track.&quot;</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                    <span class="n">request</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;Congratulations! You have reached your goal &#39;</span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;!&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                    <span class="n">request</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;Contribution added. Progress: </span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">get_progress_percentage</span><span class="p">()</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;goals_list&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContributionForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/goal_contribute.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;goal&quot;</span><span class="p">:</span> <span class="n">goal</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="reports">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.reports">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reports</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Date-range report with category breakdown and simple narrative insights.&quot;&quot;&quot;</span>
+    <span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="n">default_from</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+    <span class="n">default_to</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+    <span class="n">from_date_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;from_date&quot;</span><span class="p">,</span> <span class="n">default_from</span><span class="p">)</span>
+    <span class="n">to_date_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;to_date&quot;</span><span class="p">,</span> <span class="n">default_to</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">from_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">from_date_str</span><span class="p">)</span>
+        <span class="n">to_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">to_date_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">to_date</span> <span class="o">&lt;</span> <span class="n">from_date</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;to_date before from_date&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="n">from_date</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">to_date</span> <span class="o">=</span> <span class="n">today</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+        <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">from_date</span><span class="p">,</span>
+        <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">to_date</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">breakdown</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">transactions</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;category__name&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-total&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">total_income</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">transactions</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_INCOME</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">total_expenses</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">transactions</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="mi">0</span>
+    <span class="p">)</span>
+
+    <span class="n">insights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">transactions</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;No transaction data available for this period.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">balance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_income</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_expenses</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">balance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You saved </span><span class="si">{</span><span class="n">balance</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> this period. Great job!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">balance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You overspent by </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">balance</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> this period.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Income and expenses balanced out this period.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">breakdown</span><span class="p">:</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="n">breakdown</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">cat_name</span> <span class="o">=</span> <span class="n">top</span><span class="p">[</span><span class="s2">&quot;category__name&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;Uncategorized&quot;</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Highest spending category: </span><span class="si">{</span><span class="n">cat_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">top</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">chart_labels</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;category__name&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;Uncategorized&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">breakdown</span><span class="p">])</span>
+    <span class="n">chart_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">breakdown</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;budgeting/reports.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;from_date&quot;</span><span class="p">:</span> <span class="n">from_date</span><span class="p">,</span>
+            <span class="s2">&quot;to_date&quot;</span><span class="p">:</span> <span class="n">to_date</span><span class="p">,</span>
+            <span class="s2">&quot;total_income&quot;</span><span class="p">:</span> <span class="n">total_income</span><span class="p">,</span>
+            <span class="s2">&quot;total_expenses&quot;</span><span class="p">:</span> <span class="n">total_expenses</span><span class="p">,</span>
+            <span class="s2">&quot;balance&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_income</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_expenses</span><span class="p">),</span>
+            <span class="s2">&quot;breakdown&quot;</span><span class="p">:</span> <span class="n">breakdown</span><span class="p">,</span>
+            <span class="s2">&quot;insights&quot;</span><span class="p">:</span> <span class="n">insights</span><span class="p">,</span>
+            <span class="s2">&quot;has_data&quot;</span><span class="p">:</span> <span class="n">transactions</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span>
+            <span class="s2">&quot;chart_labels&quot;</span><span class="p">:</span> <span class="n">chart_labels</span><span class="p">,</span>
+            <span class="s2">&quot;chart_data&quot;</span><span class="p">:</span> <span class="n">chart_data</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="notifications_view">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.notifications_view">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">notifications_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List all notifications and mark unread ones as read.&quot;&quot;&quot;</span>
+    <span class="n">all_notifs</span> <span class="o">=</span> <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">Notification</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">is_read</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;budgeting/notifications.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;notifications&quot;</span><span class="p">:</span> <span class="n">all_notifs</span><span class="p">})</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

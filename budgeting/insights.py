@@ -7,7 +7,18 @@ from django.utils import timezone
 
 
 def dashboard_insights(user, month_start, month_end, prev_month_start, prev_month_end):
-    """Return up to three short strings for the dashboard."""
+    """Return up to three short dashboard tip strings.
+
+    Args:
+        user: Django user instance (the logged-in account).
+        month_start: First day of the current reporting month.
+        month_end: Last day of the current reporting month.
+        prev_month_start: First day of the prior calendar month.
+        prev_month_end: Last day of the prior calendar month.
+
+    Returns:
+        List of at most three human-readable insight strings.
+    """
     from .models import Budget, SavingsGoal, Transaction
 
     tips = []
