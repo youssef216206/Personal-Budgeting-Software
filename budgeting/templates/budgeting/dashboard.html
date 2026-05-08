@@ -12,7 +12,7 @@
 <div class="card dash-kpi-card">
   <h2 class="section-title section-title--kpi">{{ month }} overview</h2>
   {% if not has_data %}
-  <p class="dash-empty-hint muted">No ledger entries yet. <a href="{% url 'transaction_add' %}">Add a transaction</a> or use Speak below when you’re ready.</p>
+  <p class="dash-empty-hint muted">No ledger entries yet. <a href="{% url 'transaction_add' %}">Add a transaction</a> or use <strong>Speak</strong> below when you’re ready.</p>
   {% endif %}
   <div class="row dash-kpi-row">
     <div class="stat-pill dash-stat dash-stat--balance">
@@ -34,18 +34,13 @@
   <div class="dash-voice-card__head">
     <div class="dash-voice-card__titles">
       <h2 class="section-title dash-voice-card__title">Speak to add a transaction</h2>
-      <p class="dash-voice-card__sub muted">Quick hands-free entry when Chrome or Edge can use your mic.</p>
+      <p class="muted dash-voice-hint">Chrome or Edge · tap Speak and allow the microphone. For spending, say how much and which category you use in the app; for income, say the amount and that money came in (words like ‘received’ or ‘salary’ work). Mention when it happened only if you don’t mean today.</p>
     </div>
-    <span class="dash-voice-badge" title="Best with Chromium-based browsers">Chrome · Edge</span>
+    <span class="dash-voice-badge" title="Chromium browsers with microphone access">Chrome · Edge</span>
   </div>
-  <p class="muted dash-voice-lede">Click the button, allow the microphone if asked, then say a short phrase. We parse it and save—you’ll land here again. If the mic is blocked, use <strong>http://127.0.0.1</strong> (with your port) or HTTPS, and allow the mic in the site lock icon and in Windows Privacy → Microphone.</p>
-  <ul class="dash-voice-examples" aria-label="Example phrases">
-    <li><span class="dash-voice-examples__tag">Expense</span> “spent 42 on groceries yesterday”</li>
-    <li><span class="dash-voice-examples__tag">Income</span> “received salary 2100 income”</li>
-  </ul>
   <div class="dash-voice-actions">
-    <button type="button" class="secondary dash-voice-mic" id="dash-voice-mic-btn">Speak transaction</button>
-    <span id="dash-voice-status" class="dash-voice-status muted" role="status">Tap the button, allow the mic, then talk.</span>
+    <button type="button" class="secondary dash-voice-mic" id="dash-voice-mic-btn" title="If the mic is blocked: use http://127.0.0.1 with your port (or HTTPS) and allow the microphone in the browser and system settings.">Speak transaction</button>
+    <span id="dash-voice-status" class="dash-voice-status muted" role="status">Press Speak when ready.</span>
   </div>
   <form id="dash-voice-form" action="{% url 'transaction_add' %}" method="post" class="dash-voice-form" novalidate aria-hidden="true">
     {% csrf_token %}
@@ -54,102 +49,6 @@
   </form>
 </div>
 <script type="application/json" id="dash-voice-categories-data">{{ voice_categories_json|safe }}</script>
-
-<div class="card health-card">
-  <h2 class="section-title">Financial health</h2>
-  <p class="health-score-explainer">Your score from 0–100 is built from habits in the last 30 days—not your bank balance. It mixes how much income you keep versus spend, staying inside active budgets, progress on savings goals, and how consistently you log activity.</p>
-  <p class="muted health-card__note" style="margin-top:0;">{{ health.savings_note }}</p>
-  <div class="health-card__body">
-    <div class="health-ring-wrap">
-      <svg class="health-ring" viewBox="0 0 120 120" aria-hidden="true">
-        <circle cx="60" cy="60" r="{{ health.ring_r }}" fill="none" stroke="rgba(99, 102, 241, 0.12)" stroke-width="10"/>
-        <circle cx="60" cy="60" r="{{ health.ring_r }}" fill="none" stroke="url(#healthGrad)" stroke-width="10"
-          stroke-linecap="round" stroke-dasharray="{{ health.ring_circ }}" stroke-dashoffset="{{ health.ring_offset }}"
-          transform="rotate(-90 60 60)"/>
-        <defs>
-          <linearGradient id="healthGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#2563eb"/>
-            <stop offset="100%" stop-color="#7c3aed"/>
-          </linearGradient>
-        </defs>
-        <text x="60" y="66" text-anchor="middle">{{ health.score }}</text>
-      </svg>
-      <span class="muted" style="font-size:0.82rem;font-weight:600;">out of 100</span>
-    </div>
-    <div class="health-breakdown">
-      {% for row in health.breakdown %}
-      <div class="health-bar-row">
-        <span class="health-bar-label">{{ row.label }}</span>
-        <div class="health-bar-track">
-          {% if row.label == "Savings posture (vs income)" %}
-          <div class="health-bar-fill" style="width: {% widthratio row.points 40 100 %}%"></div>
-          {% elif row.label == "Budget adherence" %}
-          <div class="health-bar-fill" style="width: {% widthratio row.points 30 100 %}%"></div>
-          {% elif row.label == "Goal momentum" %}
-          <div class="health-bar-fill" style="width: {% widthratio row.points 20 100 %}%"></div>
-          {% else %}
-          <div class="health-bar-fill" style="width: {% widthratio row.points 10 100 %}%"></div>
-          {% endif %}
-        </div>
-        <span class="muted" style="font-size:0.78rem;min-width:2.5rem;text-align:right;">{{ row.points }}</span>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% if health.tips %}
-  <ul class="health-tips">
-    {% for tip in health.tips %}<li>{{ tip }}</li>{% endfor %}
-  </ul>
-  {% endif %}
-</div>
-
-{% if insight_items %}
-<div class="card">
-  <h2 class="section-title">Smart insights</h2>
-  <ul class="insight-list--dashboard">
-    {% for line in insight_items %}
-    <li class="insight-item--dash">{{ line }}</li>
-    {% endfor %}
-  </ul>
-</div>
-{% endif %}
-
-<div class="card chart-card chart-card--dashboard">
-  <h2 class="section-title">Spending overview · {{ month }}</h2>
-  <p class="heatmap-head chart-caption" style="margin-top:0;">Daily spend heatmap</p>
-  <div class="heatmap-wrap" role="img" aria-label="Daily expense heatmap">
-    <div class="heatmap-cols">
-      {% for col in heatmap_cols %}
-      <div class="heatmap-col">
-        {% for cell in col %}
-        <span class="heat-square heat-l{{ cell.level }}{% if cell.future %} heat-future{% endif %}"
-          title="{{ cell.date|date:'Y-m-d' }}{% if not cell.future %}: {{ cell.amount|floatformat:2 }}{% endif %}"></span>
-        {% endfor %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% if has_chart_data %}
-  <div class="charts-row">
-    <div class="chart-wrap">
-      <h3 class="chart-caption">By category</h3>
-      <div class="chart-canvas-host chart-canvas-host--mini">
-        <canvas id="dashCatChart" aria-label="Expenses by category for the current month"></canvas>
-      </div>
-    </div>
-    <div class="chart-wrap">
-      <h3 class="chart-caption">Daily spend</h3>
-      <div class="chart-canvas-host chart-canvas-host--mini">
-        <canvas id="dashDayChart" aria-label="Daily spending across the current month"></canvas>
-      </div>
-    </div>
-  </div>
-  {% else %}
-  <div class="chart-canvas-host chart-canvas-host--empty">
-    <p class="chart-empty muted">No expense data yet for {{ month }}. Add an expense transaction to see the breakdown and the daily-spend trend.</p>
-  </div>
-  {% endif %}
-</div>
 
 {% if budget_warnings %}
 <div class="card card--warning">
@@ -185,6 +84,30 @@
 </div>
 {% endif %}
 
+<div class="card chart-card chart-card--dashboard">
+  <h2 class="section-title">Spending overview · {{ month }}</h2>
+  {% if has_chart_data %}
+  <div class="charts-row">
+    <div class="chart-wrap">
+      <h3 class="chart-caption">By category</h3>
+      <div class="chart-canvas-host chart-canvas-host--mini">
+        <canvas id="dashCatChart" aria-label="Expenses by category for the current month"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <h3 class="chart-caption">Daily spend</h3>
+      <div class="chart-canvas-host chart-canvas-host--mini">
+        <canvas id="dashDayChart" aria-label="Daily spending across the current month"></canvas>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="chart-canvas-host chart-canvas-host--empty">
+    <p class="chart-empty muted">No expense data yet for {{ month }}. Add an expense transaction to see the breakdown and the daily-spend trend.</p>
+  </div>
+  {% endif %}
+</div>
+
 <div class="card">
   <h2 class="section-title">Recent transactions</h2>
   {% if recent_transactions %}
@@ -209,51 +132,74 @@
   {% endif %}
 </div>
 
-<div class="card">
+<div class="card card--dash-budgets">
   <h2 class="section-title">Budgets</h2>
   {% if budgets %}
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Category</th><th>Limit</th><th>Spent</th><th>Period</th></tr></thead>
+    <div class="table-wrap table-wrap--dash-budgets">
+      <table class="table--dash table--dash-budgets">
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col" class="th--numeric">Limit</th>
+            <th scope="col">Spent</th>
+            <th scope="col">Period</th>
+          </tr>
+        </thead>
         <tbody>
           {% for b in budgets %}
-            <tr>
-              <td>{{ b.category.name }}</td>
-              <td>{{ b.limit_amount }}</td>
-              <td>{{ b.spent_amount }} <span class="muted">({{ b.spent_percentage|floatformat:0 }}%)</span></td>
-              <td class="muted">{{ b.start_date }} — {{ b.end_date }}</td>
+            <tr class="dash-budget-row{% if b.is_over_limit %} dash-budget-row--over{% elif b.should_alert %} dash-budget-row--warn{% endif %}">
+              <td class="dash-budget-cat-cell">
+                <span class="dash-budget-cat">{{ b.category.name }}</span>
+              </td>
+              <td class="td--numeric dash-budget-limit">{{ b.limit_amount }}</td>
+              <td class="dash-budget-spent-cell">
+                <div class="dash-budget-spent-top">
+                  <span class="dash-budget-spent-amt">{{ b.spent_amount }}</span>
+                  <span class="dash-budget-pct muted">{{ b.spent_percentage|floatformat:0 }}%</span>
+                </div>
+                <div class="dash-budget-meter" role="presentation">
+                  <div class="dash-budget-meter__fill" style="width: {% if b.spent_percentage >= 100 %}100{% else %}{{ b.spent_percentage|floatformat:0 }}{% endif %}%;"></div>
+                </div>
+              </td>
+              <td class="dash-budget-period muted">{{ b.start_date }} → {{ b.end_date }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    <p style="margin-top:1rem;margin-bottom:0;"><a href="{% url 'budget_list' %}">Manage budgets →</a></p>
+    <p class="dash-section-footer"><a href="{% url 'budget_list' %}">Manage budgets →</a></p>
   {% else %}
     <p class="muted">No budgets yet. <a href="{% url 'budget_create' %}">Create a budget</a>.</p>
   {% endif %}
 </div>
 
-<div class="card">
+<div class="card card--dash-goals">
   <h2 class="section-title">Savings goals</h2>
   {% if savings_goals %}
+    <div class="dash-goals-stack">
     {% for g in savings_goals %}
-      <div class="goal-card goal-card--compact">
+      <article class="goal-card goal-card--compact goal-card--dash">
         <div class="goal-header">
           <span class="goal-name">{{ g.name }}</span>
           <span class="goal-amounts">{{ g.current_amount|floatformat:2 }} / {{ g.target_amount|floatformat:2 }}</span>
         </div>
-        <div class="progress-bar-wrap" title="{{ g.get_progress_percentage|floatformat:0 }}% complete">
+        <div class="progress-bar-wrap goal-progress--dash" title="{{ g.get_progress_percentage|floatformat:0 }}% complete">
           <div class="progress-bar {% if g.check_goal_completion %}progress-bar--complete{% endif %}"
                style="width: {{ g.get_progress_percentage|floatformat:0 }}%"></div>
         </div>
-        <p class="goal-meta muted" style="margin-bottom:0;">
-          {{ g.get_progress_percentage|floatformat:0 }}% · due {{ g.deadline }}
-          {% if not g.check_goal_completion %} · ~{{ g.get_monthly_savings_needed|floatformat:2 }}/mo{% endif %}
+        <p class="goal-meta muted goal-meta--dash">
+          <span class="goal-meta-pct">{{ g.get_progress_percentage|floatformat:0 }}%</span>
+          <span class="goal-meta-sep">·</span>
+          <span>due {{ g.deadline }}</span>
+          {% if not g.check_goal_completion %}
+          <span class="goal-meta-sep">·</span>
+          <span>~{{ g.get_monthly_savings_needed|floatformat:2 }}/mo</span>
+          {% endif %}
         </p>
-      </div>
-      {% if not forloop.last %}<hr class="goal-divider">{% endif %}
+      </article>
     {% endfor %}
-    <p style="margin-top:1rem;margin-bottom:0;"><a href="{% url 'goals_list' %}">All goals &amp; contributions →</a></p>
+    </div>
+    <p class="dash-section-footer"><a href="{% url 'goals_list' %}">All goals &amp; contributions →</a></p>
   {% else %}
     <p class="muted">No savings goals yet. <a href="{% url 'goal_create' %}">Create a goal</a>.</p>
   {% endif %}
@@ -264,15 +210,11 @@
 <ul class="sds-us-list">
   <li>
     <strong>US #10 — Dashboard overview</strong>
-    Opening the app loads a summary: totals, recent transactions, budget warnings, unread notifications, and optional voice quick-add via the browser speech API onto the transaction pipeline. The SDS sequence shows DashboardUI gathering data from transactions, budgets, and notifications when the user opens the application.
+    Opening the app loads a summary and optional voice quick-add right below it (browser speech API → transaction pipeline), then budget alerts and unread notifications when present, spending charts, recent transactions, budgets, and goals.
   </li>
   <li>
     <strong>US #7 — Spending overview charts</strong>
-    Category donut and daily-spend line for the current month, plus a twelve-week expense heatmap, complement the Reports view.
-  </li>
-  <li>
-    <strong>Insights &amp; financial health</strong>
-    Lightweight rule-based tips and an aggregate 0–100 score summarise budgets, savings rate, goals, and logging rhythm.
+    Category donut and daily-spend line for the current month complement the Reports view.
   </li>
 </ul>
 {% endblock %}

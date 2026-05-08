@@ -9,7 +9,7 @@
   <title>budgeting.models &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ca225bdf" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -200,7 +192,7 @@
 <span id="budgeting-models"></span><h1><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code><a class="headerlink" href="#module-budgeting.models" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.Category">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Category" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Category" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>Spending/income category (global defaults or per-user custom).</p>
 <dl class="py attribute">
@@ -235,7 +227,7 @@ many-to-one relation.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+class built by <code class="docutils literal notranslate"><span class="pre">create_reverse_many_to_one_manager()</span></code> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -262,7 +254,7 @@ many-to-one relation.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+class built by <code class="docutils literal notranslate"><span class="pre">create_reverse_many_to_one_manager()</span></code> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -277,7 +269,7 @@ many-to-one relation.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+class built by <code class="docutils literal notranslate"><span class="pre">create_reverse_many_to_one_manager()</span></code> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -289,7 +281,7 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.Notification">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Notification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Notification" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Notification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Notification" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>System alert persisted for a user (SDS US #5, #10).</p>
 <dl class="py attribute">
@@ -385,7 +377,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.Budget">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Budget" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>Spending limit for one category through a date range.</p>
 <dl class="py attribute">
@@ -512,7 +504,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.Transaction">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>Income or expense logged by the user; rolls up into budgets.</p>
 <dl class="py attribute">
@@ -586,7 +578,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="budgeting.models.Transaction._matching_budgets">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_matching_budgets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction._matching_budgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction._matching_budgets" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_matching_budgets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Transaction._matching_budgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Transaction._matching_budgets" title="Link to this definition"></a></dt>
 <dd><p>Budget rows for <code class="docutils literal notranslate"><span class="pre">user</span></code>/<code class="docutils literal notranslate"><span class="pre">category</span></code> active on <code class="docutils literal notranslate"><span class="pre">on_date</span></code>.</p>
 </dd></dl>
 
@@ -628,7 +620,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.SubscriptionManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SubscriptionManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SubscriptionManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SubscriptionManager" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SubscriptionManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SubscriptionManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SubscriptionManager" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Manager</span></code></p>
 <p>Custom manager that posts due subscription charges.</p>
 <dl class="py method">
@@ -652,7 +644,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.Subscription">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Subscription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">Subscription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>Recurring subscription or bill charge (processed on dashboard load).</p>
 <dl class="py attribute">
@@ -745,7 +737,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="budgeting.models.Subscription.advance_date">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">advance_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription.advance_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription.advance_date" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">advance_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#Subscription.advance_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.Subscription.advance_date" title="Link to this definition"></a></dt>
 <dd><p>Next charge date after <code class="docutils literal notranslate"><span class="pre">from_date</span></code> for the given <code class="docutils literal notranslate"><span class="pre">cycle</span></code>.</p>
 </dd></dl>
 
@@ -775,7 +767,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.models.SavingsGoal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SavingsGoal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.models.</span></span><span class="sig-name descname"><span class="pre">SavingsGoal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/models.html#SavingsGoal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.models.SavingsGoal" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>User savings goal with progress tracking (SDS US #6).</p>
 <dl class="py attribute">

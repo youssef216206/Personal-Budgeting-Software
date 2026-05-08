@@ -9,7 +9,7 @@
   <title>Developer guide &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ca225bdf" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api/budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -278,7 +270,7 @@ path: the same <code class="docutils literal notranslate"><span class="pre">clea
 <code class="docutils literal notranslate"><span class="pre">income</span></code>.</p></li>
 <li><p><strong>Amount</strong> — first plausible number (comma or dot as decimal).</p></li>
 <li><p><strong>Category</strong> — substring match against user/system category <strong>names</strong>, then synonym tables
-(Food, Transport, Entertainment, Bills, Healthcare, Salary).</p></li>
+(Food, Transport, Entertainment, Bills, Healthcare, Shopping, Salary).</p></li>
 <li><p><strong>Date</strong> — <code class="docutils literal notranslate"><span class="pre">yesterday</span></code>, <code class="docutils literal notranslate"><span class="pre">today</span></code>, <code class="docutils literal notranslate"><span class="pre">last</span> <span class="pre">week</span></code> adjust a base <code class="docutils literal notranslate"><span class="pre">Date</span></code>; time is set to a
 noon placeholder for <code class="docutils literal notranslate"><span class="pre">datetime-local</span></code>.</p></li>
 </ul>

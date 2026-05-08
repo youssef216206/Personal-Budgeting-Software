@@ -9,7 +9,7 @@
   <title>budgeting.admin &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ca225bdf" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -201,55 +193,55 @@
 <p>Django admin registrations for budgeting models.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.CategoryAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">CategoryAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#CategoryAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.CategoryAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">CategoryAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#CategoryAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.CategoryAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>List and search helpers for <a class="reference internal" href="budgeting_models.html#budgeting.models.Category" title="budgeting.models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a>.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.CategoryAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.CategoryAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.CategoryAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.BudgetAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">BudgetAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#BudgetAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.BudgetAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">BudgetAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#BudgetAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.BudgetAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>Admin columns for budget periods and spend.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.BudgetAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.BudgetAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.BudgetAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.SubscriptionAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">SubscriptionAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#SubscriptionAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.SubscriptionAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">SubscriptionAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#SubscriptionAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.SubscriptionAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>Subscription billing schedule overview.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.SubscriptionAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.SubscriptionAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.SubscriptionAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.TransactionAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">TransactionAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#TransactionAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.TransactionAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">TransactionAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#TransactionAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.TransactionAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>Transaction ledger columns.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.TransactionAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.TransactionAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.TransactionAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.NotificationAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">NotificationAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#NotificationAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.NotificationAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">NotificationAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#NotificationAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.NotificationAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>In-app notifications with type and read filters.</p>
 <dl class="py attribute">
@@ -259,19 +251,19 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.NotificationAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.NotificationAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.NotificationAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.admin.SavingsGoalAdmin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">SavingsGoalAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#SavingsGoalAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.SavingsGoalAdmin" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.admin.</span></span><span class="sig-name descname"><span class="pre">SavingsGoalAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/admin.html#SavingsGoalAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.admin.SavingsGoalAdmin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
 <p>Savings targets and progress.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.admin.SavingsGoalAdmin.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.SavingsGoalAdmin.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.admin.SavingsGoalAdmin.media" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

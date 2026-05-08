@@ -36,6 +36,27 @@
         [["netflix", "spotify", "cinema", "movie", "entertain"], "Entertainment"],
         [["rent", "electric", "water", "internet", "bill"], "Bills"],
         [["doctor", "pharmacy", "clinic", "health"], "Healthcare"],
+        [
+          [
+            "clothes",
+            "clothing",
+            "shirt",
+            "shirts",
+            "pants",
+            "jeans",
+            "dress",
+            "shoes",
+            "sneakers",
+            "jacket",
+            "coat",
+            "mall",
+            "shopping",
+            "apparel",
+            "wardrobe",
+            "accessories",
+          ],
+          "Shopping",
+        ],
         [["salary", "paycheck", "wage"], "Salary"],
       ];
       for (var s = 0; s < synonyms.length; s++) {
@@ -263,7 +284,7 @@
         var why = [];
         if (!parsed.amount) why.push("say an amount");
         if (parsed.kind === "expense" && !parsed.categoryId) {
-          why.push("name a category that matches your list (e.g. food, bills)");
+          why.push("name a category that matches your list (e.g. food, clothes, bills)");
         }
         if (statusEl) {
           statusEl.textContent =

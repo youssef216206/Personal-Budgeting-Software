@@ -25,8 +25,6 @@ API reference
    budgeting_admin
    budgeting_apps
    budgeting_middleware
-   budgeting_health
-   budgeting_insights
    budgeting_context
    budgeting_tests
    project_urls

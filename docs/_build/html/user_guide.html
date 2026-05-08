@@ -9,7 +9,7 @@
   <title>User guide &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ca225bdf" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api/budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api/budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -248,7 +240,7 @@ wording).</p></li>
 <section id="example-phrases">
 <h3><a class="toc-backref" href="#id5" role="doc-backlink">Example phrases</a><a class="headerlink" href="#example-phrases" title="Link to this heading"></a></h3>
 <p>Use clear numbers and plain words. Your <strong>category names</strong> are matched if you say them;
-the app also understands a few synonyms (e.g. <em>groceries</em> → Food).</p>
+the app also understands a few synonyms (e.g. <em>groceries</em> → Food, <em>clothes</em> / <em>shopping</em> → Shopping).</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 40.0%" />
@@ -263,10 +255,13 @@ the app also understands a few synonyms (e.g. <em>groceries</em> → Food).</p>
 <tr class="row-even"><td><p>“Spent <strong>42</strong> on <strong>groceries</strong> <strong>yesterday</strong>”</p></td>
 <td><p>Expense, amount 42, category if “Groceries” (or similar) exists, date shifted back one day.</p></td>
 </tr>
-<tr class="row-odd"><td><p>“<strong>Received</strong> <strong>salary</strong> <strong>2100</strong> <strong>income</strong>”</p></td>
+<tr class="row-odd"><td><p>“Spent <strong>65</strong> on <strong>clothes</strong> <strong>yesterday</strong>”</p></td>
+<td><p>Expense mapped to <strong>Shopping</strong> when that built-in category exists (also matches words like <em>shoes</em>, <em>mall</em>, <em>shopping</em>).</p></td>
+</tr>
+<tr class="row-even"><td><p>“<strong>Received</strong> <strong>salary</strong> <strong>2100</strong> <strong>income</strong>”</p></td>
 <td><p>Income, amount 2100.</p></td>
 </tr>
-<tr class="row-even"><td><p>“Paid <strong>25</strong> for <strong>food</strong> <strong>today</strong>”</p></td>
+<tr class="row-odd"><td><p>“Paid <strong>25</strong> for <strong>food</strong> <strong>today</strong>”</p></td>
 <td><p>Expense with today’s date.</p></td>
 </tr>
 </tbody>

@@ -74,7 +74,7 @@ Implementation: ``budgeting/static/budgeting/js/voice.js``.
   ``income``.
 * **Amount** — first plausible number (comma or dot as decimal).
 * **Category** — substring match against user/system category **names**, then synonym tables
-  (Food, Transport, Entertainment, Bills, Healthcare, Salary).
+  (Food, Transport, Entertainment, Bills, Healthcare, Shopping, Salary).
 * **Date** — ``yesterday``, ``today``, ``last week`` adjust a base ``Date``; time is set to a
   noon placeholder for ``datetime-local``.
 

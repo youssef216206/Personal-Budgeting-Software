@@ -8,13 +8,14 @@
   <title>budgeting.views &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=ca225bdf" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -39,9 +40,124 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#speak-to-add-voice">Speak to add (voice)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#where-it-appears">Where it appears</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#example-phrases">Example phrases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide.html#microphone-and-not-allowed-errors">Microphone and “not allowed” errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#budgets-and-alerts">Budgets and alerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#savings-goals-and-reports">Savings goals and reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide.html#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#stack-and-layout">Stack and layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#voice-data-flow">Voice: data flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#dashboard-auto-submit">Dashboard (auto-submit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#transaction-form-fill-only">Transaction form (fill only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#hidden-voice-form-helper">Hidden voice form helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#javascript-parsing-rules">JavaScript parsing rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer_guide.html#extending-behaviour">Extending behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#templates-and-context">Templates and context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_guide.html#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance.html">Maintenance notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#content-map">Content map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#application-dependencies">Application dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#voice-feature-support-boundaries">Voice feature: support boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#static-assets">Static assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#database-and-migrations">Database and migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#backups">Backups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../maintenance.html#related-docs">Related docs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_models.html"><code class="docutils literal notranslate"><span class="pre">budgeting.models</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.SubscriptionManager"><code class="docutils literal notranslate"><span class="pre">SubscriptionManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.Subscription"><code class="docutils literal notranslate"><span class="pre">Subscription</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_models.html#budgeting.models.SavingsGoal"><code class="docutils literal notranslate"><span class="pre">SavingsGoal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_views.html"><code class="docutils literal notranslate"><span class="pre">budgeting.views</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.UserLoginView"><code class="docutils literal notranslate"><span class="pre">UserLoginView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.dashboard"><code class="docutils literal notranslate"><span class="pre">dashboard()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_add"><code class="docutils literal notranslate"><span class="pre">transaction_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_list"><code class="docutils literal notranslate"><span class="pre">transaction_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_edit"><code class="docutils literal notranslate"><span class="pre">transaction_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.transaction_delete"><code class="docutils literal notranslate"><span class="pre">transaction_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.category_list"><code class="docutils literal notranslate"><span class="pre">category_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_list"><code class="docutils literal notranslate"><span class="pre">subscription_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views._subscription_save_message"><code class="docutils literal notranslate"><span class="pre">_subscription_save_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_add"><code class="docutils literal notranslate"><span class="pre">subscription_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_edit"><code class="docutils literal notranslate"><span class="pre">subscription_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_delete"><code class="docutils literal notranslate"><span class="pre">subscription_delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.subscription_toggle"><code class="docutils literal notranslate"><span class="pre">subscription_toggle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_list"><code class="docutils literal notranslate"><span class="pre">budget_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_create"><code class="docutils literal notranslate"><span class="pre">budget_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.budget_edit"><code class="docutils literal notranslate"><span class="pre">budget_edit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goals_list"><code class="docutils literal notranslate"><span class="pre">goals_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goal_create"><code class="docutils literal notranslate"><span class="pre">goal_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.goal_contribute"><code class="docutils literal notranslate"><span class="pre">goal_contribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.reports"><code class="docutils literal notranslate"><span class="pre">reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_views.html#budgeting.views.notifications_view"><code class="docutils literal notranslate"><span class="pre">notifications_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_forms.html"><code class="docutils literal notranslate"><span class="pre">budgeting.forms</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SignUpForm"><code class="docutils literal notranslate"><span class="pre">SignUpForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.TransactionForm"><code class="docutils literal notranslate"><span class="pre">TransactionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.transaction_form_voice_hidden"><code class="docutils literal notranslate"><span class="pre">transaction_form_voice_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.BudgetForm"><code class="docutils literal notranslate"><span class="pre">BudgetForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SavingsGoalForm"><code class="docutils literal notranslate"><span class="pre">SavingsGoalForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.ContributionForm"><code class="docutils literal notranslate"><span class="pre">ContributionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.SubscriptionForm"><code class="docutils literal notranslate"><span class="pre">SubscriptionForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_forms.html#budgeting.forms.CategoryForm"><code class="docutils literal notranslate"><span class="pre">CategoryForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_urls.html"><code class="docutils literal notranslate"><span class="pre">budgeting.urls</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_admin.html"><code class="docutils literal notranslate"><span class="pre">budgeting.admin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.CategoryAdmin"><code class="docutils literal notranslate"><span class="pre">CategoryAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.BudgetAdmin"><code class="docutils literal notranslate"><span class="pre">BudgetAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.SubscriptionAdmin"><code class="docutils literal notranslate"><span class="pre">SubscriptionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.TransactionAdmin"><code class="docutils literal notranslate"><span class="pre">TransactionAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.NotificationAdmin"><code class="docutils literal notranslate"><span class="pre">NotificationAdmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_admin.html#budgeting.admin.SavingsGoalAdmin"><code class="docutils literal notranslate"><span class="pre">SavingsGoalAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_apps.html"><code class="docutils literal notranslate"><span class="pre">budgeting.apps</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_apps.html#budgeting.apps.BudgetingConfig"><code class="docutils literal notranslate"><span class="pre">BudgetingConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_middleware.html"><code class="docutils literal notranslate"><span class="pre">budgeting.middleware</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/budgeting_tests.html"><code class="docutils literal notranslate"><span class="pre">budgeting.tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/project_urls.html"><code class="docutils literal notranslate"><span class="pre">Personal_Budgeting_Software.urls</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,7 +170,7 @@
       </nav>
 
       <div class="wy-nav-content">
-        <div class="rst-content">
+        <div class="rst-content style-external-links">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
@@ -96,8 +212,6 @@
     <span class="n">TransactionForm</span><span class="p">,</span>
     <span class="n">transaction_form_voice_hidden</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.health</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_health</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">dashboard_insights</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Budget</span><span class="p">,</span>
     <span class="n">Category</span><span class="p">,</span>
@@ -148,16 +262,12 @@
 <a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views.dashboard">[docs]</a>
 <span class="nd">@login_required</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main dashboard: charts, heatmap, health score, budgets, voice quick-add.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main dashboard: KPIs, charts, budgets, voice quick-add.&quot;&quot;&quot;</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
-    <span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
-    <span class="n">month_start</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">month_start</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">month_end</span> <span class="o">=</span> <span class="n">month_start</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
         <span class="n">day</span><span class="o">=</span><span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">month_start</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month_start</span><span class="o">.</span><span class="n">month</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="p">)</span>
-
-    <span class="n">prev_month_end</span> <span class="o">=</span> <span class="n">month_start</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">prev_month_start</span> <span class="o">=</span> <span class="n">prev_month_end</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">recent_transactions</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
     <span class="n">budgets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Budget</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">))</span>
@@ -256,58 +366,6 @@
         <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chart_day_data</span>
     <span class="p">)</span>
 
-    <span class="n">heat_start</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">83</span><span class="p">)</span>
-    <span class="n">start_monday</span> <span class="o">=</span> <span class="n">heat_start</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">heat_start</span><span class="o">.</span><span class="n">weekday</span><span class="p">())</span>
-    <span class="n">heat_rows</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">Transaction</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-            <span class="n">kind</span><span class="o">=</span><span class="n">Transaction</span><span class="o">.</span><span class="n">KIND_EXPENSE</span><span class="p">,</span>
-            <span class="n">occurred_at__date__gte</span><span class="o">=</span><span class="n">start_monday</span><span class="p">,</span>
-            <span class="n">occurred_at__date__lte</span><span class="o">=</span><span class="n">today</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">TruncDate</span><span class="p">(</span><span class="s2">&quot;occurred_at&quot;</span><span class="p">))</span>
-        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">))</span>
-    <span class="p">)</span>
-    <span class="n">by_heat</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]:</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">heat_rows</span><span class="p">}</span>
-    <span class="n">max_heat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">by_heat</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">heat_level</span><span class="p">(</span><span class="n">amt</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">max_heat</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">amt</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">amt</span> <span class="o">/</span> <span class="n">max_heat</span>
-        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">2</span>
-        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.65</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">3</span>
-        <span class="k">return</span> <span class="mi">4</span>
-
-    <span class="n">heatmap_cols</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">dow</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="n">start_monday</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">w</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">+</span> <span class="n">dow</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">today</span><span class="p">:</span>
-                <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;future&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">amt</span> <span class="o">=</span> <span class="n">by_heat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-                <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span>
-                        <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">amt</span><span class="p">,</span>
-                        <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">heat_level</span><span class="p">(</span><span class="n">amt</span><span class="p">),</span>
-                        <span class="s2">&quot;future&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-        <span class="n">heatmap_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-
-    <span class="n">insight_items</span> <span class="o">=</span> <span class="n">dashboard_insights</span><span class="p">(</span>
-        <span class="n">user</span><span class="p">,</span> <span class="n">month_start</span><span class="p">,</span> <span class="n">month_end</span><span class="p">,</span> <span class="n">prev_month_start</span><span class="p">,</span> <span class="n">prev_month_end</span>
-    <span class="p">)</span>
-    <span class="n">health</span> <span class="o">=</span> <span class="n">compute_health</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-
     <span class="n">voice_categories_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
         <span class="nb">list</span><span class="p">(</span>
             <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">user__isnull</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">))</span>
@@ -335,9 +393,6 @@
             <span class="s2">&quot;chart_cat_data&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_cat_data</span><span class="p">),</span>
             <span class="s2">&quot;chart_day_labels&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_day_labels</span><span class="p">),</span>
             <span class="s2">&quot;chart_day_data&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chart_day_data</span><span class="p">),</span>
-            <span class="s2">&quot;heatmap_cols&quot;</span><span class="p">:</span> <span class="n">heatmap_cols</span><span class="p">,</span>
-            <span class="s2">&quot;insight_items&quot;</span><span class="p">:</span> <span class="n">insight_items</span><span class="p">,</span>
-            <span class="s2">&quot;health&quot;</span><span class="p">:</span> <span class="n">health</span><span class="p">,</span>
             <span class="s2">&quot;voice_categories_json&quot;</span><span class="p">:</span> <span class="n">voice_categories_json</span><span class="p">,</span>
             <span class="s2">&quot;voice_quick_form&quot;</span><span class="p">:</span> <span class="n">transaction_form_voice_hidden</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
         <span class="p">},</span>
@@ -563,6 +618,8 @@
 
 
 
+<div class="viewcode-block" id="_subscription_save_message">
+<a class="viewcode-back" href="../../api/budgeting_views.html#budgeting.views._subscription_save_message">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_subscription_save_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">saved_verb</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;After save, post any due subscription expenses and surface one clear toast.&quot;&quot;&quot;</span>
     <span class="n">posted</span> <span class="o">=</span> <span class="n">Subscription</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">process_due_for</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
@@ -574,7 +631,8 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">saved_verb</span><span class="si">}</span><span class="s2">. Posted expense(s): </span><span class="si">{</span><span class="n">names</span><span class="si">}{</span><span class="n">more</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">saved_verb</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">saved_verb</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="subscription_add">

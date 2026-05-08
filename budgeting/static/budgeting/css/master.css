@@ -2849,6 +2849,220 @@ body.auth-body .app-footer {
   margin: 0.25rem 0;
 }
 
+/* ——— Dashboard: budgets table & savings goals ——— */
+.dash-section-footer {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  font-size: 0.88rem;
+}
+
+.table-wrap--dash-budgets {
+  margin-top: 0.65rem;
+}
+
+.table--dash-budgets {
+  table-layout: fixed;
+}
+
+.table--dash-budgets th:nth-child(1),
+.table--dash-budgets td:nth-child(1) {
+  width: 22%;
+}
+
+.table--dash-budgets th:nth-child(2),
+.table--dash-budgets td:nth-child(2) {
+  width: 14%;
+}
+
+.table--dash-budgets th:nth-child(3),
+.table--dash-budgets td:nth-child(3) {
+  width: 38%;
+}
+
+.table--dash-budgets th:nth-child(4),
+.table--dash-budgets td:nth-child(4) {
+  width: 26%;
+}
+
+.th--numeric,
+.td--numeric {
+  text-align: right;
+}
+
+.dash-budget-cat {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.dash-budget-limit {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.dash-budget-spent-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.38rem;
+}
+
+.dash-budget-spent-amt {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.92rem;
+  letter-spacing: -0.02em;
+}
+
+.dash-budget-pct {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-budget-meter {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.09);
+  overflow: hidden;
+}
+
+.dash-budget-meter__fill {
+  height: 100%;
+  max-width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue-500), var(--indigo-500));
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.35);
+  transition: width 0.45s var(--ease-out);
+}
+
+.dash-budget-row--warn .dash-budget-meter__fill {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.35);
+}
+
+.dash-budget-row--over .dash-budget-meter__fill {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.35);
+}
+
+.dash-budget-row td:first-child {
+  border-left: 3px solid transparent;
+}
+
+.dash-budget-row--warn td:first-child {
+  border-left-color: rgba(245, 158, 11, 0.88);
+}
+
+.dash-budget-row--warn td {
+  background: rgba(255, 251, 235, 0.38);
+}
+
+.dash-budget-row--over td:first-child {
+  border-left-color: rgba(220, 38, 38, 0.92);
+}
+
+.dash-budget-row--over td {
+  background: rgba(254, 242, 242, 0.42);
+}
+
+.table--dash-budgets tbody tr.dash-budget-row:hover td {
+  background: linear-gradient(90deg, rgba(239, 246, 255, 0.55), rgba(237, 233, 254, 0.28));
+}
+
+.table--dash-budgets tbody tr.dash-budget-row--warn:hover td {
+  background: rgba(255, 247, 237, 0.88);
+}
+
+.table--dash-budgets tbody tr.dash-budget-row--over:hover td {
+  background: rgba(254, 242, 242, 0.62);
+}
+
+.dash-budget-period {
+  font-size: 0.81rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+
+.dash-goals-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.goal-card--dash {
+  padding: 0.85rem 1rem;
+  margin: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm), 0 0 0 1px rgba(255, 255, 255, 0.68) inset;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.goal-card--dash:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.goal-card--dash.goal-card--compact {
+  padding: 0.85rem 1rem;
+}
+
+.goal-card--dash .goal-header {
+  margin-bottom: 0.48rem;
+}
+
+.goal-progress--dash {
+  margin-bottom: 0;
+}
+
+.goal-meta--dash {
+  margin-top: 0.52rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.25rem;
+}
+
+.goal-meta-sep {
+  opacity: 0.4;
+  user-select: none;
+}
+
+@media (max-width: 720px) {
+  .table--dash-budgets {
+    font-size: 0.84rem;
+  }
+
+  .table--dash-budgets th,
+  .table--dash-budgets td {
+    padding: 0.62rem 0.55rem;
+  }
+
+  .table--dash-budgets th:nth-child(1),
+  .table--dash-budgets td:nth-child(1),
+  .table--dash-budgets th:nth-child(2),
+  .table--dash-budgets td:nth-child(2),
+  .table--dash-budgets th:nth-child(3),
+  .table--dash-budgets td:nth-child(3),
+  .table--dash-budgets th:nth-child(4),
+  .table--dash-budgets td:nth-child(4) {
+    width: auto;
+  }
+
+  .table--dash-budgets {
+    table-layout: auto;
+    min-width: 520px;
+  }
+}
+
 /* ——— Budget warning card (matches default cards; accent only) ——— */
 .card--warning {
   border: 1px solid var(--stroke);
@@ -4355,110 +4569,8 @@ button.danger:hover,
 }
 
 /* =====================================================================
-   Financial health + heatmap + voice + dark theme
+   Legacy heatmap styles + dashboard KPI / voice + dark theme
    ===================================================================== */
-
-.health-score-explainer {
-  margin: 0 0 0.75rem;
-  max-width: 58ch;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--text-muted);
-}
-
-.health-card__body {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(1.25rem, 3vw, 2rem);
-  align-items: stretch;
-  min-width: 0;
-}
-
-.health-ring-wrap {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.health-ring {
-  width: 132px;
-  height: 132px;
-}
-
-.health-ring text {
-  fill: var(--text);
-  font-family: var(--font-display);
-  font-size: 1.55rem;
-  font-weight: 700;
-}
-
-.health-breakdown {
-  flex: 1 1 260px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.health-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.health-bar-label {
-  flex: 0 0 42%;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  line-height: 1.35;
-}
-
-.health-bar-track {
-  flex: 1 1 auto;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(99, 102, 241, 0.08);
-  border: 1px solid var(--stroke);
-  overflow: hidden;
-}
-
-.health-bar-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--blue-600), var(--purple-500));
-  transition: width 0.35s var(--ease-out);
-}
-
-.health-tips {
-  margin: 1rem 0 0;
-  padding: 0 0 0 1.05rem;
-}
-
-.health-tips li {
-  margin-bottom: 0.35rem;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-}
-
-.insight-list--dashboard {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.insight-item--dash {
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(237, 233, 254, 0.42));
-  border: 1px solid var(--stroke);
-  font-size: 0.9rem;
-}
 
 .heatmap-head {
   margin: 0 0 0.75rem;
@@ -4555,8 +4667,11 @@ button.danger:hover,
   min-width: 0;
 }
 
-.dash-voice-card .dash-voice-lede {
-  max-width: 52rem;
+.dash-voice-card .dash-voice-hint {
+  max-width: 42rem;
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
 
 .dash-voice-card__head {
@@ -4577,13 +4692,6 @@ button.danger:hover,
   margin: 0 0 0.35rem;
 }
 
-.dash-voice-card__sub {
-  margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.45;
-  max-width: 36rem;
-}
-
 .dash-voice-badge {
   flex-shrink: 0;
   font-size: 0.72rem;
@@ -4596,48 +4704,6 @@ button.danger:hover,
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
   align-self: center;
-}
-
-.dash-voice-lede {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
-.dash-voice-examples {
-  list-style: none;
-  margin: 0 0 1.1rem;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
-}
-
-.dash-voice-examples li {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.84rem;
-  line-height: 1.4;
-  padding: 0.45rem 0.75rem;
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.04);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  max-width: 100%;
-}
-
-.dash-voice-examples__tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #4338ca;
-  background: #fff;
-  padding: 0.2rem 0.45rem;
-  border-radius: 6px;
-  border: 1px solid rgba(79, 70, 229, 0.2);
-  white-space: nowrap;
 }
 
 .dash-voice-actions {

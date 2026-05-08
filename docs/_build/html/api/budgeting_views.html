@@ -9,7 +9,7 @@
   <title>budgeting.views &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ca225bdf" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -207,7 +199,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.views.UserLoginView">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">UserLoginView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#UserLoginView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.UserLoginView" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">UserLoginView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#UserLoginView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.UserLoginView" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.views.LoginView" title="(in Django v6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoginView</span></code></a></p>
 <p>Login page using <code class="docutils literal notranslate"><span class="pre">budgeting/login.html</span></code>.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
@@ -227,7 +219,7 @@ keyword arguments, and other things.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="budgeting.views.dashboard">
 <span class="sig-prename descclassname"><span class="pre">budgeting.views.</span></span><span class="sig-name descname"><span class="pre">dashboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/views.html#dashboard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.views.dashboard" title="Link to this definition"></a></dt>
-<dd><p>Main dashboard: charts, heatmap, health score, budgets, voice quick-add.</p>
+<dd><p>Main dashboard: KPIs, charts, budgets, voice quick-add.</p>
 </dd></dl>
 
 <dl class="py function">

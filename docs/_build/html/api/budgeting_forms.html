@@ -9,7 +9,7 @@
   <title>budgeting.forms &mdash; Personal Budgeting Software 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c953341b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ca225bdf" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -153,14 +153,6 @@
 <li class="toctree-l3"><a class="reference internal" href="budgeting_middleware.html#budgeting.middleware.ProcessDueSubscriptionsMiddleware"><code class="docutils literal notranslate"><span class="pre">ProcessDueSubscriptionsMiddleware</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_health.html"><code class="docutils literal notranslate"><span class="pre">budgeting.health</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_health.html#budgeting.health.compute_health"><code class="docutils literal notranslate"><span class="pre">compute_health()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="budgeting_insights.html"><code class="docutils literal notranslate"><span class="pre">budgeting.insights</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="budgeting_insights.html#budgeting.insights.dashboard_insights"><code class="docutils literal notranslate"><span class="pre">dashboard_insights()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="budgeting_context.html"><code class="docutils literal notranslate"><span class="pre">budgeting.context_processors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="budgeting_context.html#budgeting.context_processors.unread_notifications"><code class="docutils literal notranslate"><span class="pre">unread_notifications()</span></code></a></li>
 </ul>
@@ -201,7 +193,7 @@
 <p>Django forms for signup, transactions, budgets, goals, subscriptions, categories.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.SignUpForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SignUpForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SignUpForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
 <p>Collect full name, email-as-username, and password with confirmation.</p>
 <dl class="py method">
@@ -212,10 +204,10 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="budgeting.forms.SignUpForm.clean">
 <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SignUpForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SignUpForm.clean" title="Link to this definition"></a></dt>
-<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
-called on every field. Any ValidationError raised by this method will
-not be associated with a particular field; it will have a special-case
-association with the field named ‘__all__’.</p>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has
+been called on every field. Any ValidationError raised by this method
+will not be associated with a particular field; it will have a
+special-case association with the field named ‘__all__’.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -230,7 +222,7 @@ association with the field named ‘__all__’.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.SignUpForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SignUpForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SignUpForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -238,12 +230,12 @@ association with the field named ‘__all__’.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.TransactionForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">TransactionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">TransactionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <p>Create or edit a <a class="reference internal" href="budgeting_models.html#budgeting.models.Transaction" title="budgeting.models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a> for the current user.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="budgeting.forms.TransactionForm.Meta.model">
@@ -266,10 +258,10 @@ association with the field named ‘__all__’.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="budgeting.forms.TransactionForm.clean">
 <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#TransactionForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.TransactionForm.clean" title="Link to this definition"></a></dt>
-<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
-called on every field. Any ValidationError raised by this method will
-not be associated with a particular field; it will have a special-case
-association with the field named ‘__all__’.</p>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has
+been called on every field. Any ValidationError raised by this method
+will not be associated with a particular field; it will have a
+special-case association with the field named ‘__all__’.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -284,7 +276,7 @@ association with the field named ‘__all__’.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.TransactionForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.TransactionForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.TransactionForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -298,12 +290,12 @@ association with the field named ‘__all__’.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.BudgetForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">BudgetForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">BudgetForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <p>Create or edit a <a class="reference internal" href="budgeting_models.html#budgeting.models.Budget" title="budgeting.models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a> with overlap validation.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="budgeting.forms.BudgetForm.Meta.model">
@@ -326,10 +318,10 @@ association with the field named ‘__all__’.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="budgeting.forms.BudgetForm.clean">
 <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#BudgetForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.BudgetForm.clean" title="Link to this definition"></a></dt>
-<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
-called on every field. Any ValidationError raised by this method will
-not be associated with a particular field; it will have a special-case
-association with the field named ‘__all__’.</p>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has
+been called on every field. Any ValidationError raised by this method
+will not be associated with a particular field; it will have a
+special-case association with the field named ‘__all__’.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -352,7 +344,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.BudgetForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.BudgetForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.BudgetForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -360,12 +352,12 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SavingsGoalForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SavingsGoalForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <p>Form for creating a savings goal (SDS US #6 GoalsUI.submitGoal).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SavingsGoalForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.Meta.model">
@@ -407,7 +399,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.SavingsGoalForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SavingsGoalForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -415,7 +407,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.ContributionForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">ContributionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#ContributionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.ContributionForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">ContributionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_field_class=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#ContributionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.ContributionForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
 <p>Form for adding a contribution to an existing goal (SDS US #6 GoalsUI.addContribution).</p>
 <dl class="py attribute">
@@ -430,7 +422,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.ContributionForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.ContributionForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.ContributionForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -438,12 +430,12 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SubscriptionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">SubscriptionForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <p>Manage a recurring <a class="reference internal" href="budgeting_models.html#budgeting.models.Subscription" title="budgeting.models.Subscription"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscription</span></code></a> and next due date.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#SubscriptionForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.SubscriptionForm.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.Meta.model">
@@ -488,7 +480,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.SubscriptionForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SubscriptionForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.SubscriptionForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
@@ -496,12 +488,12 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.CategoryForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">CategoryForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budgeting.forms.</span></span><span class="sig-name descname"><span class="pre">CategoryForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <p>Form for creating a personal category (defaults are read-only).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/budgeting/forms.html#CategoryForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budgeting.forms.CategoryForm.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="budgeting.forms.CategoryForm.Meta.model">
@@ -546,7 +538,7 @@ is saved manually at a later time. Return the model instance.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="budgeting.forms.CategoryForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.CategoryForm.media" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#budgeting.forms.CategoryForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 

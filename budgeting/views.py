@@ -25,8 +25,6 @@ from .forms import (
     TransactionForm,
     transaction_form_voice_hidden,
 )
-from .health import compute_health
-from .insights import dashboard_insights
 from .models import (
     Budget,
     Category,
@@ -69,16 +67,12 @@ class UserLoginView(LoginView):
 
 @login_required
 def dashboard(request):
-    """Main dashboard: charts, heatmap, health score, budgets, voice quick-add."""
+    """Main dashboard: KPIs, charts, budgets, voice quick-add."""
     user = request.user
-    today = date.today()
-    month_start = today.replace(day=1)
+    month_start = date.today().replace(day=1)
     month_end = month_start.replace(
         day=calendar.monthrange(month_start.year, month_start.month)[1]
     )
-
-    prev_month_end = month_start - timedelta(days=1)
-    prev_month_start = prev_month_end.replace(day=1)
 
     recent_transactions = Transaction.objects.filter(user=user).select_related("category")[:8]
     budgets = list(Budget.objects.filter(user=user).select_related("category"))
@@ -177,58 +171,6 @@ def dashboard(request):
         v > 0 for v in chart_day_data
     )
 
-    heat_start = today - timedelta(days=83)
-    start_monday = heat_start - timedelta(days=heat_start.weekday())
-    heat_rows = (
-        Transaction.objects.filter(
-            user=user,
-            kind=Transaction.KIND_EXPENSE,
-            occurred_at__date__gte=start_monday,
-            occurred_at__date__lte=today,
-        )
-        .annotate(d=TruncDate("occurred_at"))
-        .values("d")
-        .annotate(total=Sum("amount"))
-    )
-    by_heat = {r["d"]: float(r["total"]) for r in heat_rows}
-    max_heat = max(by_heat.values() or [0])
-
-    def heat_level(amt):
-        if max_heat <= 0 or amt <= 0:
-            return 0
-        r = amt / max_heat
-        if r < 0.2:
-            return 1
-        if r < 0.4:
-            return 2
-        if r < 0.65:
-            return 3
-        return 4
-
-    heatmap_cols = []
-    for w in range(12):
-        col = []
-        for dow in range(7):
-            d = start_monday + timedelta(days=w * 7 + dow)
-            if d > today:
-                col.append({"date": d, "amount": 0, "level": 0, "future": True})
-            else:
-                amt = by_heat.get(d, 0.0)
-                col.append(
-                    {
-                        "date": d,
-                        "amount": amt,
-                        "level": heat_level(amt),
-                        "future": False,
-                    }
-                )
-        heatmap_cols.append(col)
-
-    insight_items = dashboard_insights(
-        user, month_start, month_end, prev_month_start, prev_month_end
-    )
-    health = compute_health(user)
-
     voice_categories_json = json.dumps(
         list(
             Category.objects.filter(Q(user__isnull=True) | Q(user=user))
@@ -256,9 +198,6 @@ def dashboard(request):
             "chart_cat_data": json.dumps(chart_cat_data),
             "chart_day_labels": json.dumps(chart_day_labels),
             "chart_day_data": json.dumps(chart_day_data),
-            "heatmap_cols": heatmap_cols,
-            "insight_items": insight_items,
-            "health": health,
             "voice_categories_json": voice_categories_json,
             "voice_quick_form": transaction_form_voice_hidden(user),
         },

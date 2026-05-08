@@ -43,7 +43,7 @@ Example phrases
 ~~~~~~~~~~~~~~~
 
 Use clear numbers and plain words. Your **category names** are matched if you say them;
-the app also understands a few synonyms (e.g. *groceries* → Food).
+the app also understands a few synonyms (e.g. *groceries* → Food, *clothes* / *shopping* → Shopping).
 
 .. list-table::
    :header-rows: 1
@@ -53,6 +53,8 @@ the app also understands a few synonyms (e.g. *groceries* → Food).
      - What happens
    * - “Spent **42** on **groceries** **yesterday**”
      - Expense, amount 42, category if “Groceries” (or similar) exists, date shifted back one day.
+   * - “Spent **65** on **clothes** **yesterday**”
+     - Expense mapped to **Shopping** when that built-in category exists (also matches words like *shoes*, *mall*, *shopping*).
    * - “**Received** **salary** **2100** **income**”
      - Income, amount 2100.
    * - “Paid **25** for **food** **today**”

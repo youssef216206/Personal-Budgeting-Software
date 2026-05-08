@@ -39,26 +39,18 @@ Where it appears
 * **Add / edit transaction** — **Talk to fill form** only fills visible fields; you press
   **Save** yourself.
 
-Example phrases
-~~~~~~~~~~~~~~~
+What to say
+~~~~~~~~~~~
 
-Use clear numbers and plain words. Your **category names** are matched if you say them;
-the app also understands a few synonyms (e.g. *groceries* → Food).
+Use clear numbers and plain words. **Expenses** need an amount and a **category** that matches
+one of yours (the parser also maps common synonyms to categories where configured). **Income**
+needs an amount and wording that signals income (for example *received*, *salary*, *pay*).
 
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
+You can add optional **timing** such as *yesterday*, *today*, or *last week* so the saved date
+matches what you mean (approximate for *last week*).
 
-   * - You say (examples)
-     - What happens
-   * - “Spent **42** on **groceries** **yesterday**”
-     - Expense, amount 42, category if “Groceries” (or similar) exists, date shifted back one day.
-   * - “**Received** **salary** **2100** **income**”
-     - Income, amount 2100.
-   * - “Paid **25** for **food** **today**”
-     - Expense with today’s date.
-
-Relative dates understood include **yesterday**, **today**, and **last week** (approximate).
+Your **category names** are matched when you say them; synonym lists in the app map everyday
+words to those categories when helpful.
 
 Microphone and “not allowed” errors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
