@@ -317,6 +317,7 @@ def transaction_list(request):
 @login_required
 def transaction_edit(request, pk):
     """Edit an existing transaction owned by the current user."""
+    t = get_object_or_404(Transaction, pk=pk, user=request.user)
 
     voice_categories_json = json.dumps(
         list(
@@ -356,6 +357,7 @@ def transaction_edit(request, pk):
 @login_required
 def transaction_delete(request, pk):
     """Confirm on GET; POST deletes the transaction."""
+    t = get_object_or_404(Transaction, pk=pk, user=request.user)
 
     if request.method == "POST":
         t.delete()

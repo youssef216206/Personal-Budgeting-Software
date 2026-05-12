@@ -33,7 +33,10 @@
       var synonyms = [
         [["food", "groceries", "grocery", "restaurant", "pizza"], "Food"],
         [["uber", "taxi", "train", "bus", "transport", "gas", "petrol"], "Transport"],
-        [["netflix", "spotify", "cinema", "movie", "entertain"], "Entertainment"],
+        [
+          ["netflix", "spotify", "cinema", "movie", "entertain", "tv", "television", "cable", "hulu", "disney"],
+          "Entertainment",
+        ],
         [["rent", "electric", "water", "internet", "bill"], "Bills"],
         [["doctor", "pharmacy", "clinic", "health"], "Healthcare"],
         [
@@ -63,7 +66,9 @@
         var words = synonyms[s][0];
         var tgt = synonyms[s][1];
         for (var w = 0; w < words.length; w++) {
-          if (lower.indexOf(words[w]) !== -1) {
+          var cue = (words[w] || "").toLowerCase();
+          if (!cue.length) continue;
+          if (lower.indexOf(cue) !== -1) {
             for (var j = 0; j < list.length; j++) {
               if ((list[j].name || "").toLowerCase().indexOf(tgt.toLowerCase()) !== -1) {
                 return String(list[j].id);
